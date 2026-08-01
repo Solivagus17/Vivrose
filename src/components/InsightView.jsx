@@ -41,7 +41,7 @@ export default function InsightView({ data }) {
                   <Icon name="ruler" size="xs" /> BMI {member.bmi}
                 </span>
                 <span>
-                  <Icon name="pill" size="xs" /> {member.conditions}
+                  <Icon name="pill" size="xs" /> {Array.isArray(member.conditions) ? (member.conditions.join(', ') || 'None') : (member.conditions || 'None')}
                 </span>
                 <span>
                   <Icon name="calendar" size="xs" /> Assessed {member.assessed}

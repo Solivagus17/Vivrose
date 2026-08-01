@@ -1,8 +1,6 @@
 import { apiPost, apiPut, apiDelete } from './api.js';
 import { createApiStore } from './storeUtils.js';
 
-export const MEDICINES_STORAGE_KEY = 'vivrose.medicines.v1';
-
 export const MEDICINE_STATUS = ['Active', 'Completed', 'Discontinued'];
 
 export const FREQUENCIES = [
@@ -15,9 +13,7 @@ export const FREQUENCIES = [
   'As Needed (PRN)',
 ];
 
-export const SEED_MEDICINES = [];
-
-const store = createApiStore({ seed: [], listPath: '/api/medicines', bulkPath: '/api/medicines/bulk' });
+const store = createApiStore({ seed: [], listPath: '/api/medicines' });
 
 export function loadMedicines() {
   return store.load();

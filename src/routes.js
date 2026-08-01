@@ -8,6 +8,7 @@ export const ROUTES = {
   insights: '/app/insights',
   pastInsights: '/app/insights/past',
   family: '/app/family',
+  familyEdit: '/app/family/:id/edit',
   health: '/app/health',
   doctors: '/app/doctors',
   doctorsAdd: '/app/doctors/add',

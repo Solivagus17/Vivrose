@@ -3,19 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import Icon from './Icon.jsx';
 import { useMember } from '../memberContext.jsx';
 import { ROUTES } from '../routes.js';
-import { addInsight } from '../insightsStore.js';
+import { apiPost } from '../api.js';
+import { refreshInsights } from '../insightsStore.js';
 
 const STEP_LABELS = ['Demographics', 'Lifestyle', 'Symptoms', 'History', 'Vitals', 'Labs'];
 
 const CONDITIONS = ['Hypertension', 'Pre-Diabetes', 'Diabetes', 'Heart Disease', 'Kidney Disease', 'Dyslipidemia', 'Stroke', 'COPD'];
 const FAMILY = ['Diabetes (Father)', 'Hypertension (Mother)', 'Heart Disease', 'Stroke', 'Kidney Disease', 'Cancer'];
-
-const SMOKING_VALUES = {
-  'Non-smoker': 'never',
-  'Active Smoker': 'current',
-  'Former Smoker': 'former',
-  'N/A': 'never',
-};
 
 const LOADING_STEPS = [
   { progress: 20, text: 'Analyzing demographics and lifestyle...' },
@@ -27,23 +21,25 @@ const LOADING_STEPS = [
 ];
 
 function numFrom(value) {
-  const n = parseFloat(String(value || '').replace(/[^\d.]/g, ''));
-  return Number.isFinite(n) ? n : '';
+  if (value === undefined || value === null || value === '—') return '';
+  const n = parseFloat(String(value).replace(/[^\d.]/g, ''));
+  return Number.isFinite(n) ? String(n) : '';
 }
 
 function reportToForm(m) {
+  if (!m) return {};
   const [bpSys, bpDia] = (m.bp || '').replace('mmHg', '').trim().split('/').map((s) => s.trim());
   return {
     name: m.name || '',
     age: m.age ?? '',
-    sex: (m.sex || 'Male').toLowerCase(),
+    sex: m.sex ? String(m.sex).toLowerCase() : '',
     relation: m.relation || '',
     location: m.location || '',
-    smoking: SMOKING_VALUES[m.smoking] || 'never',
-    medications: m.medications && m.medications !== 'None' ? m.medications : '',
+    smoking: m.smoking || '',
+    medications: Array.isArray(m.medications) ? m.medications.join(', ') : (m.medications && m.medications !== 'None' ? m.medications : ''),
     bpSys: numFrom(bpSys),
     bpDia: numFrom(bpDia),
-    bmi: m.bmi || '',
+    bmi: m.bmi === '—' ? '' : (m.bmi || ''),
     hba1c: numFrom(m.hba1c),
     glucose: numFrom(m.glucose),
     cholesterol: numFrom(m.cholesterol),
@@ -58,7 +54,7 @@ function Segmented({ options, active, onChange, size = '' }) {
         <span
           key={opt}
           className={`segmented-btn${active === opt ? ' active' : ''}`}
-          onClick={() => onChange(opt)}
+          onClick={() => onChange(active === opt ? '' : opt)}
         >
           {opt}
         </span>
@@ -82,9 +78,10 @@ function ToggleTag({ label, selected, onToggle }) {
 
 export default function NewAssessment() {
   const navigate = useNavigate();
-  const { members, member, setMember } = useMember();
-  const [forId, setForId] = useState(member.id);
-  const forMember = members.find((m) => m.id === forId) || member;
+  const { members, member, setMember, updateMember } = useMember();
+  const [forId, setForId] = useState(member?.id || '');
+  const forMember = members.find((m) => m.id === forId) || member || {};
+
   const [form, setForm] = useState(() => reportToForm(forMember));
   const [fetching, setFetching] = useState(false);
   const [fetchNote, setFetchNote] = useState('');
@@ -92,26 +89,39 @@ export default function NewAssessment() {
   const [phase, setPhase] = useState('form');
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState('');
-  const [conditions, setConditions] = useState(['Hypertension', 'Dyslipidemia']);
-  const [family, setFamily] = useState(['Diabetes (Father)', 'Hypertension (Mother)']);
-  const [stress, setStress] = useState('Moderate');
-  const [freqUrination, setFreqUrination] = useState('No');
-  const [thirst, setThirst] = useState('No');
-  const [weightLoss, setWeightLoss] = useState('No');
-  const [blurredVision, setBlurredVision] = useState('No');
-  const [chestPain, setChestPain] = useState('No');
-  const [sob, setSob] = useState('No');
-  const [fatigue, setFatigue] = useState('None');
+
+  // Unselected / Clean initial state
+  const [conditions, setConditions] = useState([]);
+  const [family, setFamily] = useState([]);
+  const [alcohol, setAlcohol] = useState('');
+  const [activity, setActivity] = useState('');
+  const [diet, setDiet] = useState('');
+  const [sleep, setSleep] = useState('');
+  const [stress, setStress] = useState('');
+  const [freqUrination, setFreqUrination] = useState('');
+  const [thirst, setThirst] = useState('');
+  const [weightLoss, setWeightLoss] = useState('');
+  const [blurredVision, setBlurredVision] = useState('');
+  const [chestPain, setChestPain] = useState('');
+  const [sob, setSob] = useState('');
+  const [fatigue, setFatigue] = useState('');
+  const [heartRate, setHeartRate] = useState('');
+  const [respRate, setRespRate] = useState('');
+  const [spO2, setSpO2] = useState('');
 
   const setField = (key) => (e) => setForm((prev) => ({ ...prev, [key]: e.target.value }));
 
   useEffect(() => {
-    setForm(reportToForm(forMember));
+    if (forMember && forMember.id) {
+      setForm(reportToForm(forMember));
+      setConditions(Array.isArray(forMember.conditions) ? forMember.conditions : []);
+      setFamily(Array.isArray(forMember.familyHistory) ? forMember.familyHistory : []);
+    }
     setFetchNote('');
   }, [forId]);
 
   useEffect(() => {
-    if (phase === 'loading') {
+    if (phase === 'loading' && forId) {
       const timers = [];
       LOADING_STEPS.forEach((s, i) => {
         timers.push(
@@ -120,8 +130,48 @@ export default function NewAssessment() {
             setStatus(s.text);
             if (i === LOADING_STEPS.length - 1) {
               timers.push(
-                setTimeout(() => {
-                  addInsight(forId, buildSnapshot());
+                setTimeout(async () => {
+                  const bp = form.bpSys && form.bpDia ? `${form.bpSys}/${form.bpDia} mmHg` : (forMember.bp || '');
+                  const assessmentData = {
+                    name: form.name || forMember.name,
+                    age: form.age || forMember.age,
+                    sex: form.sex || forMember.sex,
+                    relation: form.relation || forMember.relation,
+                    location: form.location || forMember.location,
+                    bp,
+                    bmi: form.bmi || forMember.bmi,
+                    hba1c: form.hba1c || forMember.hba1c,
+                    glucose: form.glucose || forMember.glucose,
+                    cholesterol: form.cholesterol || forMember.cholesterol,
+                    creatinine: form.creatinine || forMember.creatinine,
+                    smoking: form.smoking,
+                    conditions,
+                    familyHistory: family.join(', '),
+                    medications: form.medications || 'None',
+                    alcohol,
+                    activity,
+                    diet,
+                    sleep,
+                    stress,
+                    fatigue,
+                    heartRate,
+                    respRate,
+                    spO2,
+                  };
+
+                  try {
+                    const result = await apiPost('/api/assessments', {
+                      memberId: forId,
+                      data: assessmentData,
+                    });
+                    if (result && result.id) {
+                      await updateMember(forId, result);
+                    }
+                  } catch (err) {
+                    console.warn('API assessment error:', err);
+                  }
+
+                  await refreshInsights();
                   setMember(forId);
                   navigate(ROUTES.pastInsights);
                   setPhase('form');
@@ -130,13 +180,13 @@ export default function NewAssessment() {
                 }, 600)
               );
             }
-          }, (i + 1) * 500)
+          }, (i + 1) * 400)
         );
       });
       return () => timers.forEach(clearTimeout);
     }
     return undefined;
-  }, [phase, forId, navigate, setMember]);
+  }, [phase, forId, navigate, setMember, updateMember, form, conditions, family, stress, fatigue, alcohol, activity, diet, sleep, heartRate, respRate, spO2, forMember]);
 
   const toggleCondition = (c) =>
     setConditions((prev) => (prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]));
@@ -144,35 +194,15 @@ export default function NewAssessment() {
     setFamily((prev) => (prev.includes(f) ? prev.filter((x) => x !== f) : [...prev, f]));
 
   const fetchFromReport = () => {
-    if (fetching) return;
+    if (fetching || !forMember) return;
     setFetching(true);
     setFetchNote('');
     setTimeout(() => {
       setForm(reportToForm(forMember));
       setFetching(false);
-      setFetchNote(`Filled from ${forMember.name.split(' ')[0]}'s report`);
+      setFetchNote(`Filled from ${(forMember.name || '').split(' ')[0]}'s report`);
       setTimeout(() => setFetchNote(''), 2500);
     }, 450);
-  };
-
-  const buildSnapshot = () => {
-    const m = forMember;
-    const bp = form.bpSys && form.bpDia ? `${form.bpSys}/${form.bpDia} mmHg` : m.bp;
-    return {
-      ...m,
-      name: form.name || m.name,
-      age: form.age || m.age,
-      sex: (form.sex || m.sex).toLowerCase(),
-      location: form.location || m.location,
-      bp,
-      bmi: form.bmi || m.bmi,
-      hba1c: form.hba1c ? `${form.hba1c}%` : m.hba1c,
-      glucose: form.glucose ? `${form.glucose} mg/dL` : m.glucose,
-      cholesterol: form.cholesterol ? `${form.cholesterol} mg/dL` : m.cholesterol,
-      creatinine: form.creatinine ? `${form.creatinine} mg/dL` : m.creatinine,
-      assessed: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
-      lastAssessed: 'Just now',
-    };
   };
 
   const stepDots = STEP_LABELS.map((label, i) => {
@@ -197,17 +227,18 @@ export default function NewAssessment() {
             <div className="form-row" style={{ marginBottom: 16 }}>
               <div className="form-group">
                 <label className="form-label">Full Name</label>
-                <input type="text" className="form-input" value={form.name} onChange={setField('name')} />
+                <input type="text" className="form-input" value={form.name || ''} onChange={setField('name')} placeholder="e.g. Meera Mehta" />
               </div>
               <div className="form-group">
                 <label className="form-label">Age</label>
-                <input type="number" className="form-input" value={form.age} onChange={setField('age')} />
+                <input type="number" className="form-input" value={form.age || ''} onChange={setField('age')} placeholder="e.g. 45" />
               </div>
             </div>
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">Sex</label>
-                <select className="form-select" value={form.sex} onChange={setField('sex')}>
+                <select className="form-select" value={form.sex || ''} onChange={setField('sex')}>
+                  <option value="">Select sex...</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                   <option value="other">Other</option>
@@ -215,7 +246,7 @@ export default function NewAssessment() {
               </div>
               <div className="form-group">
                 <label className="form-label">Relation to You</label>
-                <input type="text" className="form-input" value={form.relation} onChange={setField('relation')} />
+                <input type="text" className="form-input" value={form.relation || ''} onChange={setField('relation')} placeholder="e.g. Mother" />
               </div>
             </div>
             <div className="form-row">
@@ -225,7 +256,7 @@ export default function NewAssessment() {
               </div>
               <div className="form-group">
                 <label className="form-label">Location</label>
-                <input type="text" className="form-input" value={form.location} onChange={setField('location')} />
+                <input type="text" className="form-input" value={form.location || ''} onChange={setField('location')} placeholder="e.g. Mumbai" />
               </div>
             </div>
             <div className="wizard-actions">
@@ -245,18 +276,20 @@ export default function NewAssessment() {
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">Smoking Status</label>
-                <select className="form-select" value={form.smoking} onChange={setField('smoking')}>
-                  <option value="current">Current Smoker</option>
-                  <option value="former">Former Smoker</option>
+                <select className="form-select" value={form.smoking || ''} onChange={setField('smoking')}>
+                  <option value="">Select smoking status...</option>
                   <option value="never">Never Smoked</option>
+                  <option value="former">Former Smoker</option>
+                  <option value="current">Current Smoker</option>
                 </select>
               </div>
               <div className="form-group">
                 <label className="form-label">Alcohol Consumption</label>
-                <select className="form-select" defaultValue="none">
-                  <option value="moderate">Moderate (3–7 drinks/week)</option>
+                <select className="form-select" value={alcohol} onChange={(e) => setAlcohol(e.target.value)}>
+                  <option value="">Select alcohol intake...</option>
                   <option value="none">None</option>
                   <option value="light">Light (1–2 drinks/week)</option>
+                  <option value="moderate">Moderate (3–7 drinks/week)</option>
                   <option value="heavy">Heavy (&gt;7 drinks/week)</option>
                 </select>
               </div>
@@ -264,7 +297,8 @@ export default function NewAssessment() {
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">Physical Activity</label>
-                <select className="form-select" defaultValue="moderate">
+                <select className="form-select" value={activity} onChange={(e) => setActivity(e.target.value)}>
+                  <option value="">Select activity level...</option>
                   <option value="sedentary">Sedentary</option>
                   <option value="light">Light (1–2 days/week)</option>
                   <option value="moderate">Moderate (3–5 days/week)</option>
@@ -273,7 +307,8 @@ export default function NewAssessment() {
               </div>
               <div className="form-group">
                 <label className="form-label">Diet Quality</label>
-                <select className="form-select" defaultValue="good">
+                <select className="form-select" value={diet} onChange={(e) => setDiet(e.target.value)}>
+                  <option value="">Select diet quality...</option>
                   <option value="poor">Poor — high processed food intake</option>
                   <option value="fair">Fair — some healthy choices</option>
                   <option value="good">Good — balanced diet</option>
@@ -283,7 +318,7 @@ export default function NewAssessment() {
             </div>
             <div className="form-group">
               <label className="form-label">Sleep Duration (hours/night)</label>
-              <input type="number" className="form-input" placeholder="e.g. 7" defaultValue="7" style={{ maxWidth: 200 }} />
+              <input type="number" className="form-input" value={sleep} onChange={(e) => setSleep(e.target.value)} placeholder="e.g. 7" style={{ maxWidth: 200 }} />
             </div>
             <div className="form-group">
               <label className="form-label">Stress Level</label>
@@ -379,7 +414,7 @@ export default function NewAssessment() {
                 className="form-input"
                 rows="3"
                 placeholder="List current medications..."
-                value={form.medications}
+                value={form.medications || ''}
                 onChange={setField('medications')}
                 style={{ resize: 'vertical' }}
               />
@@ -404,41 +439,31 @@ export default function NewAssessment() {
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">Systolic BP (mmHg)</label>
-                <input type="number" className="form-input" value={form.bpSys} onChange={setField('bpSys')} />
+                <input type="number" className="form-input" value={form.bpSys || ''} onChange={setField('bpSys')} placeholder="e.g. 120" />
               </div>
               <div className="form-group">
                 <label className="form-label">Diastolic BP (mmHg)</label>
-                <input type="number" className="form-input" value={form.bpDia} onChange={setField('bpDia')} />
+                <input type="number" className="form-input" value={form.bpDia || ''} onChange={setField('bpDia')} placeholder="e.g. 80" />
               </div>
             </div>
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">Heart Rate (bpm)</label>
-                <input type="number" className="form-input" defaultValue="78" />
+                <input type="number" className="form-input" value={heartRate} onChange={(e) => setHeartRate(e.target.value)} placeholder="e.g. 72" />
               </div>
               <div className="form-group">
                 <label className="form-label">Respiratory Rate</label>
-                <input type="number" className="form-input" defaultValue="16" />
-              </div>
-            </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label className="form-label">Weight (kg)</label>
-                <input type="number" className="form-input" placeholder="Enter weight" />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Height (cm)</label>
-                <input type="number" className="form-input" placeholder="Enter height" />
+                <input type="number" className="form-input" value={respRate} onChange={(e) => setRespRate(e.target.value)} placeholder="e.g. 16" />
               </div>
             </div>
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">BMI</label>
-                <input type="text" className="form-input" value={form.bmi} readOnly style={{ background: 'var(--gray-50)' }} />
+                <input type="text" className="form-input" value={form.bmi || ''} onChange={setField('bmi')} placeholder="e.g. 24.5" />
               </div>
               <div className="form-group">
                 <label className="form-label">SpO₂ (%)</label>
-                <input type="number" className="form-input" defaultValue="98" />
+                <input type="number" className="form-input" value={spO2} onChange={(e) => setSpO2(e.target.value)} placeholder="e.g. 98" />
               </div>
             </div>
             <div className="wizard-actions">
@@ -463,51 +488,21 @@ export default function NewAssessment() {
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">HbA1c (%)</label>
-                <input type="number" className="form-input" step="0.1" value={form.hba1c} onChange={setField('hba1c')} />
+                <input type="number" className="form-input" step="0.1" value={form.hba1c || ''} onChange={setField('hba1c')} placeholder="e.g. 5.7" />
               </div>
               <div className="form-group">
                 <label className="form-label">Fasting Blood Glucose (mg/dL)</label>
-                <input type="number" className="form-input" value={form.glucose} onChange={setField('glucose')} />
+                <input type="number" className="form-input" value={form.glucose || ''} onChange={setField('glucose')} placeholder="e.g. 95" />
               </div>
             </div>
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">Total Cholesterol (mg/dL)</label>
-                <input type="number" className="form-input" value={form.cholesterol} onChange={setField('cholesterol')} />
+                <input type="number" className="form-input" value={form.cholesterol || ''} onChange={setField('cholesterol')} placeholder="e.g. 180" />
               </div>
-              <div className="form-group">
-                <label className="form-label">LDL Cholesterol (mg/dL)</label>
-                <input type="number" className="form-input" placeholder="Not available" />
-              </div>
-            </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label className="form-label">HDL Cholesterol (mg/dL)</label>
-                <input type="number" className="form-input" placeholder="Not available" />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Triglycerides (mg/dL)</label>
-                <input type="number" className="form-input" placeholder="Not available" />
-              </div>
-            </div>
-            <div className="form-row">
               <div className="form-group">
                 <label className="form-label">Serum Creatinine (mg/dL)</label>
-                <input type="number" className="form-input" step="0.1" value={form.creatinine} onChange={setField('creatinine')} />
-              </div>
-              <div className="form-group">
-                <label className="form-label">eGFR (mL/min/1.73m²)</label>
-                <input type="number" className="form-input" placeholder="Not available" />
-              </div>
-            </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label className="form-label">Urine Albumin (mg/L)</label>
-                <input type="number" className="form-input" placeholder="Not available" />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Hemoglobin (g/dL)</label>
-                <input type="number" className="form-input" step="0.1" placeholder="Not available" />
+                <input type="number" className="form-input" step="0.1" value={form.creatinine || ''} onChange={setField('creatinine')} placeholder="e.g. 0.9" />
               </div>
             </div>
             <div className="wizard-actions">
@@ -544,7 +539,7 @@ export default function NewAssessment() {
                 <Icon name="brain" size="sm" />
                 Past Insights
               </button>
-              <button className="btn btn-secondary btn-sm" onClick={fetchFromReport} disabled={fetching}>
+              <button className="btn btn-secondary btn-sm" onClick={fetchFromReport} disabled={fetching || !forMember}>
                 <Icon name="document" size="sm" />
                 {fetching ? 'Fetching…' : 'Fetch from Report'}
               </button>
@@ -557,7 +552,7 @@ export default function NewAssessment() {
                 className={`assess-chip${forId === m.id ? ' active' : ''}`}
                 onClick={() => setForId(m.id)}
               >
-                {m.initials} · {m.name.split(' ')[0]}
+                {m.initials} · {(m.name || 'Member').split(' ')[0]}
               </span>
             ))}
           </div>
@@ -597,7 +592,7 @@ export default function NewAssessment() {
                 Analyzing Health Data
               </h3>
               <p style={{ color: 'var(--gray-500)', fontSize: '0.9375rem', marginBottom: 28 }}>
-                VivRose AI is processing risk factors and preparing {forMember.name.split(' ')[0]}&apos;s health insights...
+                VivRose AI is processing risk factors and preparing {(forMember?.name || 'Member').split(' ')[0]}&apos;s health insights...
               </p>
               <div
                 style={{

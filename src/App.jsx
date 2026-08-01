@@ -7,6 +7,7 @@ import NewAssessment from './components/NewAssessment.jsx';
 import AiAssessment from './components/AiAssessment.jsx';
 import PastInsights from './components/PastInsights.jsx';
 import FamilyMembers from './components/FamilyMembers.jsx';
+import EditMember from './components/EditMember.jsx';
 import HealthInsights from './components/HealthInsights.jsx';
 import Reports from './components/Reports.jsx';
 import UploadReport from './components/UploadReport.jsx';
@@ -41,6 +42,7 @@ export default function App() {
             <Route path={ROUTES.insights} element={<AiAssessment />} />
             <Route path={ROUTES.pastInsights} element={<PastInsights />} />
             <Route path={ROUTES.family} element={<FamilyMembers />} />
+            <Route path={ROUTES.familyEdit} element={<EditMember />} />
             <Route path={ROUTES.health} element={<HealthInsights />} />
             <Route path={ROUTES.doctors} element={<Doctors />} />
             <Route path={ROUTES.doctorsAdd} element={<AddDoctor />} />

@@ -1,4 +1,4 @@
-"""Rule-based chat responder that answers using real family data."""
+from . import groq_service
 
 
 def _top_score(member):
@@ -23,7 +23,7 @@ def _by_name(members):
     return result
 
 
-def reply(message, members):
+def _rule_reply(message, members):
     msg = message.lower()
     if not members:
         return ("I don't have any family members to review yet. "
@@ -73,3 +73,11 @@ def reply(message, members):
     average = total // len(members)
     return (f"Across your family of {len(members)}, the average top risk score is {average}/100. "
             "I can tell you about diabetes, blood pressure, smoking, or who needs attention most — just ask.")
+
+
+def reply(message, members):
+    """Answer user query using Groq API (llama-3.1-8b-instant), fallback to rule-based engine."""
+    ai_answer = groq_service.chat_reply(message, members)
+    if ai_answer:
+        return ai_answer
+    return _rule_reply(message, members)

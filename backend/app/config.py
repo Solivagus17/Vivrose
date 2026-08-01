@@ -13,5 +13,8 @@ class Config:
     SUPABASE_PUBLISHABLE_KEY = os.getenv('SUPABASE_PUBLISHABLE_KEY') or os.getenv('SUPABASE_ANON_KEY', '')
     SUPABASE_BUCKET = os.getenv('SUPABASE_BUCKET', 'medical-reports')
     GOOGLE_APPLICATION_CREDENTIALS = os.getenv('GOOGLE_APPLICATION_CREDENTIALS', '')
-    # Dev only: accept any bearer token instead of verifying with Firebase.
+    # Dev only: set to '1' to accept any bearer token instead of verifying
+    # with Firebase. MUST be '0' in production.
     FIREBASE_ALLOW_UNVERIFIED = os.getenv('FIREBASE_ALLOW_UNVERIFIED', '0')
+    GROQ_API_KEY = os.getenv('GROQ_API_KEY', '')
+

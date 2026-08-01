@@ -1,8 +1,8 @@
-import { apiGet, apiPut } from './api.js';
+import { apiGet } from './api.js';
 
 const stores = [];
 
-export function createApiStore({ seed = [], listPath, bulkPath }) {
+export function createApiStore({ seed = [], listPath }) {
   let cache = Array.isArray(seed) ? seed : [];
   let loaded = false;
 
@@ -10,7 +10,7 @@ export function createApiStore({ seed = [], listPath, bulkPath }) {
     if (typeof window === 'undefined') return cache;
     try {
       const list = await apiGet(listPath);
-      const rows = Array.isArray(list) ? list : (list.data || list.records || []);
+      const rows = Array.isArray(list) ? list : (list?.data || list?.records || []);
       cache = rows;
       loaded = true;
       return cache;
@@ -25,12 +25,11 @@ export function createApiStore({ seed = [], listPath, bulkPath }) {
   }
 
   function save(list) {
-    cache = list;
-    if (typeof window !== 'undefined') apiPut(bulkPath, list).catch(() => {});
+    cache = Array.isArray(list) ? list : [];
   }
 
   function setCache(next) {
-    cache = next;
+    cache = Array.isArray(next) ? next : [];
   }
 
   function reset() {

@@ -1,13 +1,9 @@
 import { apiPost, apiPut, apiDelete } from './api.js';
 import { createApiStore } from './storeUtils.js';
 
-export const CHECKUPS_STORAGE_KEY = 'vivrose.checkups.v1';
-
 export const CHECKUP_STATUS = ['Scheduled', 'Completed', 'Cancelled'];
 
-export const SEED_CHECKUPS = [];
-
-const store = createApiStore({ seed: [], listPath: '/api/checkups', bulkPath: '/api/checkups/bulk' });
+const store = createApiStore({ seed: [], listPath: '/api/checkups' });
 
 export function loadCheckups() {
   return store.load();

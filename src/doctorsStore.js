@@ -1,8 +1,6 @@
 import { apiPost, apiPut, apiDelete } from './api.js';
 import { createApiStore } from './storeUtils.js';
 
-export const DOCTORS_STORAGE_KEY = 'vivrose.doctors.v1';
-
 export const SPECIALTIES = [
   'General Physician',
   'Cardiologist',
@@ -26,9 +24,7 @@ export const SPECIALTIES = [
   'Other',
 ];
 
-export const SEED_DOCTORS = [];
-
-const store = createApiStore({ seed: [], listPath: '/api/doctors', bulkPath: '/api/doctors/bulk' });
+const store = createApiStore({ seed: [], listPath: '/api/doctors' });
 
 export function loadDoctors() {
   return store.load();

@@ -1,8 +1,6 @@
 import { apiPost, apiPut, apiDelete, apiUpload } from './api.js';
 import { createApiStore } from './storeUtils.js';
 
-export const REPORTS_STORAGE_KEY = 'vivrose.medical-reports.v1';
-
 export const REPORT_TYPES = [
   'Blood Test',
   'Urine Test',
@@ -16,9 +14,7 @@ export const REPORT_TYPES = [
   'Other',
 ];
 
-export const SEED_REPORTS = [];
-
-const store = createApiStore({ seed: [], listPath: '/api/reports', bulkPath: '/api/reports/bulk' });
+const store = createApiStore({ seed: [], listPath: '/api/reports' });
 
 export function loadReports() {
   return store.load();
@@ -40,7 +36,7 @@ export async function addReport(record) {
     store.setCache(next);
     return created;
   } catch {
-    const local = { id: `rep-${Date.now()}`, ...record };
+    const local = { id: `rep-${Date.now()}`, ...(record instanceof FormData ? {} : record) };
     const next = [local, ...loadReports()];
     store.setCache(next);
     return local;

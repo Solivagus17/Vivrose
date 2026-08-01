@@ -21,8 +21,10 @@ const NAV_SECTIONS = [
   {
     title: 'Insights',
     items: [
-      { id: 'health', label: 'Health Insights', icon: 'trend', path: ROUTES.health },
-      { id: 'generate-report', label: 'Generate AI Report', icon: 'sparkle', path: ROUTES.generateReport },
+      { id: 'insights', label: 'AI Insights', icon: 'sparkle', path: ROUTES.insights },
+      { id: 'past-insights', label: 'Past Insights', icon: 'brain', path: ROUTES.pastInsights },
+      { id: 'health', label: 'Health Analytics', icon: 'trend', path: ROUTES.health },
+      { id: 'generate-report', label: 'Generate AI Report', icon: 'document', path: ROUTES.generateReport },
     ],
   },
   {

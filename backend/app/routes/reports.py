@@ -5,7 +5,7 @@ from flask import g, request
 from ..db import db
 from ..models import Report
 from ..security import require_user
-from ..serializers import serialize
+from ..serializers import parse_date, serialize
 from ..utils import gen_id
 from .crud import crud_blueprint
 
@@ -35,7 +35,7 @@ def _upload():
         file_name=data.get('fileName') or file.filename or 'report.pdf',
         file_size=data.get('fileSize'),
         report_type=data.get('type'),
-        date=data.get('date'),
+        date=parse_date(data.get('date')),
         hospital=data.get('hospital'),
         doctor=data.get('doctor'),
         purpose=data.get('purpose'),

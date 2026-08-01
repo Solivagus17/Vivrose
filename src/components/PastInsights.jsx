@@ -1,19 +1,20 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from './Icon.jsx';
 import InsightView from './InsightView.jsx';
 import { useMember } from '../memberContext.jsx';
 import { ROUTES } from '../routes.js';
-import { loadInsights } from '../insightsStore.js';
+import { apiGet } from '../api.js';
 
 function formatDate(iso) {
+  if (!iso) return 'Recent';
   const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso || '';
+  if (Number.isNaN(d.getTime())) return iso || 'Recent';
   return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-function riskLabel(member) {
-  const level = member.level || 'low';
+function riskLabel(snapshot) {
+  const level = snapshot?.level || 'low';
   if (level === 'high') return 'High risk';
   if (level === 'moderate') return 'Moderate risk';
   return 'Low risk';
@@ -22,24 +23,51 @@ function riskLabel(member) {
 export default function PastInsights() {
   const navigate = useNavigate();
   const { members, member, setMember } = useMember();
-  const [insights] = useState(loadInsights);
-  const [forId, setForId] = useState(member.id);
+  const [insights, setInsights] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
 
-  const forMember = members.find((m) => m.id === forId) || member;
+  const activeMemberId = member?.id || (members.length ? members[0].id : '');
 
-  const list = useMemo(
-    () =>
-      insights
-        .filter((s) => s.memberId === forId)
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
-    [insights, forId]
-  );
+  /* Fetch insights from the backend */
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
 
-  const selected = insights.find((s) => s.id === selectedId) || list[0] || null;
+    apiGet('/api/insights')
+      .then((list) => {
+        if (!cancelled) {
+          setInsights(Array.isArray(list) ? list : []);
+        }
+      })
+      .catch((err) => {
+        console.error('[PastInsights] Failed to fetch insights:', err);
+        if (!cancelled) {
+          setError(err?.message || 'Failed to load insights');
+          setInsights([]);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => { cancelled = true; };
+  }, [activeMemberId]);
+
+  /* Filter and sort by selected member */
+  const list = useMemo(() => {
+    if (!activeMemberId) return insights;
+    return insights
+      .filter((s) => s.memberId === activeMemberId)
+      .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+  }, [insights, activeMemberId]);
+
+  const selected = list.find((s) => s.id === selectedId) || list[0] || null;
+  const snapshotData = selected?.member || selected?.snapshot || null;
 
   const selectMember = (id) => {
-    setForId(id);
     setMember(id);
     setSelectedId(null);
   };
@@ -47,39 +75,58 @@ export default function PastInsights() {
   return (
     <>
       <div className="page-header">
-        <div className="page-title">AI Insights</div>
-        <div className="page-subtitle">Past AI assessments and health insights for each family member.</div>
+        <div className="page-title">Past AI Insights</div>
+        <div className="page-subtitle">Review past AI health assessments and reports for each family member.</div>
       </div>
 
-      <div className="assess-for">
+      <div className="assess-for" style={{ marginBottom: 24 }}>
         <div className="assess-for-head">
           <span className="assess-for-label">Showing insights for</span>
           <button className="btn btn-primary btn-sm" onClick={() => navigate(ROUTES.assessment)}>
             <Icon name="sparkle" size="sm" />
-            AI Assessment
+            Run AI Assessment
           </button>
         </div>
-        <div className="assess-for-chips">
-          {members.map((m) => (
-            <span
-              key={m.id}
-              className={`assess-chip${forId === m.id ? ' active' : ''}`}
-              onClick={() => selectMember(m.id)}
-            >
-              {m.initials} · {(m.name || 'Member').split(' ')[0]}
-            </span>
-          ))}
-        </div>
+        {members.length > 0 && (
+          <div className="assess-for-chips">
+            {members.map((m) => (
+              <span
+                key={m.id}
+                className={`assess-chip${activeMemberId === m.id ? ' active' : ''}`}
+                onClick={() => selectMember(m.id)}
+              >
+                {m.initials} · {(m.name || 'Member').split(' ')[0]}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
 
-      {list.length === 0 ? (
+      {loading ? (
+        <div style={{ padding: 40, textAlign: 'center', color: 'var(--gray-400)' }}>
+          Loading insights...
+        </div>
+      ) : error ? (
+        <div className="reports-empty">
+          <div className="reports-empty-icon">
+            <Icon name="warning" size="lg" />
+          </div>
+          <div className="reports-empty-title">Could not load insights</div>
+          <div className="reports-empty-desc">{error}</div>
+          <button className="btn btn-primary btn-sm" onClick={() => window.location.reload()}>
+            Retry
+          </button>
+        </div>
+      ) : list.length === 0 ? (
         <div className="reports-empty">
           <div className="reports-empty-icon">
             <Icon name="brain" size="lg" />
           </div>
-          <div className="reports-empty-title">No insights for {(forMember?.name || 'Member').split(' ')[0]} yet</div>
+          <div className="reports-empty-title">
+            No insights {activeMemberId ? `for ${(members.find(m => m.id === activeMemberId)?.name || 'this member').split(' ')[0]}` : ''} yet
+          </div>
           <div className="reports-empty-desc">
-            Run an AI assessment for {(forMember?.name || 'Member').split(' ')[0]} to generate risk scores and health insights.
+            Run an AI assessment to generate risk scores and personalized health insights.
           </div>
           <button className="btn btn-primary btn-sm" onClick={() => navigate(ROUTES.assessment)}>
             <Icon name="sparkle" size="sm" />
@@ -88,20 +135,29 @@ export default function PastInsights() {
         </div>
       ) : (
         <>
-          <div className="past-insights-bar">
+          <div className="past-insights-bar" style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 20 }}>
             {list.map((s) => (
               <span
                 key={s.id}
                 className={`past-chip${selected?.id === s.id ? ' active' : ''}`}
                 onClick={() => setSelectedId(s.id)}
+                style={{ cursor: 'pointer' }}
               >
                 <Icon name="calendar" size="xs" />
                 {formatDate(s.createdAt)}
-                <span className={`risk-badge ${s.member.level || 'low'}`}>{riskLabel(s.member)}</span>
+                <span className={`risk-badge ${(s.member || s.snapshot)?.level || 'low'}`}>
+                  {riskLabel(s.member || s.snapshot)}
+                </span>
               </span>
             ))}
           </div>
-          {selected && <InsightView key={selected.id} data={selected.member} />}
+          {snapshotData ? (
+            <InsightView key={selected?.id} data={snapshotData} />
+          ) : (
+            <div style={{ padding: 40, textAlign: 'center', color: 'var(--gray-400)' }}>
+              Select an assessment to view its details.
+            </div>
+          )}
         </>
       )}
     </>

@@ -21,9 +21,12 @@ async function request(path, options = {}) {
   if (typeof window === 'undefined') {
     throw new Error('API unavailable during SSR');
   }
+  if (!token) {
+    throw new Error('No auth token available. Please sign in.');
+  }
   const isForm = typeof FormData !== 'undefined' && options.body instanceof FormData;
   const headers = {
-    Authorization: `Bearer ${token || 'dev-token'}`,
+    Authorization: `Bearer ${token}`,
     ...(options.headers || {}),
   };
   if (!isForm) {

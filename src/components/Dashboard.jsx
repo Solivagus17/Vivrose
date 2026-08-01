@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from './Icon.jsx';
 import { RiskBadge, StatCard, Avatar } from './ui.jsx';
 import { TextEffect } from './core/TextEffect.jsx';
 import { InView } from './core/InView.jsx';
-import { USER, DASH_STATS, ALERTS } from '../data/data.js';
 import { useMember } from '../memberContext.jsx';
+import { useAuth } from '../authContext.jsx';
 import { ROUTES } from '../routes.js';
+import { apiGet } from '../api.js';
 
 function getGreeting() {
   const hour = new Date().getHours();
@@ -27,12 +28,51 @@ function today() {
 export default function Dashboard() {
   const navigate = useNavigate();
   const { members, setMember } = useMember();
+  const { profile, user } = useAuth();
+  const [dashData, setDashData] = useState(null);
 
-  const stats = DASH_STATS.map((s) =>
-    s.label === 'Family Members' ? { ...s, value: String(members.length) } : s
-  );
+  useEffect(() => {
+    let unmounted = false;
+    apiGet('/api/dashboard')
+      .then((data) => {
+        if (!unmounted && data) setDashData(data);
+      })
+      .catch(() => {});
+    return () => {
+      unmounted = true;
+    };
+  }, [members]);
 
-  const greeting = `${getGreeting()}, ${USER.name.split(' ')[0]}`;
+  const displayName = profile?.name || user?.displayName || 'Family Health Manager';
+  const firstName = displayName.split(' ')[0] || 'Manager';
+  const greeting = `${getGreeting()}, ${firstName}`;
+
+  const familySize = dashData?.familySize ?? members.length;
+  const highRiskCount = dashData?.highRisk ?? members.filter((m) => m.level === 'high').length;
+  const assessedCount = dashData?.assessments ?? members.filter((m) => m.assessed && m.lastAssessed !== 'Never').length;
+  const pendingCheckups = dashData?.pendingCheckups ?? 0;
+
+  const stats = [
+    { label: 'Family Members', value: String(familySize), icon: 'users', change: 'Registered', trend: 'up' },
+    { label: 'High Risk Members', value: String(highRiskCount), icon: 'alert', change: 'Needs attention', trend: highRiskCount > 0 ? 'down' : 'flat' },
+    { label: 'AI Assessments', value: String(assessedCount), icon: 'sparkle', change: 'Completed', trend: 'up' },
+    { label: 'Pending Check-ups', value: String(pendingCheckups), icon: 'calendar', change: 'Scheduled', trend: 'flat' },
+  ];
+
+  const alerts = dashData?.alerts || [];
+  members.forEach((m) => {
+    (m.warnings || []).forEach((w) => {
+      if (!alerts.some((a) => a.title === w.title && a.memberName === m.name)) {
+        alerts.push({
+          level: w.level || 'moderate',
+          icon: w.icon || 'bolt',
+          title: w.title || 'Health Alert',
+          desc: w.desc || '',
+          memberName: m.name,
+        });
+      }
+    });
+  });
 
   const openMember = (id) => {
     setMember(id);
@@ -71,22 +111,28 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="recent-patients">
-            {members.map((p) => (
-              <div
-                key={p.id}
-                className="patient-row clickable"
-                onClick={() => openMember(p.id)}
-              >
-                <Avatar initials={p.initials} background={p.avatar} />
-                <div className="patient-info">
-                  <div className="patient-name">{p.name}</div>
-                  <div className="patient-detail">
-                    {p.relation} · {p.age} yrs · Assessed {p.lastAssessed}
-                  </div>
-                </div>
-                <RiskBadge level={p.level} />
+            {members.length === 0 ? (
+              <div style={{ padding: '24px', color: 'var(--gray-400)', textAlign: 'center', fontSize: '0.875rem' }}>
+                No family members added yet. Click &quot;Family Members&quot; to add your first profile.
               </div>
-            ))}
+            ) : (
+              members.map((p) => (
+                <div
+                  key={p.id}
+                  className="patient-row clickable"
+                  onClick={() => openMember(p.id)}
+                >
+                  <Avatar initials={p.initials} background={p.avatar} />
+                  <div className="patient-info">
+                    <div className="patient-name">{p.name}</div>
+                    <div className="patient-detail">
+                      {p.relation} {p.age ? `· ${p.age} yrs` : ''} · Assessed {p.lastAssessed || 'Never'}
+                    </div>
+                  </div>
+                  <RiskBadge level={p.level || 'low'} />
+                </div>
+              ))
+            )}
           </div>
         </InView>
 
@@ -103,18 +149,23 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="alert-list">
-            {ALERTS.map((a) => (
-              <div className="alert-item" key={a.title}>
-                <div className={`alert-icon-wrap ${a.wrap}`}>
-                  <Icon name={a.icon} size="md" />
-                </div>
-                <div className="alert-text">
-                  <div className="alert-title">{a.title}</div>
-                  <div className="alert-desc">{a.desc}</div>
-                </div>
-                <span className="alert-time">{a.time}</span>
+            {alerts.length === 0 ? (
+              <div style={{ padding: '24px', color: 'var(--gray-400)', textAlign: 'center', fontSize: '0.875rem' }}>
+                No active health alerts. All family members are monitored.
               </div>
-            ))}
+            ) : (
+              alerts.map((a, i) => (
+                <div className="alert-item" key={i}>
+                  <div className={`alert-icon-wrap ${a.level === 'high' ? 'danger' : 'warning'}`}>
+                    <Icon name={a.icon || 'bolt'} size="md" />
+                  </div>
+                  <div className="alert-text">
+                    <div className="alert-title">{a.title} {a.memberName ? `(${a.memberName})` : ''}</div>
+                    <div className="alert-desc">{a.desc}</div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </InView>
       </div>

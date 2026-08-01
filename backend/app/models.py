@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy import JSON
 from sqlalchemy.dialects.postgresql import JSONB
@@ -9,7 +9,7 @@ JSON_TYPE = JSON().with_variant(JSONB(), 'postgresql')
 
 
 def _now():
-    return datetime.utcnow()
+    return datetime.now(timezone.utc)
 
 
 class TimestampMixin:

@@ -1,5 +1,6 @@
 import React from 'react';
 import { addMember, loadMembers, refreshMembers, removeMember, updateMember } from './membersStore.js';
+import { useAuth } from './authContext.jsx';
 
 export const MemberContext = React.createContext({
   members: [],
@@ -11,46 +12,49 @@ export const MemberContext = React.createContext({
 });
 
 export function MemberProvider({ children }) {
+  const { user, loading: authLoading } = useAuth();
   const [members, setMembers] = React.useState([]);
   const [memberId, setMemberId] = React.useState(null);
   const member = (memberId && members.find((m) => m.id === memberId)) || members[0] || null;
 
-  // Initial load from Supabase on mount
+  // Initial load from Supabase after auth is ready
   React.useEffect(() => {
+    if (authLoading || !user) return;
     refreshMembers().then((list) => {
       setMembers(list);
-      if (list.length && !memberId) {
+      if (list && list.length && !memberId) {
         setMemberId(list[0].id);
       }
     });
-  }, []);
+  }, [user, authLoading]);
 
-  const add = (profile) => {
-    // addMember is synchronous-optimistic: returns localMember immediately
-    const newMember = addMember(profile);
-    // newMember is the Promise result — but addMember returns localMember synchronously
-    // Because we made addMember non-blocking, we resolve it via .then
-    Promise.resolve(newMember).then((m) => {
-      setMembers(loadMembers());
-    });
-    // Return the promise so callers can get the id
-    return Promise.resolve(newMember);
+  // Clear members when user logs out
+  React.useEffect(() => {
+    if (!user) {
+      setMembers([]);
+      setMemberId(null);
+    }
+  }, [user]);
+
+  const add = async (profile) => {
+    const created = await addMember(profile);
+    setMembers(loadMembers());
+    if (created && created.id) setMemberId(created.id);
+    return created;
   };
 
-  const update = (id, patch) => {
-    updateMember(id, patch).then(() => {
-      setMembers(loadMembers());
-    });
+  const update = async (id, patch) => {
+    await updateMember(id, patch);
+    setMembers(loadMembers());
   };
 
-  const remove = (id) => {
-    if (members.length <= 1) return;
-    removeMember(id).then((remaining) => {
-      setMembers(remaining);
-      setMemberId((prevId) => {
-        if (prevId !== id) return prevId;
-        return remaining.length ? remaining[0].id : null;
-      });
+  const remove = async (id) => {
+    const remaining = await removeMember(id);
+    const nextList = Array.isArray(remaining) ? remaining : loadMembers();
+    setMembers(nextList);
+    setMemberId((prevId) => {
+      if (prevId !== id) return prevId;
+      return nextList.length ? nextList[0].id : null;
     });
   };
 

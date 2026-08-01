@@ -19,7 +19,7 @@ API_OVERRIDES = {
     },
 }
 
-EXCLUDE = ('household_id', 'created_at', 'updated_at')
+EXCLUDE = ('household_id', 'updated_at')
 
 DATE_COLS = {'birth_date', 'date', 'start_date', 'end_date'}
 

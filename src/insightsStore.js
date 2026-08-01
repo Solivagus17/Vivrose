@@ -1,7 +1,5 @@
 import { apiGet, apiPost } from './api.js';
 
-export const INSIGHTS_STORAGE_KEY = 'vivrose.insights.v1';
-
 let cache = [];
 let loaded = false;
 
@@ -23,7 +21,7 @@ export function loadInsights() {
 }
 
 export function saveInsights() {
-  /* insights are appended individually via addInsight */
+  /* insights are created server-side or posted individually */
 }
 
 export function addInsight(memberId, memberSnapshot) {

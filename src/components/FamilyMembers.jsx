@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import Icon from './Icon.jsx';
 import { RiskBadge, RiskBadgeShort, Avatar } from './ui.jsx';
-import { USER, calcAge } from '../data/data.js';
+import { calcAge, DEFAULT_LOCATION } from '../data/data.js';
 import { useMember } from '../memberContext.jsx';
 import { ROUTES } from '../routes.js';
 
@@ -23,7 +23,7 @@ function MemberModal({ initial, onClose, onSubmit }) {
   const [sex, setSex] = useState(initial?.sex || 'Male');
   const [birthDate, setBirthDate] = useState(initial?.birthDate || '');
   const [birthLocation, setBirthLocation] = useState(initial?.birthLocation || '');
-  const [location, setLocation] = useState(initial?.location || USER.location);
+  const [location, setLocation] = useState(initial?.location || DEFAULT_LOCATION);
 
   const age = calcAge(birthDate);
 
@@ -45,7 +45,7 @@ function MemberModal({ initial, onClose, onSubmit }) {
       sex,
       birthDate,
       birthLocation: birthLocation.trim(),
-      location: location.trim() || USER.location,
+      location: location.trim() || DEFAULT_LOCATION,
       age,
     });
   };
@@ -182,9 +182,6 @@ export default function FamilyMembers() {
       const created = await addMember(profile);
       setModal(null);
       if (created && created.id) setMember(created.id);
-    } else if (modal && modal.member) {
-      await updateMember(modal.member.id, profile);
-      setModal(null);
     }
   };
 
@@ -302,7 +299,7 @@ export default function FamilyMembers() {
                   className="btn btn-ghost btn-sm"
                   onClick={(e) => {
                     e.stopPropagation();
-                    setModal({ member: m });
+                    navigate(ROUTES.familyEdit.replace(':id', m.id));
                   }}
                   title={`Edit ${m.name}`}
                   aria-label={`Edit ${m.name}`}
@@ -327,9 +324,9 @@ export default function FamilyMembers() {
         ))}
       </div>
 
-      {modal && (
+      {modal && modal === 'add' && (
         <MemberModal
-          initial={modal.member || null}
+          initial={null}
           onClose={() => setModal(null)}
           onSubmit={handleSubmit}
         />
