@@ -177,22 +177,21 @@ export default function FamilyMembers() {
     navigate(ROUTES.insights);
   };
 
-  const handleSubmit = (profile) => {
+  const handleSubmit = async (profile) => {
     if (modal === 'add') {
-      const created = addMember(profile);
+      const created = await addMember(profile);
       setModal(null);
-      setMember(created.id);
-      navigate(ROUTES.insights);
+      if (created && created.id) setMember(created.id);
     } else if (modal && modal.member) {
-      updateMember(modal.member.id, profile);
+      await updateMember(modal.member.id, profile);
       setModal(null);
     }
   };
 
-  const handleDelete = (m) => {
+  const handleDelete = async (m) => {
     if (members.length <= 1) return;
     const ok = window.confirm(`Remove ${m.name} (${m.relation}) from your family? Their health profile will be deleted.`);
-    if (ok) removeMember(m.id);
+    if (ok) await removeMember(m.id);
   };
 
   return (
@@ -275,7 +274,7 @@ export default function FamilyMembers() {
               </div>
               <div>
                 <span className="f-label">BP</span>
-                <span className="f-value">{m.bp.split(' ')[0]}</span>
+                <span className="f-value">{(m.bp ? String(m.bp) : '—').split(' ')[0]}</span>
               </div>
               <div>
                 <span className="f-label">HbA1c</span>

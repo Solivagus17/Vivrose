@@ -2,8 +2,8 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from './Icon.jsx';
 import { StatCard } from './ui.jsx';
-import { loadDoctors, saveDoctors } from '../doctorsStore.js';
-import { CHECKUP_STATUS, loadCheckups, saveCheckups } from '../checkupsStore.js';
+import { loadDoctors, refreshDoctors, addDoctor, updateDoctor, deleteDoctor } from '../doctorsStore.js';
+import { CHECKUP_STATUS, loadCheckups, refreshCheckups, addCheckup, updateCheckup, deleteCheckup } from '../checkupsStore.js';
 import { ROUTES } from '../routes.js';
 
 const SPECIALTY_ICONS = {
@@ -51,12 +51,9 @@ export default function Doctors() {
   const [chkFilter, setChkFilter] = useState('Scheduled');
 
   useEffect(() => {
-    saveDoctors(doctors);
-  }, [doctors]);
-
-  useEffect(() => {
-    saveCheckups(checkups);
-  }, [checkups]);
+    refreshDoctors().then(setDoctors);
+    refreshCheckups().then(setCheckups);
+  }, []);
 
   const filteredDoctors = doctors.filter((d) => {
     const q = query.toLowerCase().trim();
@@ -98,17 +95,28 @@ export default function Doctors() {
       .sort((a, b) => new Date(`${a.date}T00:00:00`) - new Date(`${b.date}T00:00:00`))[0];
   };
 
-  const handleDoctorDelete = (d) => {
+  const handleDoctorDelete = async (d) => {
     const ok = window.confirm(`Remove ${d.name} from your doctors?`);
-    if (ok) setDoctors((prev) => prev.filter((x) => x.id !== d.id));
+    if (ok) {
+      await deleteDoctor(d.id);
+      const updated = await refreshDoctors();
+      setDoctors(updated);
+    }
   };
 
-  const setCheckupStatus = (id, status) =>
-    setCheckups((prev) => prev.map((c) => (c.id === id ? { ...c, status } : c)));
+  const setCheckupStatus = async (id, status) => {
+    await updateCheckup(id, { status });
+    const updated = await refreshCheckups();
+    setCheckups(updated);
+  };
 
-  const handleCheckupDelete = (c) => {
+  const handleCheckupDelete = async (c) => {
     const ok = window.confirm(`Remove the "${c.purpose}" checkup?`);
-    if (ok) setCheckups((prev) => prev.filter((x) => x.id !== c.id));
+    if (ok) {
+      await deleteCheckup(c.id);
+      const updated = await refreshCheckups();
+      setCheckups(updated);
+    }
   };
 
   return (

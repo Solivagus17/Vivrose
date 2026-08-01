@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from './Icon.jsx';
 import { StatCard } from './ui.jsx';
-import { MEDICINE_STATUS, loadMedicines, saveMedicines } from '../medicinesStore.js';
+import { MEDICINE_STATUS, loadMedicines, refreshMedicines, addMedicine, updateMedicine, deleteMedicine } from '../medicinesStore.js';
 import { ROUTES } from '../routes.js';
 
 const STATUS_FILTERS = ['All', ...MEDICINE_STATUS];
@@ -38,8 +38,8 @@ export default function Medicines() {
   const [filter, setFilter] = useState('All');
 
   useEffect(() => {
-    saveMedicines(medicines);
-  }, [medicines]);
+    refreshMedicines().then(setMedicines);
+  }, []);
 
   const filtered = medicines.filter((m) => {
     const matchesStatus = filter === 'All' || m.status === filter;
@@ -59,12 +59,19 @@ export default function Medicines() {
     return { total: medicines.length, active, completed };
   }, [medicines]);
 
-  const setStatus = (id, status) =>
-    setMedicines((prev) => prev.map((m) => (m.id === id ? { ...m, status } : m)));
+  const setStatus = async (id, status) => {
+    await updateMedicine(id, { status });
+    const updated = await refreshMedicines();
+    setMedicines(updated);
+  };
 
-  const handleDelete = (m) => {
+  const handleDelete = async (m) => {
     const ok = window.confirm(`Remove ${m.name} from your medicines?`);
-    if (ok) setMedicines((prev) => prev.filter((x) => x.id !== m.id));
+    if (ok) {
+      await deleteMedicine(m.id);
+      const updated = await refreshMedicines();
+      setMedicines(updated);
+    }
   };
 
   return (

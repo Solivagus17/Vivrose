@@ -1,3 +1,4 @@
+import { apiPost, apiPut, apiDelete } from './api.js';
 import { createApiStore } from './storeUtils.js';
 
 export const MEDICINES_STORAGE_KEY = 'vivrose.medicines.v1';
@@ -26,15 +27,44 @@ export function saveMedicines(medicines) {
   store.save(medicines);
 }
 
-export function addMedicine(medicine) {
-  const next = [{ id: `med-${Date.now()}`, ...medicine }, ...loadMedicines()];
-  saveMedicines(next);
+export async function addMedicine(medicine) {
+  try {
+    const created = await apiPost('/api/medicines', medicine);
+    const next = [created, ...loadMedicines().filter((m) => m.id !== created.id)];
+    store.setCache(next);
+    return created;
+  } catch {
+    const local = { id: `med-${Date.now()}`, ...medicine };
+    const next = [local, ...loadMedicines()];
+    store.setCache(next);
+    return local;
+  }
+}
+
+export async function updateMedicine(id, patch) {
+  const current = loadMedicines();
+  const next = current.map((m) => (m.id === id ? { ...m, ...patch } : m));
+  store.setCache(next);
+  try {
+    const updated = await apiPut(`/api/medicines/${id}`, patch);
+    if (updated && updated.id) {
+      const synced = loadMedicines().map((m) => (m.id === id ? updated : m));
+      store.setCache(synced);
+    }
+  } catch {
+    store.save(next);
+  }
   return next;
 }
 
-export function updateMedicine(id, medicine) {
-  const next = loadMedicines().map((m) => (m.id === id ? { ...m, ...medicine } : m));
-  saveMedicines(next);
+export async function deleteMedicine(id) {
+  const next = loadMedicines().filter((m) => m.id !== id);
+  store.setCache(next);
+  try {
+    await apiDelete(`/api/medicines/${id}`);
+  } catch {
+    store.save(next);
+  }
   return next;
 }
 

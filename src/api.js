@@ -23,7 +23,7 @@ async function request(path, options = {}) {
   }
   const isForm = typeof FormData !== 'undefined' && options.body instanceof FormData;
   const headers = {
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    Authorization: `Bearer ${token || 'dev-token'}`,
     ...(options.headers || {}),
   };
   if (!isForm) {

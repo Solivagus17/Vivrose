@@ -26,7 +26,7 @@ export default function AddMedicine() {
 
   const valid = name.trim().length > 0 && !!startDate;
 
-  const submit = () => {
+  const submit = async () => {
     if (!valid) return;
     const payload = {
       name: name.trim(),
@@ -40,8 +40,8 @@ export default function AddMedicine() {
       status,
       remark: remark.trim(),
     };
-    if (isEdit) updateMedicine(id, payload);
-    else addMedicine(payload);
+    if (isEdit) await updateMedicine(id, payload);
+    else await addMedicine(payload);
     navigate(ROUTES.medicines);
   };
 

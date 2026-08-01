@@ -66,7 +66,7 @@ export default function PastInsights() {
               className={`assess-chip${forId === m.id ? ' active' : ''}`}
               onClick={() => selectMember(m.id)}
             >
-              {m.initials} · {m.name.split(' ')[0]}
+              {m.initials} · {(m.name || 'Member').split(' ')[0]}
             </span>
           ))}
         </div>
@@ -77,9 +77,9 @@ export default function PastInsights() {
           <div className="reports-empty-icon">
             <Icon name="brain" size="lg" />
           </div>
-          <div className="reports-empty-title">No insights for {forMember.name.split(' ')[0]} yet</div>
+          <div className="reports-empty-title">No insights for {(forMember?.name || 'Member').split(' ')[0]} yet</div>
           <div className="reports-empty-desc">
-            Run an AI assessment for {forMember.name.split(' ')[0]} to generate risk scores and health insights.
+            Run an AI assessment for {(forMember?.name || 'Member').split(' ')[0]} to generate risk scores and health insights.
           </div>
           <button className="btn btn-primary btn-sm" onClick={() => navigate(ROUTES.assessment)}>
             <Icon name="sparkle" size="sm" />

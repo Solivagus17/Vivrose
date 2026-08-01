@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from './Icon.jsx';
 import { StatCard } from './ui.jsx';
-import { REPORT_TYPES, loadReports, saveReports } from '../reportsStore.js';
+import { REPORT_TYPES, loadReports, refreshReports, deleteReport } from '../reportsStore.js';
 import { ROUTES } from '../routes.js';
 
 function formatDate(iso) {
@@ -18,8 +18,8 @@ export default function Reports() {
   const [filter, setFilter] = useState('All');
 
   useEffect(() => {
-    saveReports(records);
-  }, [records]);
+    refreshReports().then(setRecords);
+  }, []);
 
   const filtered = records.filter((r) => {
     const matchesType = filter === 'All' || r.type === filter;
@@ -45,9 +45,13 @@ export default function Reports() {
     return { total: records.length, thisMonth, facilities };
   }, [records]);
 
-  const handleDelete = (r) => {
+  const handleDelete = async (r) => {
     const ok = window.confirm(`Remove "${r.fileName}" from your reports library?`);
-    if (ok) setRecords((prev) => prev.filter((x) => x.id !== r.id));
+    if (ok) {
+      await deleteReport(r.id);
+      const updated = await refreshReports();
+      setRecords(updated);
+    }
   };
 
   return (

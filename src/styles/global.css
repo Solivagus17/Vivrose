@@ -1437,9 +1437,9 @@ img { max-width: 100%; display: block; }
    FAMILY MEMBERS PAGE
    ══════════════════════════════════════════════════ */
 .family-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   margin-top: 20px;
 }
 .family-card {
@@ -1448,10 +1448,15 @@ img { max-width: 100%; display: block; }
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255,255,255,0.55);
   border-radius: var(--r-xl);
-  padding: 20px;
+  padding: 14px 22px;
   box-shadow: var(--sh-sm);
   cursor: pointer;
   transition: all var(--t-base);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 .family-card:hover {
   box-shadow: var(--sh-md);
@@ -1461,8 +1466,10 @@ img { max-width: 100%; display: block; }
 .family-card-top {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 14px;
+  min-width: 220px;
+  flex: 1;
+  margin-bottom: 0;
 }
 .family-card-name {
   font-size: 1rem;
@@ -1478,13 +1485,16 @@ img { max-width: 100%; display: block; }
   margin-top: 2px;
 }
 .family-card-meta {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
   background: rgba(61, 40, 51, 0.04);
   border-radius: var(--r-lg);
-  padding: 12px 8px;
-  margin-bottom: 14px;
+  padding: 8px 18px;
+  margin-bottom: 0;
+  flex: 1.2;
+  justify-content: space-around;
+  min-width: 280px;
 }
 .family-card-meta > div {
   display: flex;
@@ -1507,9 +1517,10 @@ img { max-width: 100%; display: block; }
 }
 .family-card-footer {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   gap: 8px;
+  margin-top: 0;
 }
 .btn-icon-danger {
   display: inline-flex;

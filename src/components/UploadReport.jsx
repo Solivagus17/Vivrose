@@ -32,7 +32,7 @@ export default function UploadReport() {
   const hasFile = !!file || !!existing;
   const valid = hasFile && !!type && !!date;
 
-  const submit = () => {
+  const submit = async () => {
     if (!valid) return;
     const payload = {
       fileName: file ? file.name : existing.fileName,
@@ -44,8 +44,8 @@ export default function UploadReport() {
       purpose: purpose.trim(),
       remark: remark.trim(),
     };
-    if (isEdit) updateReport(id, payload);
-    else addReport(payload);
+    if (isEdit) await updateReport(id, payload);
+    else await addReport(payload);
     navigate(ROUTES.reports);
   };
 

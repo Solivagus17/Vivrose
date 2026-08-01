@@ -23,7 +23,7 @@ export default function AddDoctor() {
 
   const valid = name.trim().length > 0;
 
-  const submit = () => {
+  const submit = async () => {
     if (!valid) return;
     const payload = {
       name: name.trim(),
@@ -34,8 +34,8 @@ export default function AddDoctor() {
       city: city.trim(),
       notes: notes.trim(),
     };
-    if (isEdit) updateDoctor(id, payload);
-    else addDoctor(payload);
+    if (isEdit) await updateDoctor(id, payload);
+    else await addDoctor(payload);
     navigate(ROUTES.doctors);
   };
 

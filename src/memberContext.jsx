@@ -15,6 +15,7 @@ export function MemberProvider({ children }) {
   const [memberId, setMemberId] = React.useState(null);
   const member = (memberId && members.find((m) => m.id === memberId)) || members[0] || null;
 
+  // Initial load from Supabase on mount
   React.useEffect(() => {
     refreshMembers().then((list) => {
       setMembers(list);
@@ -24,27 +25,32 @@ export function MemberProvider({ children }) {
     });
   }, []);
 
-  const sync = () => setMembers(loadMembers());
-
-  const add = async (profile) => {
-    const newMember = await addMember(profile);
-    await refreshMembers().then(setMembers);
-    return newMember;
+  const add = (profile) => {
+    // addMember is synchronous-optimistic: returns localMember immediately
+    const newMember = addMember(profile);
+    // newMember is the Promise result — but addMember returns localMember synchronously
+    // Because we made addMember non-blocking, we resolve it via .then
+    Promise.resolve(newMember).then((m) => {
+      setMembers(loadMembers());
+    });
+    // Return the promise so callers can get the id
+    return Promise.resolve(newMember);
   };
 
-  const update = async (id, patch) => {
-    await updateMember(id, patch);
-    await refreshMembers().then(setMembers);
+  const update = (id, patch) => {
+    updateMember(id, patch).then(() => {
+      setMembers(loadMembers());
+    });
   };
 
-  const remove = async (id) => {
+  const remove = (id) => {
     if (members.length <= 1) return;
-    await removeMember(id);
-    const remaining = await refreshMembers();
-    setMembers(remaining);
-    setMemberId((prevId) => {
-      if (prevId !== id) return prevId;
-      return remaining.length ? remaining[0].id : null;
+    removeMember(id).then((remaining) => {
+      setMembers(remaining);
+      setMemberId((prevId) => {
+        if (prevId !== id) return prevId;
+        return remaining.length ? remaining[0].id : null;
+      });
     });
   };
 

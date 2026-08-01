@@ -32,7 +32,7 @@ export default function AddCheckup() {
 
   const valid = !!doctorId && purpose.trim().length > 0 && !!date;
 
-  const submit = () => {
+  const submit = async () => {
     if (!valid) return;
     const doctor = doctors.find((d) => d.id === doctorId);
     const payload = {
@@ -45,8 +45,8 @@ export default function AddCheckup() {
       notes: notes.trim(),
       status,
     };
-    if (isEdit) updateCheckup(id, payload);
-    else addCheckup(payload);
+    if (isEdit) await updateCheckup(id, payload);
+    else await addCheckup(payload);
     navigate(ROUTES.doctors);
   };
 
