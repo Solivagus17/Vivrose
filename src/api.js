@@ -22,13 +22,16 @@ async function request(path, options = {}) {
     throw new Error('API unavailable during SSR');
   }
   const isForm = typeof FormData !== 'undefined' && options.body instanceof FormData;
+  const headers = {
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(options.headers || {}),
+  };
+  if (!isForm) {
+    headers['Content-Type'] = 'application/json';
+  }
   const res = await fetch(`${BASE}${path}`, {
     method: options.method || 'GET',
-    headers: {
-      'Content-Type': isForm ? undefined : 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(options.headers || {}),
-    },
+    headers,
     body: options.body === undefined ? undefined
       : isForm ? options.body
         : typeof options.body === 'string' ? options.body

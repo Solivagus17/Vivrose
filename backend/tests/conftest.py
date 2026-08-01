@@ -12,6 +12,7 @@ from app.db import db as _db  # noqa: E402
 @pytest.fixture()
 def app():
     app = create_app()
+    app.config['TESTING'] = True
     with app.app_context():
         _db.create_all()
     yield app

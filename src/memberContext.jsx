@@ -1,11 +1,9 @@
 import React from 'react';
 import { addMember, loadMembers, refreshMembers, removeMember, updateMember } from './membersStore.js';
 
-const DEFAULT_ID = 'rajesh';
-
 export const MemberContext = React.createContext({
-  members: loadMembers(),
-  member: loadMembers().find((m) => m.id === DEFAULT_ID) || loadMembers()[0],
+  members: [],
+  member: null,
   setMember: () => {},
   addMember: () => {},
   updateMember: () => {},
@@ -13,36 +11,41 @@ export const MemberContext = React.createContext({
 });
 
 export function MemberProvider({ children }) {
-  const [members, setMembers] = React.useState(loadMembers);
-  const [memberId, setMemberId] = React.useState(DEFAULT_ID);
-  const member = members.find((m) => m.id === memberId) || members[0];
+  const [members, setMembers] = React.useState([]);
+  const [memberId, setMemberId] = React.useState(null);
+  const member = (memberId && members.find((m) => m.id === memberId)) || members[0] || null;
 
   React.useEffect(() => {
-    refreshMembers().then(setMembers);
+    refreshMembers().then((list) => {
+      setMembers(list);
+      if (list.length && !memberId) {
+        setMemberId(list[0].id);
+      }
+    });
   }, []);
 
   const sync = () => setMembers(loadMembers());
 
-  const add = (profile) => {
-    const newMember = addMember(profile);
-    sync();
+  const add = async (profile) => {
+    const newMember = await addMember(profile);
+    await refreshMembers().then(setMembers);
     return newMember;
   };
 
-  const update = (id, patch) => {
-    updateMember(id, patch);
-    sync();
+  const update = async (id, patch) => {
+    await updateMember(id, patch);
+    await refreshMembers().then(setMembers);
   };
 
-  const remove = (id) => {
+  const remove = async (id) => {
     if (members.length <= 1) return;
-    removeMember(id);
+    await removeMember(id);
+    const remaining = await refreshMembers();
+    setMembers(remaining);
     setMemberId((prevId) => {
       if (prevId !== id) return prevId;
-      const remaining = loadMembers();
-      return remaining.length ? remaining[0].id : prevId;
+      return remaining.length ? remaining[0].id : null;
     });
-    sync();
   };
 
   return (

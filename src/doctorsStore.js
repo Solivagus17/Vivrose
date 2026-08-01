@@ -25,40 +25,9 @@ export const SPECIALTIES = [
   'Other',
 ];
 
-export const SEED_DOCTORS = [
-  {
-    id: 'doc-seed-1',
-    name: 'Dr. Meera Shah',
-    specialty: 'Endocrinologist',
-    hospital: 'Apollo Hospital, Ahmedabad',
-    phone: '+91 98765 00011',
-    email: 'meera.shah@apollohospitals.in',
-    city: 'Ahmedabad',
-    notes: 'Manages father\u2019s diabetes and cholesterol care.',
-  },
-  {
-    id: 'doc-seed-2',
-    name: 'Dr. Anil Patel',
-    specialty: 'Cardiologist',
-    hospital: 'Care Clinic, Navrangpura',
-    phone: '+91 98765 00022',
-    email: 'anil.patel@careclinic.in',
-    city: 'Ahmedabad',
-    notes: 'Monitors mother\u2019s blood pressure and heart health.',
-  },
-  {
-    id: 'doc-seed-3',
-    name: 'Dr. Nidhi Desai',
-    specialty: 'Gynecologist',
-    hospital: 'Shalby Hospital, Ahmedabad',
-    phone: '+91 98765 00033',
-    email: 'nidhi.desai@shalby.org',
-    city: 'Ahmedabad',
-    notes: 'Kavya\u2019s gestational diabetes follow-up.',
-  },
-];
+export const SEED_DOCTORS = [];
 
-const store = createApiStore({ seed: SEED_DOCTORS, listPath: '/api/doctors', bulkPath: '/api/doctors/bulk' });
+const store = createApiStore({ seed: [], listPath: '/api/doctors', bulkPath: '/api/doctors/bulk' });
 
 export function loadDoctors() {
   return store.load();

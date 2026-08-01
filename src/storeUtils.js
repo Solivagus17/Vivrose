@@ -2,23 +2,16 @@ import { apiGet, apiPut } from './api.js';
 
 const stores = [];
 
-export function createApiStore({ seed, listPath, bulkPath }) {
-  let cache = seed;
+export function createApiStore({ seed = [], listPath, bulkPath }) {
+  let cache = Array.isArray(seed) ? seed : [];
   let loaded = false;
-  const seededKey = `vivrose.seeded.${listPath}`;
 
   async function refresh() {
     if (typeof window === 'undefined') return cache;
     try {
       const list = await apiGet(listPath);
       const rows = Array.isArray(list) ? list : (list.data || list.records || []);
-      if (rows.length === 0 && seed.length && !window.localStorage.getItem(seededKey)) {
-        window.localStorage.setItem(seededKey, '1');
-        apiPut(bulkPath, seed).catch(() => {});
-        cache = seed;
-      } else {
-        cache = rows;
-      }
+      cache = rows;
       loaded = true;
       return cache;
     } catch {
@@ -36,12 +29,16 @@ export function createApiStore({ seed, listPath, bulkPath }) {
     if (typeof window !== 'undefined') apiPut(bulkPath, list).catch(() => {});
   }
 
+  function setCache(next) {
+    cache = next;
+  }
+
   function reset() {
-    cache = seed;
+    cache = [];
     loaded = false;
   }
 
-  const store = { refresh, load, save, reset };
+  const store = { refresh, load, save, setCache, reset };
   stores.push(store);
   return store;
 }

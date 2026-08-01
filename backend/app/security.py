@@ -62,8 +62,12 @@ def verify_token(token):
 
 def ensure_profile(uid, name, email):
     """Return the household_id for this Firebase uid, creating one on first sign-in."""
+    from flask import current_app
+    from .services.seed import seed_household_data
     profile = Profile.query.filter_by(id=uid).first()
     if profile is not None:
+        if not current_app.config.get('TESTING'):
+            seed_household_data(profile.household_id)
         return profile.household_id
     household = Household(id=gen_id('household'), name=f"{name or 'My Family'}'s Family")
     db.session.add(household)
@@ -75,6 +79,8 @@ def ensure_profile(uid, name, email):
         email=email or '',
     ))
     db.session.commit()
+    if not current_app.config.get('TESTING'):
+        seed_household_data(household.id)
     return household.id
 
 
