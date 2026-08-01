@@ -3,11 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import Icon from './Icon.jsx';
 import { useMember } from '../memberContext.jsx';
 import { ROUTES } from '../routes.js';
+import { addInsight } from '../insightsStore.js';
 
 const STEP_LABELS = ['Demographics', 'Lifestyle', 'Symptoms', 'History', 'Vitals', 'Labs'];
 
 const CONDITIONS = ['Hypertension', 'Pre-Diabetes', 'Diabetes', 'Heart Disease', 'Kidney Disease', 'Dyslipidemia', 'Stroke', 'COPD'];
 const FAMILY = ['Diabetes (Father)', 'Hypertension (Mother)', 'Heart Disease', 'Stroke', 'Kidney Disease', 'Cancer'];
+
+const SMOKING_VALUES = {
+  'Non-smoker': 'never',
+  'Active Smoker': 'current',
+  'Former Smoker': 'former',
+  'N/A': 'never',
+};
 
 const LOADING_STEPS = [
   { progress: 20, text: 'Analyzing demographics and lifestyle...' },
@@ -18,9 +26,29 @@ const LOADING_STEPS = [
   { progress: 100, text: 'Assessment complete!' },
 ];
 
-function numOf(value) {
-  const n = parseFloat(value);
-  return Number.isFinite(n) ? n : undefined;
+function numFrom(value) {
+  const n = parseFloat(String(value || '').replace(/[^\d.]/g, ''));
+  return Number.isFinite(n) ? n : '';
+}
+
+function reportToForm(m) {
+  const [bpSys, bpDia] = (m.bp || '').replace('mmHg', '').trim().split('/').map((s) => s.trim());
+  return {
+    name: m.name || '',
+    age: m.age ?? '',
+    sex: (m.sex || 'Male').toLowerCase(),
+    relation: m.relation || '',
+    location: m.location || '',
+    smoking: SMOKING_VALUES[m.smoking] || 'never',
+    medications: m.medications && m.medications !== 'None' ? m.medications : '',
+    bpSys: numFrom(bpSys),
+    bpDia: numFrom(bpDia),
+    bmi: m.bmi || '',
+    hba1c: numFrom(m.hba1c),
+    glucose: numFrom(m.glucose),
+    cholesterol: numFrom(m.cholesterol),
+    creatinine: numFrom(m.creatinine),
+  };
 }
 
 function Segmented({ options, active, onChange, size = '' }) {
@@ -57,6 +85,9 @@ export default function NewAssessment() {
   const { members, member, setMember } = useMember();
   const [forId, setForId] = useState(member.id);
   const forMember = members.find((m) => m.id === forId) || member;
+  const [form, setForm] = useState(() => reportToForm(forMember));
+  const [fetching, setFetching] = useState(false);
+  const [fetchNote, setFetchNote] = useState('');
   const [step, setStep] = useState(1);
   const [phase, setPhase] = useState('form');
   const [progress, setProgress] = useState(0);
@@ -72,7 +103,12 @@ export default function NewAssessment() {
   const [sob, setSob] = useState('No');
   const [fatigue, setFatigue] = useState('None');
 
-  const [bpSys, bpDia] = (forMember.bp.replace('mmHg', '').trim().split('/').map((s) => s.trim()) || []);
+  const setField = (key) => (e) => setForm((prev) => ({ ...prev, [key]: e.target.value }));
+
+  useEffect(() => {
+    setForm(reportToForm(forMember));
+    setFetchNote('');
+  }, [forId]);
 
   useEffect(() => {
     if (phase === 'loading') {
@@ -85,8 +121,9 @@ export default function NewAssessment() {
             if (i === LOADING_STEPS.length - 1) {
               timers.push(
                 setTimeout(() => {
+                  addInsight(forId, buildSnapshot());
                   setMember(forId);
-                  navigate(ROUTES.insights);
+                  navigate(ROUTES.pastInsights);
                   setPhase('form');
                   setStep(1);
                   setProgress(0);
@@ -105,6 +142,38 @@ export default function NewAssessment() {
     setConditions((prev) => (prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]));
   const toggleFamily = (f) =>
     setFamily((prev) => (prev.includes(f) ? prev.filter((x) => x !== f) : [...prev, f]));
+
+  const fetchFromReport = () => {
+    if (fetching) return;
+    setFetching(true);
+    setFetchNote('');
+    setTimeout(() => {
+      setForm(reportToForm(forMember));
+      setFetching(false);
+      setFetchNote(`Filled from ${forMember.name.split(' ')[0]}'s report`);
+      setTimeout(() => setFetchNote(''), 2500);
+    }, 450);
+  };
+
+  const buildSnapshot = () => {
+    const m = forMember;
+    const bp = form.bpSys && form.bpDia ? `${form.bpSys}/${form.bpDia} mmHg` : m.bp;
+    return {
+      ...m,
+      name: form.name || m.name,
+      age: form.age || m.age,
+      sex: (form.sex || m.sex).toLowerCase(),
+      location: form.location || m.location,
+      bp,
+      bmi: form.bmi || m.bmi,
+      hba1c: form.hba1c ? `${form.hba1c}%` : m.hba1c,
+      glucose: form.glucose ? `${form.glucose} mg/dL` : m.glucose,
+      cholesterol: form.cholesterol ? `${form.cholesterol} mg/dL` : m.cholesterol,
+      creatinine: form.creatinine ? `${form.creatinine} mg/dL` : m.creatinine,
+      assessed: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+      lastAssessed: 'Just now',
+    };
+  };
 
   const stepDots = STEP_LABELS.map((label, i) => {
     const n = i + 1;
@@ -128,17 +197,17 @@ export default function NewAssessment() {
             <div className="form-row" style={{ marginBottom: 16 }}>
               <div className="form-group">
                 <label className="form-label">Full Name</label>
-                <input type="text" className="form-input" defaultValue={forMember.name} />
+                <input type="text" className="form-input" value={form.name} onChange={setField('name')} />
               </div>
               <div className="form-group">
                 <label className="form-label">Age</label>
-                <input type="number" className="form-input" defaultValue={forMember.age} />
+                <input type="number" className="form-input" value={form.age} onChange={setField('age')} />
               </div>
             </div>
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">Sex</label>
-                <select className="form-select" defaultValue={forMember.sex.toLowerCase()}>
+                <select className="form-select" value={form.sex} onChange={setField('sex')}>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                   <option value="other">Other</option>
@@ -146,7 +215,7 @@ export default function NewAssessment() {
               </div>
               <div className="form-group">
                 <label className="form-label">Relation to You</label>
-                <input type="text" className="form-input" defaultValue={forMember.relation} />
+                <input type="text" className="form-input" value={form.relation} onChange={setField('relation')} />
               </div>
             </div>
             <div className="form-row">
@@ -156,7 +225,7 @@ export default function NewAssessment() {
               </div>
               <div className="form-group">
                 <label className="form-label">Location</label>
-                <input type="text" className="form-input" defaultValue={forMember.location} />
+                <input type="text" className="form-input" value={form.location} onChange={setField('location')} />
               </div>
             </div>
             <div className="wizard-actions">
@@ -176,7 +245,7 @@ export default function NewAssessment() {
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">Smoking Status</label>
-                <select className="form-select" defaultValue="never">
+                <select className="form-select" value={form.smoking} onChange={setField('smoking')}>
                   <option value="current">Current Smoker</option>
                   <option value="former">Former Smoker</option>
                   <option value="never">Never Smoked</option>
@@ -310,7 +379,8 @@ export default function NewAssessment() {
                 className="form-input"
                 rows="3"
                 placeholder="List current medications..."
-                defaultValue={forMember.medications}
+                value={form.medications}
+                onChange={setField('medications')}
                 style={{ resize: 'vertical' }}
               />
             </div>
@@ -334,11 +404,11 @@ export default function NewAssessment() {
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">Systolic BP (mmHg)</label>
-                <input type="number" className="form-input" defaultValue={numOf(bpSys)} />
+                <input type="number" className="form-input" value={form.bpSys} onChange={setField('bpSys')} />
               </div>
               <div className="form-group">
                 <label className="form-label">Diastolic BP (mmHg)</label>
-                <input type="number" className="form-input" defaultValue={numOf(bpDia)} />
+                <input type="number" className="form-input" value={form.bpDia} onChange={setField('bpDia')} />
               </div>
             </div>
             <div className="form-row">
@@ -364,7 +434,7 @@ export default function NewAssessment() {
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">BMI</label>
-                <input type="text" className="form-input" value={forMember.bmi} readOnly style={{ background: 'var(--gray-50)' }} />
+                <input type="text" className="form-input" value={form.bmi} readOnly style={{ background: 'var(--gray-50)' }} />
               </div>
               <div className="form-group">
                 <label className="form-label">SpO₂ (%)</label>
@@ -393,17 +463,17 @@ export default function NewAssessment() {
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">HbA1c (%)</label>
-                <input type="number" className="form-input" step="0.1" defaultValue={numOf(forMember.hba1c)} />
+                <input type="number" className="form-input" step="0.1" value={form.hba1c} onChange={setField('hba1c')} />
               </div>
               <div className="form-group">
                 <label className="form-label">Fasting Blood Glucose (mg/dL)</label>
-                <input type="number" className="form-input" defaultValue={numOf(forMember.glucose)} />
+                <input type="number" className="form-input" value={form.glucose} onChange={setField('glucose')} />
               </div>
             </div>
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">Total Cholesterol (mg/dL)</label>
-                <input type="number" className="form-input" defaultValue={numOf(forMember.cholesterol)} />
+                <input type="number" className="form-input" value={form.cholesterol} onChange={setField('cholesterol')} />
               </div>
               <div className="form-group">
                 <label className="form-label">LDL Cholesterol (mg/dL)</label>
@@ -423,7 +493,7 @@ export default function NewAssessment() {
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">Serum Creatinine (mg/dL)</label>
-                <input type="number" className="form-input" step="0.1" defaultValue={numOf(forMember.creatinine)} />
+                <input type="number" className="form-input" step="0.1" value={form.creatinine} onChange={setField('creatinine')} />
               </div>
               <div className="form-group">
                 <label className="form-label">eGFR (mL/min/1.73m²)</label>
@@ -460,13 +530,26 @@ export default function NewAssessment() {
   return (
     <>
       <div className="page-header">
-        <div className="page-title">New Assessment</div>
-        <div className="page-subtitle">A quick health check-up that generates AI-powered risk insights.</div>
+        <div className="page-title">AI Assessment</div>
+        <div className="page-subtitle">A quick health check-up that generates AI-powered risk insights for any family member.</div>
       </div>
 
       <div className="wizard-container">
         <div className="assess-for">
-          <span className="assess-for-label">This assessment is for</span>
+          <div className="assess-for-head">
+            <span className="assess-for-label">This assessment is for</span>
+            <div className="assess-fetch">
+              {fetchNote && <span className="assess-fetch-note">{fetchNote}</span>}
+              <button className="btn btn-ghost btn-sm" onClick={() => navigate(ROUTES.pastInsights)}>
+                <Icon name="brain" size="sm" />
+                Past Insights
+              </button>
+              <button className="btn btn-secondary btn-sm" onClick={fetchFromReport} disabled={fetching}>
+                <Icon name="document" size="sm" />
+                {fetching ? 'Fetching…' : 'Fetch from Report'}
+              </button>
+            </div>
+          </div>
           <div className="assess-for-chips">
             {members.map((m) => (
               <span

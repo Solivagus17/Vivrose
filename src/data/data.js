@@ -34,6 +34,8 @@ export const FAMILY_MEMBERS = [
     lastAssessed: '2 days ago',
     assessed: 'July 29, 2026',
     location: 'Ahmedabad, Gujarat',
+    birthDate: '1988-04-12',
+    birthLocation: 'Ahmedabad, Gujarat',
     bmi: '24.2',
     bmiClass: 'Normal',
     bp: '120/78 mmHg',
@@ -99,6 +101,8 @@ export const FAMILY_MEMBERS = [
     lastAssessed: '5 days ago',
     assessed: 'July 27, 2026',
     location: 'Ahmedabad, Gujarat',
+    birthDate: '1991-06-18',
+    birthLocation: 'Mumbai, Maharashtra',
     bmi: '27.4',
     bmiClass: 'Overweight',
     bp: '128/84 mmHg',
@@ -167,6 +171,8 @@ export const FAMILY_MEMBERS = [
     lastAssessed: 'Today',
     assessed: 'July 31, 2026',
     location: 'Ahmedabad, Gujarat',
+    birthDate: '1964-02-28',
+    birthLocation: 'Rajkot, Gujarat',
     bmi: '32.0',
     bmiClass: 'Obese Class I',
     bp: '165/100 mmHg',
@@ -257,6 +263,8 @@ export const FAMILY_MEMBERS = [
     lastAssessed: '1 week ago',
     assessed: 'July 25, 2026',
     location: 'Ahmedabad, Gujarat',
+    birthDate: '1968-11-03',
+    birthLocation: 'Ahmedabad, Gujarat',
     bmi: '28.6',
     bmiClass: 'Overweight',
     bp: '148/92 mmHg',
@@ -326,6 +334,8 @@ export const FAMILY_MEMBERS = [
     lastAssessed: '2 weeks ago',
     assessed: 'July 18, 2026',
     location: 'Ahmedabad, Gujarat',
+    birthDate: '2016-08-22',
+    birthLocation: 'Ahmedabad, Gujarat',
     bmi: '18.0',
     bmiClass: 'Healthy (age-adjusted)',
     bp: '104/66 mmHg',
@@ -499,6 +509,17 @@ const DEFAULT_SCORES = [
   { label: 'Stroke', score: 0, level: 'low', trend: 'flat', trendLabel: 'Awaiting assessment', points: '2,10 10,10 18,10 26,10 34,10 38,10', color: LOW },
 ];
 
+export function calcAge(birthDate) {
+  if (!birthDate) return null;
+  const d = new Date(birthDate);
+  if (Number.isNaN(d.getTime())) return null;
+  const now = new Date();
+  let age = now.getFullYear() - d.getFullYear();
+  const m = now.getMonth() - d.getMonth();
+  if (m < 0 || (m === 0 && now.getDate() < d.getDate())) age -= 1;
+  return age;
+}
+
 export function createFamilyMember(input) {
   const initials =
     input.name
@@ -508,12 +529,15 @@ export function createFamilyMember(input) {
       .join('')
       .toUpperCase()
       .slice(0, 2) || 'FM';
+  const age = input.birthDate ? calcAge(input.birthDate) : input.age;
   return {
     id: `mem-${Date.now()}`,
     initials,
     name: input.name,
     relation: input.relation || 'Family Member',
-    age: input.age || 30,
+    age: age || 30,
+    birthDate: input.birthDate || '',
+    birthLocation: input.birthLocation || '',
     sex: input.sex || 'Male',
     avatar: AVATAR_LOW,
     level: 'low',
@@ -540,11 +564,11 @@ export function createFamilyMember(input) {
     ],
     warnings: [],
     recommendations: [],
-    summary: `<strong>${input.name}</strong> has been added and is <strong>awaiting their first AI health assessment</strong>. Run a New Assessment to generate risk scores, check-up suggestions, and doctor recommendations.`,
+    summary: `<strong>${input.name}</strong> has been added and is <strong>awaiting their first AI health assessment</strong>. Run an AI Assessment to generate risk scores, check-up suggestions, and doctor recommendations.`,
     reportSummary: `${input.name} has been added to the family. No assessment data is available yet — complete an assessment to generate the health report.`,
     findings: ['No assessment data yet — awaiting the first health assessment'],
     checkupList: ['Complete health check-up — establish a baseline'],
     recommendationList: [],
-    lifestyle: ['Complete a New Assessment to receive a personalized lifestyle plan'],
+    lifestyle: ['Complete an AI Assessment to receive a personalized lifestyle plan'],
   };
 }

@@ -105,14 +105,22 @@ Tetrathon/
     │   └── useClickOutside.js
     └── components/
         ├── Icon.jsx              # SVG icon symbol set
-        ├── Sidebar.jsx           # Frosted-glass translucent sidebar
+        ├── Sidebar.jsx           # Frosted-glass translucent sidebar (+ VivRose AI button)
         ├── LandingPage.jsx       # Hero landing screen
         ├── Dashboard.jsx         # Clinical overview
-        ├── NewAssessment.jsx     # 6-step wizard + loading simulation
-        ├── AiAssessment.jsx      # Risk showcase page
-        ├── Patients.jsx          # Searchable patient table
-        ├── RiskAnalytics.jsx     # Population analytics + chart
-        ├── Reports.jsx           # PDF-style report preview
+        ├── AiAssistant.jsx       # VivRose AI chat assistant (family health Q&A)
+        ├── NewAssessment.jsx     # 6-step wizard + loading simulation (saves snapshot, nav → Past Insights)
+        ├── AiAssessment.jsx      # Risk showcase page (thin wrapper over InsightView)
+        ├── InsightView.jsx       # Shared insights renderer (data prop)
+        ├── PastInsights.jsx      # Past generated insights per member (member chips + history bar)
+        ├── Reports.jsx           # Medical report library (search + type filter)
+        ├── UploadReport.jsx      # Dedicated report upload & categorization page
+        ├── GenerateReport.jsx    # PDF-style AI report preview / generation
+        ├── Doctors.jsx           # Care team management (cards, search) + Upcoming Checkups section
+        ├── AddDoctor.jsx         # Add-doctor form page
+        ├── AddCheckup.jsx        # Add/edit checkup form page
+        ├── Medicines.jsx         # Medicine course tracker (status, days left)
+        ├── AddMedicine.jsx       # Add-medicine form page
         ├── PatientEducation.jsx  # Multilingual education tabs
         ├── Settings.jsx          # Clinical/notification/AI config
         ├── core/                 # Motion primitives (motion/react based)
@@ -134,11 +142,13 @@ Landing Page (Full Screen)
               ├── Sidebar (fixed, frosted glass)
               └── Main Content Area
                     ├── Dashboard
-                    ├── New Assessment (6-step wizard)
+                    ├── AI Assessment (6-step wizard)
                     ├── AI Assessment Dashboard (showcase)
-                    ├── Patients (table view)
-                    ├── Risk Analytics
-                    ├── Reports (PDF preview)
+                    ├── Past Insights (per-member history)
+                    ├── Family Members
+                    ├── Health Insights
+                    ├── Reports (medical report library)
+                    ├── Generate AI Report (PDF preview)
                     ├── Patient Education (multilingual)
                     └── Settings
 ```
@@ -183,8 +193,8 @@ Full-screen hero with animated gradient orbs, floating preview cards, and CTA bu
 ### 2. Dashboard
 Clinical overview with stat cards (total patients, high risk alerts, assessments, pending investigations), recent patients list, and clinical alerts feed.
 
-### 3. New Assessment (Wizard)
-6-step floating card wizard:
+### 3. AI Assessment (Wizard)
+6-step floating card wizard (page renamed from "New Assessment" to **AI Assessment**):
 1. Demographics (name, age, sex, ethnicity)
 2. Lifestyle (smoking, alcohol, exercise, diet, sleep, stress)
 3. Symptoms (polyuria, polydipsia, chest pain, SOB, fatigue)
@@ -192,9 +202,10 @@ Clinical overview with stat cards (total patients, high risk alerts, assessments
 5. Vital Signs (BP, HR, weight, height, BMI, SpO₂)
 6. Laboratory Results (HbA1c, glucose, lipids, creatinine)
 
-Includes animated loading simulation before showing results.
+Includes animated loading simulation before showing results. On completion, a snapshot of the member's assessment is saved to `src/insightsStore.js` (localStorage key `vivrose.insights.v1`, seeded from `FAMILY_MEMBERS`) and the app navigates to **Past Insights** for that member. "This assessment is for" member chips select who to assess; a **Past Insights** button opens the history page.
 
 ### 4. AI Assessment Dashboard (Showcase Screen)
+Rendered by the shared `src/components/InsightView.jsx` (takes a `data` member-like prop). `AiAssessment.jsx` is a thin wrapper feeding it the current member.
 - Patient header card (teal gradient with metadata)
 - 5 risk cards with animated progress bars and trend sparklines
 - AI Clinical Summary (executive-style explanation)
@@ -203,14 +214,29 @@ Includes animated loading simulation before showing results.
 - Early Warning Alerts (4 alert cards with severity)
 - Referral Recommendations (3 specialist cards with priority)
 
-### 5. Patients
-Searchable patient table with live risk filtering, avatar badges, and clickable rows. `Ctrl+K` focuses search.
+### 4b. Past Insights
+New page at `/app/insights/past` (`PastInsights.jsx`): member chips select a family member, and a horizontal bar lists their past generated assessments (date + risk badge). Clicking a chip renders that snapshot's full insights via `InsightView`. Empty state prompts to run an AI Assessment. The **AI Insights** item was removed from the sidebar — the page is reached from AI Assessment ("Past Insights" button) and after generating an assessment.
 
-### 6. Risk Analytics
-Population-level stats, animated bar chart, and top modifiable risk contributors.
+### 5. Family Members
+Searchable card grid with live risk filtering (All/High/Moderate/Low), avatar badges, and clickable rows. `Ctrl+K` focuses search. Add/edit/delete via a modal (`MemberModal` in `FamilyMembers.jsx`): **date of birth** input that auto-calculates age (`calcAge` in `data.js`), **birth location**, **current residence** (stored on `location`), free-text **relation**, and sex. `MemberProvider` exposes `addMember`/`updateMember`/`removeMember`. Pencil icon opens the modal prefilled for editing; trash removes (min 1 member).
+
+### 6. VivRose AI Assistant
+Chat page at `/app/ai-assistant` (`AiAssistant.jsx`), reached from a gradient **VivRose AI** button in the sidebar above the Overview section. The assistant answers questions about the family using live `members` data (risk ranking, diabetes/BP overview, healthiest member, member-specific summaries via `buildReply`), with typing simulation, suggestion chips, and Enter-to-send. Mock/AI-simulated — no backend.
 
 ### 7. Reports
-PDF-style clinical report with VivRose branding, patient info, risk scores, AI summary, findings, investigations, referrals, and lifestyle recommendations. Print-ready.
+Medical report library: reports are categorized by type, date of checkup, hospital/clinic, doctor consulted, purpose, and remark. Records persist in localStorage (`src/reportsStore.js`). The library has a stats strip, search, and a type-filter dropdown. **Upload Report** is a dedicated page (`/app/reports/upload`) with a file dropzone and the categorization form; the same page serves **edit** at `/app/reports/:id/edit` (replaces the file, updates fields via `updateReport`).
+
+### 7b. Generate AI Report
+PDF-style clinical report with VivRose branding, patient info, risk scores, AI summary, findings, investigations, referrals, and lifestyle recommendations. Print-ready. (Formerly the "Reports" page; moved to `/app/generate-report`.)
+
+### 7c. Doctors
+Care team management: doctor cards with specialty, hospital/clinic, phone, email, city, and notes. Records persist in localStorage (`src/doctorsStore.js`). Add via `/app/doctors/add`, edit via `/app/doctors/:id/edit` (same page, `updateDoctor`). Search + call/email links + delete.
+
+### 7d. Medicines
+Medicine course tracker: name, purpose, dosage, frequency, timing, prescribed-by, start/end dates, status (Active/Completed/Discontinued), and remark. Records persist in localStorage (`src/medicinesStore.js`). Shows days-left/overdue for active dated courses; mark complete/resume/delete. Add via `/app/medicines/add`, edit via `/app/medicines/:id/edit` (same page, `updateMedicine`).
+
+### 7e. Upcoming Checkups
+Integrated into the Doctors page: each doctor card shows its next scheduled checkup, and an **Upcoming Checkups** section lists all checkups with status filters (Scheduled/Completed/Cancelled). Checkup fields: doctor (dropdown from doctors store), purpose, date, time, location (auto-fills from doctor's hospital), notes, status. Records persist in localStorage (`src/checkupsStore.js`, key `vivrose.checkups.v1`, seeds `chk-seed-1..3`). Actions per row: edit, mark complete/re-open (`check`/`run`), delete. Add via `/app/checkups/add`, edit via `/app/checkups/:id/edit` (same `AddCheckup.jsx` page).
 
 ### 8. Patient Education
 Multilingual tabbed interface (English, Hindi, Gujarati) with disease explanation, diet, exercise, smoking cessation, warning signs, and follow-up guidance.
@@ -263,12 +289,14 @@ Motion is powered by **motion (framer-motion successor, `motion/react`)** via cu
 
 1. **Landing Page** → Show the hero, floating cards, and tagline
 2. **Dashboard** → Family overview: stat cards, family list, health alerts
-3. **Family Members** → Card grid, search (Ctrl+K), risk filters
-4. **"New Assessment"** → 6-step wizard, "This assessment is for" member chips
-5. **Generate AI Assessment** → Loading animation → member-specific AI Insights
-6. **Health Insights** → Family-level analytics
-7. **Reports** → Per-member PDF-style report
-8. **Health Education** → English / Hindi / Gujarati tabs
+3. **Family Members** → Card grid, search (Ctrl+K), risk filters, add/edit/delete modal (DOB→age, birth + current location, free-text relation)
+4. **VivRose AI** → Chat assistant (sidebar gradient button) — asks about family risk/vitals
+5. **"AI Assessment"** → 6-step wizard, "This assessment is for" member chips
+6. **Generate AI Assessment** → Loading animation → snapshot saved to insights store → Past Insights for that member (past chips + full insights view)
+7. **Health Insights** → Family-level analytics
+8. **Reports** → Upload & categorize medical reports (localStorage)
+9. **Generate AI Report** → Per-member PDF-style report
+10. **Health Education** → English / Hindi / Gujarati tabs
 
 ## Session Status (patient-family pivot)
 
@@ -284,6 +312,12 @@ Motion is powered by **motion (framer-motion successor, `motion/react`)** via cu
 - **Integration:** Landing hero title = per-char `fade-in-blur` + per-char gradient `fade`; landing eyebrow = `TextScramble`; first hero float-card = `BorderTrail`; feature pills = per-pill `InView` stagger (their old CSS entrance animation was removed). Dashboard greeting = per-word `slide`; dashboard cards = `InView` stagger. AiAssessment member name = per-char `blur`; "AI Health Summary" label = `TextScramble`; AI summary card = `BorderTrail`. `Reveal` in `ui.jsx` is now an `InView` wrapper (no API change). `AppShell` mounts `ToolbarExpandable` (fixed bottom-right; Profile/Alerts/Reports/Education quick actions wired to routes).
 - **Notes/gotchas:** `TextEffect` requires a plain-string child (pass a built `greeting` string, not JSX expressions). `BorderTrail` is invisible inside `overflow:hidden` cards (mask is clipped), so it lives on `.hero-float-card` and `.ai-summary-card` only. TextScramble intentionally used exactly twice. Landing hero float cards now use a non-overlapping **bento grid** (`.hero-cards` = 2-col grid; cards 1 & 4 span both columns, cards 2 & 3 tucked left/right) instead of absolute `top/left/right` offsets — cards can no longer collide, even during the staggered float animation (amplitude 6px, 20px gaps).
 - **CSS added:** motion utilities (`.sr-only`, `.inline-block`, `.whitespace-pre`, `.block`, `.hidden`, `.overflow-hidden`), `.mp-trail-dot` gradient, and the `.mp-toolbar*` block (frosted-glass floating toolbar); `.mp-toolbar` hidden on print.
+
+## Session Status (VivRose AI + family editing)
+
+- **Done & verified (build + smoke green, 22 checks):** `VivRose AI` chat page (`AiAssistant.jsx`) at `/app/ai-assistant`, opened from a gradient `.sidebar-ai` button above Overview in the sidebar; `buildReply()` answers family-risk/diabetes/BP/healthiest/check-up questions from live `members` data with typing simulation + suggestion chips. Family member editing: `MemberProvider.updateMember(id, patch)` added; `FamilyMembers.jsx` `MemberModal` now handles add **and** edit (pencil button on cards); form uses **date of birth** (`calcAge()` in `data.js`) instead of age, adds **birth location** + **current residence** (kept on `location`), and replaces the relation dropdown with a free-text input. Seed members gained `birthDate`/`birthLocation`; `createFamilyMember` stores them and computes `age`.
+- **CSS added:** `.sidebar-ai*` gradient button, `.ai-chat-*` chat UI (bubbles, typing dots, suggestion chips, input row). Chat card height `calc(100vh - 220px)`.
+- **Note:** assistant replies are rule-based mock (no backend); age auto-calc uses local date.
 
 ---
 

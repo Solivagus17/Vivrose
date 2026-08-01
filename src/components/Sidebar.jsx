@@ -8,26 +8,33 @@ const NAV_SECTIONS = [
     title: 'Overview',
     items: [
       { id: 'dashboard', label: 'Dashboard', icon: 'chart', path: ROUTES.dashboard },
-      { id: 'new-assessment', label: 'New Assessment', icon: 'sparkle', path: ROUTES.assessment },
+      { id: 'ai-assessments', label: 'AI Assessments', icon: 'sparkle', path: ROUTES.assessment },
     ],
   },
   {
     title: 'Family',
     items: [
       { id: 'family', label: 'Family Members', icon: 'user', path: ROUTES.family },
-      { id: 'ai-assessment', label: 'AI Insights', icon: 'brain', path: ROUTES.insights, badge: '1' },
     ],
   },
   {
     title: 'Insights',
     items: [
       { id: 'health', label: 'Health Insights', icon: 'trend', path: ROUTES.health },
+      { id: 'generate-report', label: 'Generate AI Report', icon: 'sparkle', path: ROUTES.generateReport },
+    ],
+  },
+  {
+    title: 'Care',
+    items: [
+      { id: 'doctors', label: 'Doctors', icon: 'stethoscope', path: ROUTES.doctors },
+      { id: 'medicines', label: 'Medicines', icon: 'pill', path: ROUTES.medicines },
     ],
   },
   {
     title: 'Resources',
     items: [
-      { id: 'reports', label: 'Reports', icon: 'document', path: ROUTES.reports },
+      { id: 'reports', label: 'Reports', icon: 'clipboard', path: ROUTES.reports },
       { id: 'patient-education', label: 'Health Education', icon: 'book', path: ROUTES.education },
       { id: 'settings', label: 'Settings', icon: 'gear', path: ROUTES.settings },
     ],
@@ -46,6 +53,21 @@ export default function Sidebar() {
       </div>
 
       <nav className="sidebar-nav">
+        <NavLink
+          to={ROUTES.aiAssistant}
+          end
+          className={({ isActive }) => `sidebar-ai${isActive ? ' active' : ''}`}
+        >
+          <span className="sidebar-ai-icon">
+            <Icon name="sparkles" size="md" />
+          </span>
+          <span className="sidebar-ai-text">
+            <span className="sidebar-ai-name">VivRose AI</span>
+            <span className="sidebar-ai-sub">Ask about your family</span>
+          </span>
+          <span className="sidebar-ai-badge">AI</span>
+        </NavLink>
+
         {NAV_SECTIONS.map((section) => (
           <div className="sidebar-section" key={section.title}>
             <div className="sidebar-section-title">{section.title}</div>

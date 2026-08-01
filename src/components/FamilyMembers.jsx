@@ -3,25 +3,11 @@ import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import Icon from './Icon.jsx';
 import { RiskBadge, RiskBadgeShort, Avatar } from './ui.jsx';
-import { USER } from '../data/data.js';
+import { USER, calcAge } from '../data/data.js';
 import { useMember } from '../memberContext.jsx';
 import { ROUTES } from '../routes.js';
 
 const FILTERS = ['All', 'high', 'moderate', 'low'];
-
-const RELATIONS = [
-  'Self',
-  'Spouse',
-  'Father',
-  'Mother',
-  'Son',
-  'Daughter',
-  'Brother',
-  'Sister',
-  'Grandfather',
-  'Grandmother',
-  'Other Family Member',
-];
 
 function FilterLabel(filter) {
   if (filter === 'high') return 'High Risk';
@@ -30,12 +16,16 @@ function FilterLabel(filter) {
   return 'All';
 }
 
-function AddMemberModal({ onClose, onAdd }) {
-  const [name, setName] = useState('');
-  const [relation, setRelation] = useState('Other Family Member');
-  const [age, setAge] = useState('');
-  const [sex, setSex] = useState('Male');
-  const [location, setLocation] = useState(USER.location);
+function MemberModal({ initial, onClose, onSubmit }) {
+  const isEdit = Boolean(initial);
+  const [name, setName] = useState(initial?.name || '');
+  const [relation, setRelation] = useState(initial?.relation || '');
+  const [sex, setSex] = useState(initial?.sex || 'Male');
+  const [birthDate, setBirthDate] = useState(initial?.birthDate || '');
+  const [birthLocation, setBirthLocation] = useState(initial?.birthLocation || '');
+  const [location, setLocation] = useState(initial?.location || USER.location);
+
+  const age = calcAge(birthDate);
 
   useEffect(() => {
     const prevOverflow = document.body.style.overflow;
@@ -45,16 +35,18 @@ function AddMemberModal({ onClose, onAdd }) {
     };
   }, []);
 
-  const valid = name.trim().length > 0 && Number(age) > 0;
+  const valid = name.trim().length > 0 && !!age && age > 0;
 
   const submit = () => {
     if (!valid) return;
-    onAdd({
+    onSubmit({
       name: name.trim(),
-      relation,
-      age: Number(age),
+      relation: relation.trim() || 'Family Member',
       sex,
+      birthDate,
+      birthLocation: birthLocation.trim(),
       location: location.trim() || USER.location,
+      age,
     });
   };
 
@@ -63,8 +55,10 @@ function AddMemberModal({ onClose, onAdd }) {
       <div className="modal-card" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <div>
-            <div className="modal-title">Add Family Member</div>
-            <div className="modal-subtitle">Add someone new to your family health plan.</div>
+            <div className="modal-title">{isEdit ? 'Edit Family Member' : 'Add Family Member'}</div>
+            <div className="modal-subtitle">
+              {isEdit ? 'Update their profile details below.' : 'Add someone new to your family health plan.'}
+            </div>
           </div>
           <button className="modal-close" onClick={onClose} aria-label="Close">
             <Icon name="x" size="sm" />
@@ -85,27 +79,13 @@ function AddMemberModal({ onClose, onAdd }) {
           <div className="form-row">
             <div className="form-group">
               <label className="form-label">Relation</label>
-              <select className="form-select" value={relation} onChange={(e) => setRelation(e.target.value)}>
-                {RELATIONS.map((r) => (
-                  <option key={r} value={r}>
-                    {r}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Age</label>
               <input
                 className="form-input"
-                type="number"
-                min="0"
-                value={age}
-                onChange={(e) => setAge(e.target.value)}
-                placeholder="e.g. 34"
+                value={relation}
+                onChange={(e) => setRelation(e.target.value)}
+                placeholder="e.g. Sister, Uncle, Cousin..."
               />
             </div>
-          </div>
-          <div className="form-row">
             <div className="form-group">
               <label className="form-label">Sex</label>
               <select className="form-select" value={sex} onChange={(e) => setSex(e.target.value)}>
@@ -114,9 +94,38 @@ function AddMemberModal({ onClose, onAdd }) {
                 <option value="Other">Other</option>
               </select>
             </div>
+          </div>
+          <div className="form-group">
+            <label className="form-label">Date of Birth</label>
+            <input
+              className="form-input"
+              type="date"
+              value={birthDate}
+              onChange={(e) => setBirthDate(e.target.value)}
+              max={new Date().toISOString().split('T')[0]}
+            />
+            <span className="form-hint">
+              {age ? `${age} year${age === 1 ? '' : 's'} old` : 'Age is calculated automatically from the date of birth.'}
+            </span>
+          </div>
+          <div className="form-row">
             <div className="form-group">
-              <label className="form-label">Location</label>
-              <input className="form-input" value={location} onChange={(e) => setLocation(e.target.value)} />
+              <label className="form-label">Birth Location</label>
+              <input
+                className="form-input"
+                value={birthLocation}
+                onChange={(e) => setBirthLocation(e.target.value)}
+                placeholder="e.g. Mumbai, Maharashtra"
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Current Residence</label>
+              <input
+                className="form-input"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                placeholder="e.g. Ahmedabad, Gujarat"
+              />
             </div>
           </div>
         </div>
@@ -126,8 +135,8 @@ function AddMemberModal({ onClose, onAdd }) {
             Cancel
           </button>
           <button className="btn btn-primary" disabled={!valid} onClick={submit}>
-            <Icon name="userPlus" size="sm" />
-            Add Member
+            <Icon name={isEdit ? 'check' : 'userPlus'} size="sm" />
+            {isEdit ? 'Save Changes' : 'Add Member'}
           </button>
         </div>
       </div>
@@ -138,10 +147,10 @@ function AddMemberModal({ onClose, onAdd }) {
 
 export default function FamilyMembers() {
   const navigate = useNavigate();
-  const { members, setMember, addMember, removeMember } = useMember();
+  const { members, setMember, addMember, updateMember, removeMember } = useMember();
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('All');
-  const [showAdd, setShowAdd] = useState(false);
+  const [modal, setModal] = useState(null);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -168,11 +177,16 @@ export default function FamilyMembers() {
     navigate(ROUTES.insights);
   };
 
-  const handleAdd = (profile) => {
-    const created = addMember(profile);
-    setShowAdd(false);
-    setMember(created.id);
-    navigate(ROUTES.insights);
+  const handleSubmit = (profile) => {
+    if (modal === 'add') {
+      const created = addMember(profile);
+      setModal(null);
+      setMember(created.id);
+      navigate(ROUTES.insights);
+    } else if (modal && modal.member) {
+      updateMember(modal.member.id, profile);
+      setModal(null);
+    }
   };
 
   const handleDelete = (m) => {
@@ -213,13 +227,13 @@ export default function FamilyMembers() {
               </span>
             ))}
           </div>
-          <button className="btn btn-secondary btn-sm" onClick={() => setShowAdd(true)}>
+          <button className="btn btn-secondary btn-sm" onClick={() => setModal('add')}>
             <Icon name="userPlus" size="sm" />
             Add Member
           </button>
           <button className="btn btn-primary btn-sm" onClick={() => navigate(ROUTES.assessment)}>
             <Icon name="sparkle" size="sm" />
-            New Assessment
+            AI Assessment
           </button>
         </div>
       </div>
@@ -284,24 +298,43 @@ export default function FamilyMembers() {
                 <Icon name="sparkle" size="sm" />
                 View Insights
               </button>
-              <button
-                className="btn btn-icon-danger btn-sm"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDelete(m);
-                }}
-                disabled={members.length <= 1}
-                title={members.length <= 1 ? 'At least one member is required' : `Remove ${m.name}`}
-                aria-label={`Remove ${m.name}`}
-              >
-                <Icon name="trash" size="sm" />
-              </button>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <button
+                  className="btn btn-ghost btn-sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setModal({ member: m });
+                  }}
+                  title={`Edit ${m.name}`}
+                  aria-label={`Edit ${m.name}`}
+                >
+                  <Icon name="edit" size="sm" />
+                </button>
+                <button
+                  className="btn btn-icon-danger btn-sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(m);
+                  }}
+                  disabled={members.length <= 1}
+                  title={members.length <= 1 ? 'At least one member is required' : `Remove ${m.name}`}
+                  aria-label={`Remove ${m.name}`}
+                >
+                  <Icon name="trash" size="sm" />
+                </button>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      {showAdd && <AddMemberModal onClose={() => setShowAdd(false)} onAdd={handleAdd} />}
+      {modal && (
+        <MemberModal
+          initial={modal.member || null}
+          onClose={() => setModal(null)}
+          onSubmit={handleSubmit}
+        />
+      )}
     </>
   );
 }

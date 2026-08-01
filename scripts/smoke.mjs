@@ -39,11 +39,20 @@ try {
   const pages = [
     ['LandingPage', ROUTES.home],
     ['Dashboard', ROUTES.dashboard],
+    ['AiAssistant', ROUTES.aiAssistant],
     ['NewAssessment', ROUTES.assessment],
     ['AiAssessment', ROUTES.insights],
+    ['PastInsights', ROUTES.pastInsights],
     ['FamilyMembers', ROUTES.family],
     ['HealthInsights', ROUTES.health],
     ['Reports', ROUTES.reports],
+    ['UploadReport', ROUTES.reportsUpload],
+    ['GenerateReport', ROUTES.generateReport],
+    ['Doctors', ROUTES.doctors],
+    ['AddDoctor', ROUTES.doctorsAdd],
+    ['AddCheckup', ROUTES.checkupsAdd],
+    ['Medicines', ROUTES.medicines],
+    ['AddMedicine', ROUTES.medicinesAdd],
     ['PatientEducation', ROUTES.education],
     ['Settings', ROUTES.settings],
   ];
@@ -72,6 +81,13 @@ try {
   );
   if (!dash || dash.length < 100) throw new Error('Suspiciously small render for App dashboard');
   console.log(`OK  App (dashboard view)  (${dash.length} chars)`);
+
+  const editPath = ROUTES.reportsEdit.replace(':id', 'rep-seed-1');
+  const edit = renderToString(
+    withProvider(React.createElement(MemoryRouter, { initialEntries: [editPath] }, React.createElement(App)))
+  );
+  if (!edit || edit.length < 100) throw new Error('Suspiciously small render for App edit view');
+  console.log(`OK  App (edit report view)  (${edit.length} chars)`);
 
   console.log('ALL SMOKE TESTS PASSED');
 } finally {

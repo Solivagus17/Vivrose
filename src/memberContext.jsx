@@ -8,6 +8,7 @@ export const MemberContext = React.createContext({
   member: FAMILY_MEMBERS.find((m) => m.id === DEFAULT_ID) || FAMILY_MEMBERS[0],
   setMember: () => {},
   addMember: () => {},
+  updateMember: () => {},
   removeMember: () => {},
 });
 
@@ -22,6 +23,10 @@ export function MemberProvider({ children }) {
     return newMember;
   };
 
+  const updateMember = (id, patch) => {
+    setMembers((prev) => prev.map((m) => (m.id === id ? { ...m, ...patch } : m)));
+  };
+
   const removeMember = (id) => {
     setMembers((prev) => (prev.length <= 1 ? prev : prev.filter((m) => m.id !== id)));
     setMemberId((prevId) => {
@@ -33,7 +38,7 @@ export function MemberProvider({ children }) {
 
   return (
     <MemberContext.Provider
-      value={{ members, member, setMember: setMemberId, addMember, removeMember }}
+      value={{ members, member, setMember: setMemberId, addMember, updateMember, removeMember }}
     >
       {children}
     </MemberContext.Provider>
