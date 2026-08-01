@@ -99,6 +99,10 @@ Tetrathon/
     │   └── global.css    # Design system + all page styles
     ├── data/
     │   └── data.js       # Mock clinical data (patient, risks, alerts...)
+    ├── lib/
+    │   └── utils.js      # cn() classname joiner
+    ├── hooks/
+    │   └── useClickOutside.js
     └── components/
         ├── Icon.jsx              # SVG icon symbol set
         ├── Sidebar.jsx           # Frosted-glass translucent sidebar
@@ -111,6 +115,12 @@ Tetrathon/
         ├── Reports.jsx           # PDF-style report preview
         ├── PatientEducation.jsx  # Multilingual education tabs
         ├── Settings.jsx          # Clinical/notification/AI config
+        ├── core/                 # Motion primitives (motion/react based)
+        │   ├── TextEffect.jsx
+        │   ├── BorderTrail.jsx
+        │   ├── InView.jsx
+        │   ├── TextScramble.jsx
+        │   └── ToolbarExpandable.jsx
         └── ui.jsx                # Shared primitives (RiskBar, Reveal...)
 ```
 
@@ -219,13 +229,30 @@ Clinical thresholds, notification preferences, AI model configuration with worki
 ---
 
 ## Animations & Motion
+
+Motion is powered by **motion (framer-motion successor, `motion/react`)** via custom primitives in `src/components/core/` — ported from the motion-primitives pattern and adapted to the vanilla-CSS design system (no Tailwind). `@` maps to `src` via `vite.config.js`.
+
+### Core Primitives (`src/components/core/`)
+| Primitive | What it does | Used in |
+|---|---|---|
+| `TextEffect` | Animates text per char/word/line with presets (`fade`, `blur`, `fade-in-blur`, `scale`, `slide`) | Landing hero title, Dashboard greeting, AiAssessment member name |
+| `TextScramble` | Character-scramble reveal (used sparingly — 2 spots max) | Landing eyebrow, AiAssessment "AI Health Summary" label |
+| `BorderTrail` | Glowing dot that traces the card border (mask-based, `offset-path`) | Landing hero card, AiAssessment AI summary card |
+| `InView` | Scroll-triggered reveal via `useInView` + variants | Feature pills, Dashboard cards |
+| `ToolbarExpandable` | Floating quick-actions bar (spring expand/collapse, `react-use-measure`) | AppShell (fixed bottom-right, all app pages) |
+
+### Motion usage rules
+- **TextScramble** is intentionally rare — it is loud and only used on the landing eyebrow and the AI summary label.
+- `Reveal` (in `ui.jsx`) is now a thin wrapper over `InView`, so all existing scroll-reveal call sites are motion-powered.
+- Custom components import `cn` from `@/lib/utils` and `Icon` from `../Icon.jsx` — the toolbar is fully wired to real routes (`ROUTES.*`) and `useMember`.
+
+### Existing CSS animations (kept)
 - **Page transitions:** Fade + translateY keyed remount of page components
 - **Risk bars:** Width animation with cubic-bezier easing (1.2s)
 - **Landing orbs:** 20s infinite floating animation
 - **Hero cards:** 6s floating effect with staggered delays
 - **Wizard steps:** React state transitions between steps
 - **Loading simulation:** Sequential progress bar with status text
-- **Scroll-triggered:** IntersectionObserver-based Reveal wrapper for cards
 - **Hover effects:** Subtle elevation and scale for cards
 
 ---
@@ -250,6 +277,13 @@ Clinical thresholds, notification preferences, AI model configuration with worki
 - **Icons:** no additions needed — `users`, `userPlus`, `sparkles`, `arrowLeft/Right`, `heart`, `droplet`, `dna`, `eye`, `search`, `check`, `printer` all already in `Icon.jsx`.
 - **Old data exports gone:** `PATIENT`, `RISK_SCORES`, `XAI_FACTORS`, `INVESTIGATIONS`, `WARNINGS`, `REFERRALS`, `AI_SUMMARY`, `PATIENTS`, `REPORT_LISTS`, `REPORT_SUMMARY`.
 - **Note:** `PatientEducation.jsx` body content is still father-specific (HbA1c 8.4% etc.); acceptable for demo, not data-driven.
+
+## Session Status (motion primitives)
+
+- **Done & verified (build + smoke green):** Installed `motion@12.43` + `react-use-measure` (needs `--legacy-peer-deps` due to the vite 8 / plugin-react peer gap). Added `@` alias → `src` in `vite.config.js` and `scripts/smoke.mjs`. Created `src/lib/utils.js` (`cn`), `src/hooks/useClickOutside.js`, and `src/components/core/` with `TextEffect`, `BorderTrail`, `InView`, `TextScramble`, `ToolbarExpandable`.
+- **Integration:** Landing hero title = per-char `fade-in-blur` + per-char gradient `fade`; landing eyebrow = `TextScramble`; first hero float-card = `BorderTrail`; feature pills = per-pill `InView` stagger (their old CSS entrance animation was removed). Dashboard greeting = per-word `slide`; dashboard cards = `InView` stagger. AiAssessment member name = per-char `blur`; "AI Health Summary" label = `TextScramble`; AI summary card = `BorderTrail`. `Reveal` in `ui.jsx` is now an `InView` wrapper (no API change). `AppShell` mounts `ToolbarExpandable` (fixed bottom-right; Profile/Alerts/Reports/Education quick actions wired to routes).
+- **Notes/gotchas:** `TextEffect` requires a plain-string child (pass a built `greeting` string, not JSX expressions). `BorderTrail` is invisible inside `overflow:hidden` cards (mask is clipped), so it lives on `.hero-float-card` and `.ai-summary-card` only. TextScramble intentionally used exactly twice. Landing hero float cards now use a non-overlapping **bento grid** (`.hero-cards` = 2-col grid; cards 1 & 4 span both columns, cards 2 & 3 tucked left/right) instead of absolute `top/left/right` offsets — cards can no longer collide, even during the staggered float animation (amplitude 6px, 20px gaps).
+- **CSS added:** motion utilities (`.sr-only`, `.inline-block`, `.whitespace-pre`, `.block`, `.hidden`, `.overflow-hidden`), `.mp-trail-dot` gradient, and the `.mp-toolbar*` block (frosted-glass floating toolbar); `.mp-toolbar` hidden on print.
 
 ---
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import Icon from './Icon.jsx';
+import { InView } from './core/InView.jsx';
 
 export function RiskBadge({ level }) {
   const label = level === 'high' ? 'High Risk' : level === 'moderate' ? 'Moderate' : 'Low Risk';
@@ -68,37 +69,18 @@ export function Avatar({ initials, background }) {
 }
 
 export function Reveal({ children, className = '', delay = 0, style = {} }) {
-  const [visible, setVisible] = React.useState(false);
-  const ref = React.useRef(null);
-
-  React.useEffect(() => {
-    const el = ref.current;
-    if (!el) return undefined;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.unobserve(el);
-        }
-      },
-      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <div
-      ref={ref}
+    <InView
       className={className}
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(20px)',
-        transition: `opacity 0.5s ease ${delay}ms, transform 0.5s ease ${delay}ms`,
-        ...style,
+      style={style}
+      variants={{
+        hidden: { opacity: 0, y: 24 },
+        visible: { opacity: 1, y: 0 },
       }}
+      viewOptions={{ margin: '0px 0px -60px 0px' }}
+      transition={{ duration: 0.5, delay, ease: 'easeOut' }}
     >
       {children}
-    </div>
+    </InView>
   );
 }

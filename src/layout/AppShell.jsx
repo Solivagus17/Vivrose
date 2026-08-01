@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar.jsx';
+import ToolbarExpandable from '../components/core/ToolbarExpandable.jsx';
 import { ROUTES } from '../routes.js';
 
 export default function AppShell() {
@@ -29,6 +30,7 @@ export default function AppShell() {
           <Outlet />
         </div>
       </main>
+      <ToolbarExpandable />
     </div>
   );
 }

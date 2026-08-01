@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { StatCard } from './ui.jsx';
+import React, { useRef } from 'react';
+import { useInView } from 'motion/react';
+import { StatCard, Reveal } from './ui.jsx';
 import { ANALYTICS_OVERVIEW, ANALYTICS_CHART, TOP_CONTRIBUTORS } from '../data/data.js';
 import { useMember } from '../memberContext.jsx';
 
@@ -7,23 +8,11 @@ const BAR_COLORS = { low: '#2E9E6A', mod: '#D49A2A', high: '#C43C3C' };
 const LEVEL_ORDER = ['high', 'moderate', 'low'];
 
 function RiskChart() {
-  const [heights, setHeights] = useState(null);
-
-  useEffect(() => {
-    const t = setTimeout(() => {
-      setHeights(
-        ANALYTICS_CHART.map((c) => [
-          (c.low / 100) * 140,
-          (c.mod / 100) * 140,
-          (c.high / 100) * 140,
-        ])
-      );
-    }, 200);
-    return () => clearTimeout(t);
-  }, []);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '0px 0px -80px 0px' });
 
   return (
-    <div className="chart-wrap">
+    <div className="chart-wrap" ref={ref}>
       <div className="analytics-chart">
         {ANALYTICS_CHART.map((item, i) => (
           <div className="chart-group" key={item.label}>
@@ -34,7 +23,7 @@ function RiskChart() {
                   className="chart-bar"
                   style={{
                     background: color,
-                    height: heights ? `${heights[i][j]}px` : 0,
+                    height: isInView ? `${(item[key] / 100) * 140}px` : '0px',
                     transitionDelay: `${(i * 3 + j) * 80}ms`,
                   }}
                 ></div>
@@ -51,6 +40,26 @@ function RiskChart() {
             </div>
           ))}
         </div>
+      </div>
+    </div>
+  );
+}
+
+function XaiBar({ width, gradient }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '0px 0px -40px 0px' });
+
+  return (
+    <div className="xai-impact-bar-container" ref={ref}>
+      <div className="xai-impact-bar-bg">
+        <div
+          className="xai-impact-bar"
+          style={{
+            width: isInView ? `${width}%` : '0%',
+            background: gradient || 'linear-gradient(90deg,var(--plum-700),var(--plum-500))',
+            transition: 'width 0.7s cubic-bezier(0.34,1.56,0.64,1)',
+          }}
+        ></div>
       </div>
     </div>
   );
@@ -78,7 +87,7 @@ export default function HealthInsights() {
       </div>
 
       <div className="assess-grid">
-        <div className="card card-lg">
+        <Reveal className="card card-lg">
           <div className="card-header">
             <div>
               <div className="card-title">Risk Levels by Condition</div>
@@ -86,9 +95,9 @@ export default function HealthInsights() {
             </div>
           </div>
           <RiskChart />
-        </div>
+        </Reveal>
 
-        <div className="card card-lg">
+        <Reveal className="card card-lg" delay={0.1}>
           <div className="card-header">
             <div>
               <div className="card-title">Common Health Factors</div>
@@ -102,21 +111,11 @@ export default function HealthInsights() {
                   <div className="xai-factor-name">{c.name}</div>
                   <div className="xai-factor-value">{c.value}</div>
                 </div>
-                <div className="xai-impact-bar-container">
-                  <div className="xai-impact-bar-bg">
-                    <div
-                      className="xai-impact-bar"
-                      style={{
-                        width: `${c.width}%`,
-                        background: 'linear-gradient(90deg,var(--plum-700),var(--plum-500))',
-                      }}
-                    ></div>
-                  </div>
-                </div>
+                <XaiBar width={c.width} gradient="linear-gradient(90deg,var(--plum-700),var(--plum-500))" />
               </div>
             ))}
           </div>
-        </div>
+        </Reveal>
       </div>
     </>
   );

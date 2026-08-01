@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import Icon from './Icon.jsx';
 import { RiskBadge, RiskBadgeShort, Avatar } from './ui.jsx';
@@ -36,6 +37,14 @@ function AddMemberModal({ onClose, onAdd }) {
   const [sex, setSex] = useState('Male');
   const [location, setLocation] = useState(USER.location);
 
+  useEffect(() => {
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, []);
+
   const valid = name.trim().length > 0 && Number(age) > 0;
 
   const submit = () => {
@@ -49,7 +58,7 @@ function AddMemberModal({ onClose, onAdd }) {
     });
   };
 
-  return (
+  return createPortal(
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-card" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
@@ -122,7 +131,8 @@ function AddMemberModal({ onClose, onAdd }) {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 

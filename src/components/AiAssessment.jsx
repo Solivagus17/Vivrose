@@ -2,6 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from './Icon.jsx';
 import { RiskBadge, RiskBar, TrendLine, Reveal } from './ui.jsx';
+import { TextEffect } from './core/TextEffect.jsx';
+import { TextScramble } from './core/TextScramble.jsx';
 import { useMember } from '../memberContext.jsx';
 import { ROUTES } from '../routes.js';
 
@@ -27,7 +29,11 @@ export default function AiAssessment() {
           <div className="patient-header-left">
             <div className="patient-header-avatar">{member.initials}</div>
             <div>
-              <div className="patient-header-name">{member.name}</div>
+              <div className="patient-header-name">
+                <TextEffect per="char" preset="blur" as="span" speedReveal={1.3}>
+                  {member.name}
+                </TextEffect>
+              </div>
               <div className="patient-header-meta">
                 <span>
                   <Icon name="user" size="xs" /> {member.relation}, {member.age} years
@@ -76,11 +82,63 @@ export default function AiAssessment() {
         ))}
       </div>
 
-      <Reveal className="ai-summary-card" delay={150}>
+      <Reveal className="ai-summary-card" delay={0.15}>
         <div className="ai-summary-label">
-          <Icon name="sparkles" size="xs" /> AI Health Summary
+          <Icon name="sparkles" size="xs" />{' '}
+          <TextScramble as="span" duration={0.9} speed={0.045}>
+            AI Health Summary
+          </TextScramble>
         </div>
+
         <p className="ai-summary-text" dangerouslySetInnerHTML={{ __html: member.summary }} />
+
+        <div className="ai-summary-body">
+          {/* Key Findings */}
+          {member.findings?.length > 0 && (
+            <div className="ai-summary-section">
+              <div className="ai-summary-section-title">
+                <Icon name="target" size="xs" /> Key Findings
+              </div>
+              <ul className="ai-summary-list">
+                {member.findings.map((f, i) => (
+                  <li key={i}>{f}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Lifestyle & Action */}
+          <div className="ai-summary-right">
+            {member.lifestyle?.length > 0 && (
+              <div className="ai-summary-section">
+                <div className="ai-summary-section-title">
+                  <Icon name="bolt" size="xs" /> Lifestyle Actions
+                </div>
+                <ul className="ai-summary-list ai-summary-list--action">
+                  {member.lifestyle.map((l, i) => (
+                    <li key={i}>{l}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {(member.checkupList?.length > 0 || member.recommendationList?.length > 0) && (
+              <div className="ai-summary-section">
+                <div className="ai-summary-section-title">
+                  <Icon name="clipboard" size="xs" /> Action Checklist
+                </div>
+                <ul className="ai-summary-list ai-summary-list--check">
+                  {member.checkupList?.map((c, i) => (
+                    <li key={`c-${i}`}>{c}</li>
+                  ))}
+                  {member.recommendationList?.map((r, i) => (
+                    <li key={`r-${i}`}>{r}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
       </Reveal>
 
       <div className="assess-grid">
@@ -109,7 +167,7 @@ export default function AiAssessment() {
           </div>
         </Reveal>
 
-        <Reveal className="card card-lg" delay={100}>
+        <Reveal className="card card-lg" delay={0.1}>
           <SectionHeader
             title="Suggested Check-ups"
             subtitle="Tests worth booking for a clearer health picture"

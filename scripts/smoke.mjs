@@ -16,12 +16,13 @@ const server = await createServer({
   optimizeDeps: { disabled: true },
   resolve: {
     alias: [
+      { find: '@', replacement: path.resolve('src') },
       { find: 'react-router/dom', replacement: RR_DOM_EXPORT },
       { find: 'react-router-dom', replacement: RR_DOM },
       { find: 'react-router', replacement: RR },
     ],
   },
-  ssr: { noExternal: ['react-router-dom', 'react-router'] },
+  ssr: { noExternal: ['react-router-dom', 'react-router', 'motion', 'react-use-measure'] },
 });
 
 const rrDomMod = await server.ssrLoadModule(RR_DOM);

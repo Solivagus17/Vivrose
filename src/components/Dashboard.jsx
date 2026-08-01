@@ -2,6 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from './Icon.jsx';
 import { RiskBadge, StatCard, Avatar } from './ui.jsx';
+import { TextEffect } from './core/TextEffect.jsx';
+import { InView } from './core/InView.jsx';
 import { USER, DASH_STATS, ALERTS } from '../data/data.js';
 import { useMember } from '../memberContext.jsx';
 import { ROUTES } from '../routes.js';
@@ -30,6 +32,8 @@ export default function Dashboard() {
     s.label === 'Family Members' ? { ...s, value: String(members.length) } : s
   );
 
+  const greeting = `${getGreeting()}, ${USER.name.split(' ')[0]}`;
+
   const openMember = (id) => {
     setMember(id);
     navigate(ROUTES.insights);
@@ -39,7 +43,9 @@ export default function Dashboard() {
     <>
       <div className="dash-greeting">
         <h1>
-          {getGreeting()}, {USER.name.split(' ')[0]}
+          <TextEffect per="word" preset="slide" as="span">
+            {greeting}
+          </TextEffect>
         </h1>
         <p>Here&apos;s your family&apos;s health overview for today.</p>
       </div>
@@ -52,7 +58,12 @@ export default function Dashboard() {
       </div>
 
       <div className="dash-grid">
-        <div className="card card-lg">
+        <InView
+          className="card card-lg"
+          variants={{ hidden: { opacity: 0, y: 28 }, visible: { opacity: 1, y: 0 } }}
+          viewOptions={{ margin: '0px 0px -60px 0px' }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+        >
           <div className="card-header">
             <div>
               <div className="card-title">Family Members</div>
@@ -77,9 +88,14 @@ export default function Dashboard() {
               </div>
             ))}
           </div>
-        </div>
+        </InView>
 
-        <div className="card card-lg">
+        <InView
+          className="card card-lg"
+          variants={{ hidden: { opacity: 0, y: 28 }, visible: { opacity: 1, y: 0 } }}
+          viewOptions={{ margin: '0px 0px -60px 0px' }}
+          transition={{ duration: 0.5, delay: 0.12, ease: 'easeOut' }}
+        >
           <div className="card-header">
             <div>
               <div className="card-title">Health Alerts</div>
@@ -100,7 +116,7 @@ export default function Dashboard() {
               </div>
             ))}
           </div>
-        </div>
+        </InView>
       </div>
     </>
   );
