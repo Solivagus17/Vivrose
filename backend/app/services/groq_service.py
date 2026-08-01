@@ -1,12 +1,14 @@
 import json
 import os
+import re
 import time
 from datetime import datetime, timezone
 import requests
 from flask import current_app
 
 GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions'
-MODEL_NAME = 'openai/gpt-oss-120b'
+MODEL_NAME = 'llama-3.3-70b-versatile'
+FALLBACK_MODEL_NAME = 'llama-3.1-8b-instant'
 
 LLM_LOGS = []
 
@@ -76,13 +78,38 @@ def _log_interaction(call_type, messages, response_content, status_code, duratio
     return entry
 
 
-
 def get_llm_logs():
     return list(LLM_LOGS)
 
 
+def _parse_json_robust(text):
+    """Robustly parse JSON string, removing markdown codeblocks or trailing noise."""
+    if not text:
+        return None
+    raw = text.strip()
+    if raw.startswith('```'):
+        lines = raw.splitlines()
+        if lines[0].startswith('```'):
+            lines = lines[1:]
+        if lines and lines[-1].strip() == '```':
+            lines = lines[:-1]
+        raw = '\n'.join(lines).strip()
+    try:
+        return json.loads(raw)
+    except Exception:
+        pass
+    start = raw.find('{')
+    end = raw.rfind('}')
+    if start != -1 and end != -1 and end > start:
+        try:
+            return json.loads(raw[start:end + 1])
+        except Exception:
+            pass
+    return None
+
+
 def analyze_health(data, baseline_result):
-    """Call Groq API (openai/gpt-oss-120b) to generate a comprehensive AI clinical health report."""
+    """Call Groq API (llama-3.3-70b-versatile) to generate a comprehensive AI clinical health report."""
     api_key = _get_api_key()
     if not api_key:
         _log_interaction('AI Health Assessment', [], None, 401, 0, 'GROQ_API_KEY missing')
@@ -108,7 +135,6 @@ def analyze_health(data, baseline_result):
     fatigue = data.get('fatigue') or 'Not specified'
 
     prompt = f"""
-System: You are an expert clinical AI decision support system (CDSS) evaluating health risk data for a family member.
 Analyze the patient profile below and calculate personalized, evidence-based health risk scores (5-95%) for EACH of the 4 conditions: Diabetes, Hypertension, CVD, and Stroke.
 
 Patient Profile:
@@ -118,37 +144,13 @@ Patient Profile:
 - Habits & History: Smoking: {smoking}, Known Conditions: {conditions}, Family History: {family_history}, Medications: {medications}
 - Lifestyle & Symptoms: Physical Activity: {activity}, Diet: {diet}, Stress: {stress}, Sleep: {sleep} hrs/night, Fatigue: {fatigue}
 
-Respond strictly in valid JSON format with the following keys:
+Respond strictly in valid JSON format with the following exact keys and structure:
 {{
   "scores": [
-    {{
-      "label": "Diabetes",
-      "score": <calculated integer risk 5 to 95 based on HbA1c, Fasting Glucose, BMI, family history>,
-      "level": "<low|moderate|high>",
-      "trend": "<up|flat|down>",
-      "trendLabel": "<Rising|Stable|Improving>"
-    }},
-    {{
-      "label": "Hypertension",
-      "score": <calculated integer risk 5 to 95 based on BP, BMI, smoking, family history>,
-      "level": "<low|moderate|high>",
-      "trend": "<up|flat|down>",
-      "trendLabel": "<Rising|Stable|Improving>"
-    }},
-    {{
-      "label": "CVD",
-      "score": <calculated integer risk 5 to 95 based on Cholesterol, BP, BMI, smoking, family history>,
-      "level": "<low|moderate|high>",
-      "trend": "<up|flat|down>",
-      "trendLabel": "<Rising|Stable|Improving>"
-    }},
-    {{
-      "label": "Stroke",
-      "score": <calculated integer risk 5 to 95 based on BP, smoking, family history>,
-      "level": "<low|moderate|high>",
-      "trend": "<up|flat|down>",
-      "trendLabel": "<Rising|Stable|Improving>"
-    }}
+    {{"label": "Diabetes", "score": 75, "level": "high", "trend": "up", "trendLabel": "Rising"}},
+    {{"label": "Hypertension", "score": 60, "level": "moderate", "trend": "flat", "trendLabel": "Stable"}},
+    {{"label": "CVD", "score": 45, "level": "moderate", "trend": "flat", "trendLabel": "Stable"}},
+    {{"label": "Stroke", "score": 30, "level": "low", "trend": "flat", "trendLabel": "Stable"}}
   ],
   "summary": "HTML executive clinical summary using <strong> tags for key findings",
   "report_summary": "Plain text version of summary without HTML tags",
@@ -176,14 +178,14 @@ Respond strictly in valid JSON format with the following keys:
         'Content-Type': 'application/json',
     }
     messages = [
-        {'role': 'system', 'content': 'You are a clinical AI health evaluation system that outputs strict valid JSON.'},
+        {'role': 'system', 'content': 'You are a clinical AI health evaluation system that outputs strict valid JSON only.'},
         {'role': 'user', 'content': prompt},
     ]
     payload = {
         'model': MODEL_NAME,
         'messages': messages,
-        'temperature': 0.3,
-        'max_tokens': 1500,
+        'temperature': 0.2,
+        'max_tokens': 2500,
         'response_format': {'type': 'json_object'},
     }
 
@@ -191,10 +193,23 @@ Respond strictly in valid JSON format with the following keys:
     try:
         resp = requests.post(GROQ_URL, headers=headers, json=payload, timeout=25)
         dur = (time.time() - start_t) * 1000
+
+        # Automatic retry fallback if Groq API throws 400 json_validate_failed or invalid model error
+        if resp.status_code == 400 and 'json_validate_failed' in resp.text:
+            print("Notice: Groq JSON validation error. Retrying with fallback configuration...")
+            retry_payload = dict(payload)
+            retry_payload['model'] = FALLBACK_MODEL_NAME
+            retry_payload.pop('response_format', None)
+            resp = requests.post(GROQ_URL, headers=headers, json=retry_payload, timeout=25)
+            dur = (time.time() - start_t) * 1000
+
         if resp.status_code == 200:
             content = resp.json()['choices'][0]['message']['content']
             _log_interaction('AI Health Assessment', messages, content, 200, dur)
-            parsed = json.loads(content)
+            parsed = _parse_json_robust(content)
+            if not parsed or not isinstance(parsed, dict):
+                raise ValueError(f"Failed to parse JSON response: {content[:200]}")
+
             merged = dict(baseline_result)
             merged['llmStatus'] = 'success'
             merged['llmError'] = None
@@ -225,7 +240,7 @@ Respond strictly in valid JSON format with the following keys:
                     trend = s.get('trend') or ('up' if level == 'high' else 'flat')
                     trend_label = s.get('trendLabel') or ('Rising' if trend == 'up' else 'Stable')
                     color = '#C43C3C' if level == 'high' else '#D49A2A' if level == 'moderate' else '#2E9E6A'
-                    
+
                     peaks = {'up': [2, 10, 10, 9, 18, 11, 26, 12, 34, 13, 38, 13],
                              'down': [2, 12, 10, 11, 18, 10, 26, 9, 34, 8, 38, 7],
                              'flat': [2, 10, 10, 9, 18, 9, 26, 9, 34, 9, 38, 9]}
@@ -274,16 +289,12 @@ Respond strictly in valid JSON format with the following keys:
 
 
 def _compress_member_for_chat(m):
-    """Return a lean dict with only clinically meaningful fields — strips all UI-only noise
-    (CSS gradients, SVG polyline points, avatar strings, duplicate arrays, icon names, etc.)
-    to keep token count well under the 6000 TPM free-tier limit."""
-    # Summarise scores as a compact string, e.g. "Diabetes 75% high, Hypertension 60% moderate"
+    """Return a lean dict with only clinically meaningful fields."""
     scores_summary = ', '.join(
         f"{s.get('label')} {s.get('score')}% {s.get('level')}"
         for s in (m.get('scores') or [])
         if s.get('label')
     )
-    # Keep only the name/rationale from checkups, not icon strings
     checkups = [
         f"{c.get('name')}: {c.get('rationale', '')}"
         for c in (m.get('checkups') or m.get('checkupList') or [])
@@ -335,16 +346,14 @@ def _compress_member_for_chat(m):
 
 
 def chat_reply(message, members_data, history=None):
-    """Call Groq API (llama-3.1-8b-instant) for intelligent family health chat assistant."""
+    """Call Groq API (llama-3.3-70b-versatile) for intelligent family health chat assistant."""
     api_key = _get_api_key()
     if not api_key:
         _log_interaction('VivRose AI Chat', [], None, 401, 0, 'GROQ_API_KEY missing')
         return None
 
-    # Compress member data — strip UI-only noise to stay within the 6000 TPM free-tier limit
     if members_data:
         compressed = [_compress_member_for_chat(m) for m in members_data]
-        # Remove None-valued keys to further trim tokens
         compressed = [{k: v for k, v in c.items() if v is not None} for c in compressed]
         members_summary = json.dumps(compressed, indent=2)
     else:
@@ -371,11 +380,11 @@ def chat_reply(message, members_data, history=None):
     messages = [{'role': 'system', 'content': system_prompt}]
 
     if history and isinstance(history, list):
-        for item in history[-4:]:  # reduced from 6 to 4 to save tokens
+        for item in history[-4:]:
             role = item.get('role')
             content = item.get('text') or item.get('content') or ''
             if role in ('user', 'assistant') and content:
-                messages.append({'role': role, 'content': content[:400]})  # cap history messages
+                messages.append({'role': role, 'content': content[:400]})
 
     messages.append({'role': 'user', 'content': message})
 
@@ -383,13 +392,19 @@ def chat_reply(message, members_data, history=None):
         'model': MODEL_NAME,
         'messages': messages,
         'temperature': 0.4,
-        'max_tokens': 1200,
+        'max_tokens': 1500,
     }
 
     start_t = time.time()
     try:
-        resp = requests.post(GROQ_URL, headers=headers, json=payload, timeout=15)
+        resp = requests.post(GROQ_URL, headers=headers, json=payload, timeout=20)
         dur = (time.time() - start_t) * 1000
+        if resp.status_code != 200 and 'model' in resp.text.lower():
+            # Fallback model retry if primary model name is unavailable
+            payload['model'] = FALLBACK_MODEL_NAME
+            resp = requests.post(GROQ_URL, headers=headers, json=payload, timeout=20)
+            dur = (time.time() - start_t) * 1000
+
         if resp.status_code == 200:
             content = resp.json()['choices'][0]['message']['content'].strip()
             _log_interaction('VivRose AI Chat', messages, content, 200, dur)
@@ -402,5 +417,3 @@ def chat_reply(message, members_data, history=None):
         _log_interaction('VivRose AI Chat', messages, None, 500, dur, error=str(exc))
 
     return None
-
-

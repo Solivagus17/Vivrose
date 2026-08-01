@@ -1,0 +1,42 @@
+{
+  "risk_levels": {
+    "low": "Low",
+    "moderate": "Moderate",
+    "high": "High",
+    "very_high": "Very High",
+    "critical": "Critical"
+  },
+  "stages": {
+    "normal": "Normal",
+    "elevated": "Elevated",
+    "stage_1_hypertension": "Stage 1 Hypertension",
+    "stage_2_hypertension": "Stage 2 Hypertension",
+    "hypertensive_crisis": "Hypertensive Crisis",
+    "low": "Low Risk",
+    "borderline": "Borderline Risk",
+    "intermediate": "Intermediate Risk",
+    "high": "High Risk",
+    "G1": "G1 — Normal or high",
+    "G2": "G2 — Mildly decreased",
+    "G3a": "G3a — Mildly to moderately decreased",
+    "G3b": "G3b — Moderately to severely decreased",
+    "G4": "G4 — Severely decreased",
+    "G5": "G5 — Kidney failure"
+  },
+  "referral_urgency": {
+    "emergency": "Go to ER immediately",
+    "urgent": "Book within 2 weeks",
+    "soon": "Book within 1 month",
+    "routine": "Routine follow-up"
+  },
+  "shap_sentence": "{feature} of {value} {direction} {disease} risk by ~{pct}%.",
+  "confidence_labels": {
+    "high": "High confidence",
+    "moderate": "Moderate confidence",
+    "low": "Low confidence — some tests missing",
+    "very_low": "Very low confidence — key tests missing"
+  },
+  "missing_prompt_header": "Recommended investigations to improve assessment accuracy:",
+  "warning_header": "Health Alerts",
+  "referral_header": "Referral Recommendations"
+}

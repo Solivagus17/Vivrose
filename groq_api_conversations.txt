@@ -9778,3 +9778,3908 @@ ERROR: Groq LLM Chat HTTP 429: {"error":{"message":"Rate limit reached for model
 ================================================================================
 
 
+================================================================================
+TIMESTAMP: 2026-08-01T16:15:07.742034+00:00
+CALL TYPE: VivRose AI Chat
+STATUS: 200 SUCCESS (Duration: 3218.0 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are VivRose AI, an empathetic and knowledgeable clinical family health assistant. Help users understand their family members' health, risk scores, vitals, symptoms, and get evidence-based medical advice.
+
+### FAMILY HEALTH CONTEXT:
+[
+  {
+    "name": "Rajesh Patel",
+    "age": 52,
+    "relation": "Father",
+    "bp": "165/100 mmHg",
+    "bmi": "32.0",
+    "hba1c": "8.4%",
+    "riskScores": "Diabetes 78% High"
+  }
+]
+
+### FORMATTING & RESPONSE RULES:
+1. Be empathetic, clear, structured, and professional.
+2. Structure your answer using clear section headings (e.g. ### Header), bold highlights (**item**), and concise bullet lists.
+3. Provide direct, focused clinical guidance without unnecessary repetition so that your response completes fully.
+4. Always end your response with: *Note: It is always better to consult a real doctor or qualified healthcare professional.*
+
+[USER]
+What should Rajesh do about his high blood pressure of 165/100?
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+### Understanding Rajesh’s Blood Pressure Reading  
+- **Current reading:** **165/100 mmHg** – classified as **Stage 2 hypertension**.  
+- **Why it matters:** At this level, the risk of heart attack, stroke, kidney disease, and worsening diabetes is significantly increased.
+
+---
+
+## Immediate Actions
+
+| Action | Why It’s Important | How to Do It |
+|--------|-------------------|--------------|
+| **Schedule a medical appointment today** | A clinician can confirm the diagnosis, evaluate for end‑organ damage, and adjust/initiate medication. | Call his primary care physician or a cardiology/diabetes clinic. |
+| **Start home blood‑pressure monitoring** | Provides a clearer picture of his average BP and helps gauge treatment response. | Use a validated automatic cuff; measure **twice daily** (morning & evening) after 5 min rest; record 2–3 readings each time. |
+| **Know emergency signs** | Hypertensive emergencies need urgent care. | Seek ER if he experiences **severe headache, chest pain, shortness of breath, vision changes, or sudden weakness/numbness**. |
+
+---
+
+## Lifestyle Modifications (Evidence‑Based)
+
+- **Diet**
+  - Adopt the **DASH** or **Mediterranean** eating pattern.
+  - **Sodium:** ≤ 1,500 mg/day (≈ ⅔ tsp salt). Avoid processed foods, canned soups, salty snacks.
+  - **Potassium‑rich foods** (if kidney function allows): bananas, oranges, spinach, beans.
+  - **Limit added sugars & refined carbs** – crucial for his diabetes (HbA1c 8.4%).
+- **Weight Management**
+  - Current **BMI 32 kg/m²** → aim for **5–10 % weight loss** (≈ 10–20 lb). Even modest loss can drop systolic BP by 5–10 mmHg.
+  - Combine **portion control** with regular physical activity.
+- **Physical Activity**
+  - **150 min/week** of moderate‑intensity aerobic exercise (e.g., brisk walking, cycling) **plus** muscle‑strengthening on ≥2 days.
+  - Start slowly (e.g., 10‑minute walks) and increase gradually.
+- **Alcohol & Tobacco**
+  - **Alcohol:** ≤ 2 drinks/day for men; consider reducing to ≤ 1 drink/day.
+  - **If he smokes:** seek cessation support (counseling, nicotine replacement, medications).
+- **Stress Management**
+  - Practice relaxation techniques: deep breathing, meditation, yoga, or tai chi for **10–15 min daily**.
+
+---
+
+## Medication Considerations (Discuss with His Doctor)
+
+| Medication Class | Reason for Use in Rajesh |
+|------------------|--------------------------|
+| **ACE inhibitor or ARB** (e.g., lisinopril, losartan) | Lowers BP **and** protects kidneys in diabetes. |
+| **Thiazide‑type diuretic** (e.g., chlorthalidone) | Effective for volume control; often added to ACE/ARB. |
+| **Calcium‑channel blocker** (e.g., amlodipine) | Helpful if BP remains high despite two drugs. |
+| **Combination pill** (e.g., ACE‑inhibitor + thiazide) | Improves adherence by reducing pill burden. |
+
+- **Goal BP:** **< 130/80 mmHg** for most patients with diabetes (per ACC/AHA 2023 guidelines).  
+- **Adherence:** Take meds at the same time each day; use a pill organizer or reminder app.  
+- **Follow‑up:** Re‑check BP in **4–6 weeks** after any medication change; labs (electrolytes, kidney function, HbA1c) should be reviewed concurrently.
+
+---
+
+## Monitoring & Follow‑Up Plan
+
+1. **Blood Pressure:** Home log → bring to each visit.  
+2. **Weight:** Weekly weigh‑ins; aim for gradual loss.  
+3. **Blood Glucose/HbA1c:** Check fasting glucose daily if on oral meds; repeat HbA1c every 3 months.  
+4. **Laboratory Tests (every 6–12 months or as directed):**  
+   - Serum creatinine & eGFR  
+   - Electrolytes (especially potassium)  
+   - Lipid panel  
+   - Urine albumin‑to‑creatinine ratio (kidney screening)  
+
+---
+
+## Quick “Do‑and‑Don’t” Checklist
+
+**Do:**  
+- Take prescribed antihypertensives exactly as directed.
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T16:15:11.547301+00:00
+CALL TYPE: AI Health Assessment
+STATUS: 200 SUCCESS (Duration: 3694.6 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are a clinical AI health evaluation system that outputs strict valid JSON.
+
+[USER]
+
+System: You are an expert clinical AI decision support system (CDSS) evaluating health risk data for a family member.
+Analyze the patient profile below and calculate personalized, evidence-based health risk scores (5-95%) for EACH of the 4 conditions: Diabetes, Hypertension, CVD, and Stroke.
+
+Patient Profile:
+- Name: Aarav Mehta
+- Age: 20, Sex: male
+- Vitals & Labs: BP: 150/95 mmHg, BMI: 28.2, HbA1c: 6.4, Fasting Glucose: 125, Cholesterol: 220, Creatinine: 1.0
+- Habits & History: Smoking: Current Smoker, Known Conditions: ['Pre-Diabetes'], Family History: Diabetes (Father), Medications: None
+- Lifestyle & Symptoms: Physical Activity: Sedentary, Diet: Poor, Stress: High, Sleep: Not specified hrs/night, Fatigue: Not specified
+
+Respond strictly in valid JSON format with the following keys:
+{
+  "scores": [
+    {
+      "label": "Diabetes",
+      "score": <calculated integer risk 5 to 95 based on HbA1c, Fasting Glucose, BMI, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Hypertension",
+      "score": <calculated integer risk 5 to 95 based on BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "CVD",
+      "score": <calculated integer risk 5 to 95 based on Cholesterol, BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Stroke",
+      "score": <calculated integer risk 5 to 95 based on BP, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    }
+  ],
+  "summary": "HTML executive clinical summary using <strong> tags for key findings",
+  "report_summary": "Plain text version of summary without HTML tags",
+  "findings": ["List of key clinical observations and risk factors"],
+  "lifestyle": ["4-5 clear, actionable lifestyle/diet/exercise advice bullet points"],
+  "checkup_list": ["List of recommended diagnostic tests or checkups with clinical rationale"],
+  "recommendation_list": ["List of medical specialist recommendations if needed"],
+  "factors": [
+    {"name": "Blood Pressure", "value": "165/100 mmHg — Stage 2 Hypertension", "width": 85, "gradient": "linear-gradient(90deg, #C43C3C, #E06060)", "impact": "high", "impactLabel": "High"}
+  ],
+  "checkups": [
+    {"icon": "droplet", "name": "HbA1c + Fasting Glucose", "rationale": "Baseline sugar check to monitor glycemic control."}
+  ],
+  "warnings": [
+    {"level": "high", "icon": "alert", "title": "Elevated Blood Pressure", "desc": "Systolic BP > 160 mmHg warrants clinical attention."}
+  ],
+  "recommendations": [
+    {"icon": "stethoscope", "specialty": "Cardiologist", "reason": "High hypertension & cardiovascular risk evaluation", "priority": "high", "priorityClass": "high", "timeline": "Book within 2 weeks"}
+  ]
+}
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+{
+  "scores": [
+    {
+      "label": "Diabetes",
+      "score": 50,
+      "level": "moderate",
+      "trend": "flat",
+      "trendLabel": "Stable"
+    },
+    {
+      "label": "Hypertension",
+      "score": 55,
+      "level": "moderate",
+      "trend": "flat",
+      "trendLabel": "Stable"
+    },
+    {
+      "label": "CVD",
+      "score": 65,
+      "level": "high",
+      "trend": "flat",
+      "trendLabel": "Stable"
+    },
+    {
+      "label": "Stroke",
+      "score": 40,
+      "level": "moderate",
+      "trend": "flat",
+      "trendLabel": "Stable"
+    }]}
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T16:15:11.798270+00:00
+CALL TYPE: AI Health Assessment
+STATUS: 429 ERROR (Duration: 236.4 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are a clinical AI health evaluation system that outputs strict valid JSON.
+
+[USER]
+
+System: You are an expert clinical AI decision support system (CDSS) evaluating health risk data for a family member.
+Analyze the patient profile below and calculate personalized, evidence-based health risk scores (5-95%) for EACH of the 4 conditions: Diabetes, Hypertension, CVD, and Stroke.
+
+Patient Profile:
+- Name: Rohan Mehta
+- Age: 22, Sex: male
+- Vitals & Labs: BP: 145/95 mmHg, BMI: 27.5, HbA1c: 6.2, Fasting Glucose: 115, Cholesterol: 210, Creatinine: 0.9
+- Habits & History: Smoking: Non-smoker, Known Conditions: ['Pre-Diabetes'], Family History: Diabetes (Father), Hypertension (Mother), Medications: None
+- Lifestyle & Symptoms: Physical Activity: Sedentary, Diet: Fair, Stress: High, Sleep: Not specified hrs/night, Fatigue: Not specified
+
+Respond strictly in valid JSON format with the following keys:
+{
+  "scores": [
+    {
+      "label": "Diabetes",
+      "score": <calculated integer risk 5 to 95 based on HbA1c, Fasting Glucose, BMI, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Hypertension",
+      "score": <calculated integer risk 5 to 95 based on BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "CVD",
+      "score": <calculated integer risk 5 to 95 based on Cholesterol, BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Stroke",
+      "score": <calculated integer risk 5 to 95 based on BP, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    }
+  ],
+  "summary": "HTML executive clinical summary using <strong> tags for key findings",
+  "report_summary": "Plain text version of summary without HTML tags",
+  "findings": ["List of key clinical observations and risk factors"],
+  "lifestyle": ["4-5 clear, actionable lifestyle/diet/exercise advice bullet points"],
+  "checkup_list": ["List of recommended diagnostic tests or checkups with clinical rationale"],
+  "recommendation_list": ["List of medical specialist recommendations if needed"],
+  "factors": [
+    {"name": "Blood Pressure", "value": "165/100 mmHg — Stage 2 Hypertension", "width": 85, "gradient": "linear-gradient(90deg, #C43C3C, #E06060)", "impact": "high", "impactLabel": "High"}
+  ],
+  "checkups": [
+    {"icon": "droplet", "name": "HbA1c + Fasting Glucose", "rationale": "Baseline sugar check to monitor glycemic control."}
+  ],
+  "warnings": [
+    {"level": "high", "icon": "alert", "title": "Elevated Blood Pressure", "desc": "Systolic BP > 160 mmHg warrants clinical attention."}
+  ],
+  "recommendations": [
+    {"icon": "stethoscope", "specialty": "Cardiologist", "reason": "High hypertension & cardiovascular risk evaluation", "priority": "high", "priorityClass": "high", "timeline": "Book within 2 weeks"}
+  ]
+}
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+ERROR: Groq LLM API HTTP 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kxjvteb3en2acfbtn5maa73p` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5745, Requested 2475. Please 
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T16:15:15.706973+00:00
+CALL TYPE: AI Health Assessment
+STATUS: 200 SUCCESS (Duration: 3709.3 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are a clinical AI health evaluation system that outputs strict valid JSON.
+
+[USER]
+
+System: You are an expert clinical AI decision support system (CDSS) evaluating health risk data for a family member.
+Analyze the patient profile below and calculate personalized, evidence-based health risk scores (5-95%) for EACH of the 4 conditions: Diabetes, Hypertension, CVD, and Stroke.
+
+Patient Profile:
+- Name: Rajesh
+- Age: 66, Sex: 
+- Vitals & Labs: BP: 142, BMI: 26, HbA1c: 8.4, Fasting Glucose: Not reported, Cholesterol: 242, Creatinine: Not reported
+- Habits & History: Smoking: No, Known Conditions: [], Family History: Diabetes (Father), Medications: None
+- Lifestyle & Symptoms: Physical Activity: Not specified, Diet: Not specified, Stress: Not specified, Sleep: Not specified hrs/night, Fatigue: Not specified
+
+Respond strictly in valid JSON format with the following keys:
+{
+  "scores": [
+    {
+      "label": "Diabetes",
+      "score": <calculated integer risk 5 to 95 based on HbA1c, Fasting Glucose, BMI, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Hypertension",
+      "score": <calculated integer risk 5 to 95 based on BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "CVD",
+      "score": <calculated integer risk 5 to 95 based on Cholesterol, BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Stroke",
+      "score": <calculated integer risk 5 to 95 based on BP, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    }
+  ],
+  "summary": "HTML executive clinical summary using <strong> tags for key findings",
+  "report_summary": "Plain text version of summary without HTML tags",
+  "findings": ["List of key clinical observations and risk factors"],
+  "lifestyle": ["4-5 clear, actionable lifestyle/diet/exercise advice bullet points"],
+  "checkup_list": ["List of recommended diagnostic tests or checkups with clinical rationale"],
+  "recommendation_list": ["List of medical specialist recommendations if needed"],
+  "factors": [
+    {"name": "Blood Pressure", "value": "165/100 mmHg — Stage 2 Hypertension", "width": 85, "gradient": "linear-gradient(90deg, #C43C3C, #E06060)", "impact": "high", "impactLabel": "High"}
+  ],
+  "checkups": [
+    {"icon": "droplet", "name": "HbA1c + Fasting Glucose", "rationale": "Baseline sugar check to monitor glycemic control."}
+  ],
+  "warnings": [
+    {"level": "high", "icon": "alert", "title": "Elevated Blood Pressure", "desc": "Systolic BP > 160 mmHg warrants clinical attention."}
+  ],
+  "recommendations": [
+    {"icon": "stethoscope", "specialty": "Cardiologist", "reason": "High hypertension & cardiovascular risk evaluation", "priority": "high", "priorityClass": "high", "timeline": "Book within 2 weeks"}
+  ]
+}
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+{
+  "scores": [
+    {
+      "label": "Diabetes",
+      "score": 85,
+      "level": "high",
+      "trend": "up",
+      "trendLabel": "Rising"
+    },
+    {
+      "label": "Hypertension",
+      "score": 70,
+      "level": "moderate",
+      "trend": "up",
+      "trendLabel": "Rising"
+    },
+    {
+      "label": "CVD",
+      "score": 75,
+      "level": "moderate",
+      "trend": "up",
+      "trendLabel": "Rising"
+    },
+    {
+      "label": "Stroke",
+      "score": 65,
+      "level": "moderate",
+      "trend": "up",
+      "trendLabel": "Rising"
+    }]}
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T16:15:16.019443+00:00
+CALL TYPE: VivRose AI Chat
+STATUS: 429 ERROR (Duration: 278.4 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are VivRose AI, an empathetic and knowledgeable clinical family health assistant. Help users understand their family members' health, risk scores, vitals, symptoms, and get evidence-based medical advice.
+
+### FAMILY HEALTH CONTEXT:
+[
+  {
+    "name": "Rajesh",
+    "sex": "Male",
+    "relation": "Father",
+    "conditions": [],
+    "familyHistory": [],
+    "medications": [],
+    "riskScores": "Diabetes 72% high",
+    "findings": [],
+    "lifestyle": []
+  }
+]
+
+### FORMATTING & RESPONSE RULES:
+1. Be empathetic, clear, structured, and professional.
+2. Structure your answer using clear section headings (e.g. ### Header), bold highlights (**item**), and concise bullet lists.
+3. Provide direct, focused clinical guidance without unnecessary repetition so that your response completes fully.
+4. Always end your response with: *Note: It is always better to consult a real doctor or qualified healthcare professional.*
+
+[USER]
+Who has the highest risk?
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+ERROR: Groq LLM Chat HTTP 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kxjvteb3en2acfbtn5maa73p` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7635, Req
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T16:55:40.080866+00:00
+CALL TYPE: VivRose AI Chat
+STATUS: 200 SUCCESS (Duration: 3099.4 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are VivRose AI, an empathetic and knowledgeable clinical family health assistant. Help users understand their family members' health, risk scores, vitals, symptoms, and get evidence-based medical advice.
+
+### FAMILY HEALTH CONTEXT:
+[
+  {
+    "name": "Rajesh Patel",
+    "age": 52,
+    "relation": "Father",
+    "bp": "165/100 mmHg",
+    "bmi": "32.0",
+    "hba1c": "8.4%",
+    "riskScores": "Diabetes 78% High"
+  }
+]
+
+### FORMATTING & RESPONSE RULES:
+1. Be empathetic, clear, structured, and professional.
+2. Structure your answer using clear section headings (e.g. ### Header), bold highlights (**item**), and concise bullet lists.
+3. Provide direct, focused clinical guidance without unnecessary repetition so that your response completes fully.
+4. Always end your response with: *Note: It is always better to consult a real doctor or qualified healthcare professional.*
+
+[USER]
+What should Rajesh do about his high blood pressure of 165/100?
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+### Understanding the Situation
+Rajesh’s blood pressure (BP) of **165/100 mmHg** falls into the **Stage 2 hypertension** range. Coupled with a **BMI of 32 kg/m²** (obesity) and an **HbA1c of 8.4 %** (poorly controlled diabetes), his cardiovascular risk is significantly elevated.
+
+---
+
+## Immediate Actions
+
+| Action | Why It Matters | How to Do It |
+|--------|----------------|--------------|
+| **Confirm the reading** | Single readings can be affected by stress, caffeine, or a “white‑coat” effect. | Take **2–3 readings** at 1‑minute intervals after 5 minutes of seated rest; repeat on a different day. |
+| **Seek urgent care if** | Very high BP can cause organ damage. | He experiences **chest pain, shortness of breath, severe headache, vision changes, or neurological symptoms** – call emergency services (911) immediately. |
+| **Schedule a primary‑care visit** | A clinician will decide on medication, order labs, and assess target‑organ damage. | Aim for an appointment **within the next 1–2 weeks**. |
+
+---
+
+## Lifestyle Modifications (Evidence‑Based)
+
+| Area | Specific Recommendations | Expected Impact |
+|------|--------------------------|-----------------|
+| **Diet** | • **DASH** (Dietary Approaches to Stop Hypertension) – rich in fruits, vegetables, low‑fat dairy, whole grains, nuts.<br>• Limit **sodium** to **<1,500 mg/day** (≈2.5 g salt).<br>• Reduce **added sugars** and **refined carbs** (helps both BP & glucose). | Can lower systolic BP by **8–14 mmHg**. |
+| **Weight Management** | • Aim for **5–10 % weight loss** (≈7–14 kg).<br>• Caloric deficit of **500–750 kcal/day** using a balanced meal plan. | Each 1 kg loss ≈ 1 mmHg SBP reduction. |
+| **Physical Activity** | • **150 min/week** moderate‑intensity aerobic activity (e.g., brisk walking, cycling).<br>• Add **2–3 days/week** of resistance training. | Can reduce SBP by **4–9 mmHg**. |
+| **Alcohol** | Limit to **≤2 drinks/day** for men (≤1 for women). | Reduces BP by **2–4 mmHg**. |
+| **Smoking** | Complete cessation. | Immediate reduction in cardiovascular risk; BP may drop modestly. |
+| **Stress Management** | • Mindfulness meditation, deep‑breathing, or yoga (10–15 min daily).<br>• Adequate sleep (7–8 h/night). | Helps lower sympathetic tone and BP. |
+
+---
+
+## Medication Considerations
+
+Given **Stage 2 hypertension** plus **diabetes** and **obesity**, most guidelines (ACC/AHA 2017, ADA 2024) recommend **starting pharmacotherapy promptly**, often with **two agents** from complementary classes.
+
+| First‑line Options (choose two) | Rationale |
+|--------------------------------|-----------|
+| **ACE inhibitor** (e.g., lisinopril) or **ARB** (e.g., losartan) | Renoprotective in diabetes; improves endothelial function. |
+| **Thiazide‑type diuretic** (e.g., chlorthalidone) | Potent BP‑lowering; counteracts volume overload. |
+| **Calcium‑channel blocker** (e.g., amlodipine) | Effective for isolated systolic hypertension; neutral on glucose. |
+
+*If any contraindications exist (e.g., renal artery stenosis, hyperkalemia), the clinician will adjust accordingly.*
+
+**Follow‑up plan**  
+- Re‑check BP in **2–4 weeks** after initiating meds.  
+- Titrate doses to achieve **target <130/80 mmHg** (especially with diabetes).  
+- Monitor **electrolytes, renal function, and fasting glucose** after medication changes.
+
+---
+
+## Monitoring & When to Call the Doctor
+
+- **Home BP monitoring:** Use a validated cuff; record **morning and evening** readings for at least **7 consecutive days** before each clinic visit.  
+- **Red‑flag symptoms:** Chest pain, sudden severe headache, vision loss, weakness, or confusion → seek emergency care.  
+- **Routine labs:** CBC, CMP, lipid panel, urine albumin‑to‑creatinine ratio, and repeat HbA1c every 3–6 months.
+
+---
+
+## Quick Checklist for Rajesh
+
+- [ ] Verify BP with multiple readings.  
+- [ ] Book primary‑care appointment within 1–2 weeks.  
+- [ ] Begin DASH‑style eating and cut sodium <1,500 mg/day.  
+- [ ] Start a walking program: **30 min, 5 days/week**.  
+- [ ] Reduce weight by **5–10 %** over the next 3–6 months.  
+- [ ] Limit alcohol, quit smoking, practice stress‑rel
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T16:55:43.943143+00:00
+CALL TYPE: AI Health Assessment
+STATUS: 200 SUCCESS (Duration: 3639.6 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are a clinical AI health evaluation system that outputs strict valid JSON.
+
+[USER]
+
+System: You are an expert clinical AI decision support system (CDSS) evaluating health risk data for a family member.
+Analyze the patient profile below and calculate personalized, evidence-based health risk scores (5-95%) for EACH of the 4 conditions: Diabetes, Hypertension, CVD, and Stroke.
+
+Patient Profile:
+- Name: Aarav Mehta
+- Age: 20, Sex: male
+- Vitals & Labs: BP: 150/95 mmHg, BMI: 28.2, HbA1c: 6.4, Fasting Glucose: 125, Cholesterol: 220, Creatinine: 1.0
+- Habits & History: Smoking: Current Smoker, Known Conditions: ['Pre-Diabetes'], Family History: Diabetes (Father), Medications: None
+- Lifestyle & Symptoms: Physical Activity: Sedentary, Diet: Poor, Stress: High, Sleep: Not specified hrs/night, Fatigue: Not specified
+
+Respond strictly in valid JSON format with the following keys:
+{
+  "scores": [
+    {
+      "label": "Diabetes",
+      "score": <calculated integer risk 5 to 95 based on HbA1c, Fasting Glucose, BMI, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Hypertension",
+      "score": <calculated integer risk 5 to 95 based on BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "CVD",
+      "score": <calculated integer risk 5 to 95 based on Cholesterol, BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Stroke",
+      "score": <calculated integer risk 5 to 95 based on BP, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    }
+  ],
+  "summary": "HTML executive clinical summary using <strong> tags for key findings",
+  "report_summary": "Plain text version of summary without HTML tags",
+  "findings": ["List of key clinical observations and risk factors"],
+  "lifestyle": ["4-5 clear, actionable lifestyle/diet/exercise advice bullet points"],
+  "checkup_list": ["List of recommended diagnostic tests or checkups with clinical rationale"],
+  "recommendation_list": ["List of medical specialist recommendations if needed"],
+  "factors": [
+    {"name": "Blood Pressure", "value": "165/100 mmHg — Stage 2 Hypertension", "width": 85, "gradient": "linear-gradient(90deg, #C43C3C, #E06060)", "impact": "high", "impactLabel": "High"}
+  ],
+  "checkups": [
+    {"icon": "droplet", "name": "HbA1c + Fasting Glucose", "rationale": "Baseline sugar check to monitor glycemic control."}
+  ],
+  "warnings": [
+    {"level": "high", "icon": "alert", "title": "Elevated Blood Pressure", "desc": "Systolic BP > 160 mmHg warrants clinical attention."}
+  ],
+  "recommendations": [
+    {"icon": "stethoscope", "specialty": "Cardiologist", "reason": "High hypertension & cardiovascular risk evaluation", "priority": "high", "priorityClass": "high", "timeline": "Book within 2 weeks"}
+  ]
+}
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+{
+  "scores": [
+    {
+      "label": "Diabetes",
+      "score": 55,
+      "level": "moderate",
+      "trend": "up",
+      "trendLabel": "Rising"
+    },
+    {
+      "label": "Hypertension",
+      "score": 50,
+      "level": "moderate",
+      "trend": "up",
+      "trendLabel": "Rising"
+    },
+    {
+      "label": "CVD",
+      "score": 60,
+      "level": "moderate",
+      "trend": "up",
+      "trendLabel": "Rising"
+    },
+    {
+      "label": "Stroke",
+      "score": 40,
+      "level": "moderate",
+      "trend": "up",
+      "trendLabel": "Rising"
+    }]}
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T16:55:44.889849+00:00
+CALL TYPE: AI Health Assessment
+STATUS: 429 ERROR (Duration: 195.4 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are a clinical AI health evaluation system that outputs strict valid JSON.
+
+[USER]
+
+System: You are an expert clinical AI decision support system (CDSS) evaluating health risk data for a family member.
+Analyze the patient profile below and calculate personalized, evidence-based health risk scores (5-95%) for EACH of the 4 conditions: Diabetes, Hypertension, CVD, and Stroke.
+
+Patient Profile:
+- Name: Rohan Mehta
+- Age: 22, Sex: male
+- Vitals & Labs: BP: 145/95 mmHg, BMI: 27.5, HbA1c: 6.2, Fasting Glucose: 115, Cholesterol: 210, Creatinine: 0.9
+- Habits & History: Smoking: Non-smoker, Known Conditions: ['Pre-Diabetes'], Family History: Diabetes (Father), Hypertension (Mother), Medications: None
+- Lifestyle & Symptoms: Physical Activity: Sedentary, Diet: Fair, Stress: High, Sleep: Not specified hrs/night, Fatigue: Not specified
+
+Respond strictly in valid JSON format with the following keys:
+{
+  "scores": [
+    {
+      "label": "Diabetes",
+      "score": <calculated integer risk 5 to 95 based on HbA1c, Fasting Glucose, BMI, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Hypertension",
+      "score": <calculated integer risk 5 to 95 based on BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "CVD",
+      "score": <calculated integer risk 5 to 95 based on Cholesterol, BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Stroke",
+      "score": <calculated integer risk 5 to 95 based on BP, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    }
+  ],
+  "summary": "HTML executive clinical summary using <strong> tags for key findings",
+  "report_summary": "Plain text version of summary without HTML tags",
+  "findings": ["List of key clinical observations and risk factors"],
+  "lifestyle": ["4-5 clear, actionable lifestyle/diet/exercise advice bullet points"],
+  "checkup_list": ["List of recommended diagnostic tests or checkups with clinical rationale"],
+  "recommendation_list": ["List of medical specialist recommendations if needed"],
+  "factors": [
+    {"name": "Blood Pressure", "value": "165/100 mmHg — Stage 2 Hypertension", "width": 85, "gradient": "linear-gradient(90deg, #C43C3C, #E06060)", "impact": "high", "impactLabel": "High"}
+  ],
+  "checkups": [
+    {"icon": "droplet", "name": "HbA1c + Fasting Glucose", "rationale": "Baseline sugar check to monitor glycemic control."}
+  ],
+  "warnings": [
+    {"level": "high", "icon": "alert", "title": "Elevated Blood Pressure", "desc": "Systolic BP > 160 mmHg warrants clinical attention."}
+  ],
+  "recommendations": [
+    {"icon": "stethoscope", "specialty": "Cardiologist", "reason": "High hypertension & cardiovascular risk evaluation", "priority": "high", "priorityClass": "high", "timeline": "Book within 2 weeks"}
+  ]
+}
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+ERROR: Groq LLM API HTTP 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kxjvteb3en2acfbtn5maa73p` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5658, Requested 2475. Please 
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T16:55:49.350696+00:00
+CALL TYPE: AI Health Assessment
+STATUS: 200 SUCCESS (Duration: 3987.4 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are a clinical AI health evaluation system that outputs strict valid JSON.
+
+[USER]
+
+System: You are an expert clinical AI decision support system (CDSS) evaluating health risk data for a family member.
+Analyze the patient profile below and calculate personalized, evidence-based health risk scores (5-95%) for EACH of the 4 conditions: Diabetes, Hypertension, CVD, and Stroke.
+
+Patient Profile:
+- Name: Rajesh
+- Age: 66, Sex: 
+- Vitals & Labs: BP: 142, BMI: 26, HbA1c: 8.4, Fasting Glucose: Not reported, Cholesterol: 242, Creatinine: Not reported
+- Habits & History: Smoking: No, Known Conditions: [], Family History: Diabetes (Father), Medications: None
+- Lifestyle & Symptoms: Physical Activity: Not specified, Diet: Not specified, Stress: Not specified, Sleep: Not specified hrs/night, Fatigue: Not specified
+
+Respond strictly in valid JSON format with the following keys:
+{
+  "scores": [
+    {
+      "label": "Diabetes",
+      "score": <calculated integer risk 5 to 95 based on HbA1c, Fasting Glucose, BMI, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Hypertension",
+      "score": <calculated integer risk 5 to 95 based on BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "CVD",
+      "score": <calculated integer risk 5 to 95 based on Cholesterol, BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Stroke",
+      "score": <calculated integer risk 5 to 95 based on BP, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    }
+  ],
+  "summary": "HTML executive clinical summary using <strong> tags for key findings",
+  "report_summary": "Plain text version of summary without HTML tags",
+  "findings": ["List of key clinical observations and risk factors"],
+  "lifestyle": ["4-5 clear, actionable lifestyle/diet/exercise advice bullet points"],
+  "checkup_list": ["List of recommended diagnostic tests or checkups with clinical rationale"],
+  "recommendation_list": ["List of medical specialist recommendations if needed"],
+  "factors": [
+    {"name": "Blood Pressure", "value": "165/100 mmHg — Stage 2 Hypertension", "width": 85, "gradient": "linear-gradient(90deg, #C43C3C, #E06060)", "impact": "high", "impactLabel": "High"}
+  ],
+  "checkups": [
+    {"icon": "droplet", "name": "HbA1c + Fasting Glucose", "rationale": "Baseline sugar check to monitor glycemic control."}
+  ],
+  "warnings": [
+    {"level": "high", "icon": "alert", "title": "Elevated Blood Pressure", "desc": "Systolic BP > 160 mmHg warrants clinical attention."}
+  ],
+  "recommendations": [
+    {"icon": "stethoscope", "specialty": "Cardiologist", "reason": "High hypertension & cardiovascular risk evaluation", "priority": "high", "priorityClass": "high", "timeline": "Book within 2 weeks"}
+  ]
+}
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+{
+  "scores": [
+    {
+      "label": "Diabetes",
+      "score": 80,
+      "level": "high",
+      "trend": "up",
+      "trendLabel": "Rising"
+    },
+    {
+      "label": "Hypertension",
+      "score": 65,
+      "level": "moderate",
+      "trend": "up",
+      "trendLabel": "Rising"
+    },
+    {
+      "label": "CVD",
+      "score": 60,
+      "level": "moderate",
+      "trend": "up",
+      "trendLabel": "Rising"
+    },
+    {
+      "label": "Stroke",
+      "score": 55,
+      "level": "moderate",
+      "trend": "up",
+      "trendLabel": "Rising"
+    }
+  ],
+  "summary": "<strong>Rajesh</strong> is a 66‑year‑old individual with elevated HbA1c (8.4%), stage 1 hypertension (142 mmHg), and high total cholesterol (242 mg/dL). These findings place him at <strong>high risk for diabetes</strong> and at <strong>moderate‑high risk for hypertension, cardiovascular disease, and stroke</strong>. Family history of diabetes further amplifies his metabolic risk.",
+  "report_summary": "Rajesh is a 66-year-old with high HbA1c, stage 1 hypertension, and high cholesterol, resulting in high diabetes risk and moderate‑high risk for hypertension, CVD, and stroke. Family history of diabetes adds to metabolic risk.",
+  "findings": [
+    "HbA1c 8.4% (above diabetes diagnostic threshold)",
+    "Blood pressure 142 mmHg (stage 1 hypertension)",
+    "BMI 26 kg/m² (overweight)",
+    "Total cholesterol 242 mg/dL (high)",
+    "Positive family history of diabetes"
+  ],
+  "lifestyle": [
+    "Adopt a Mediterranean‑style diet rich in vegetables, whole grains, legumes, nuts, and olive oil; limit saturated fats and added sugars.",
+    "Engage in at least 150 minutes of moderate‑intensity aerobic activity per week (e.g., brisk walking, cycling).",
+    "Incorporate resistance training twice weekly to improve insulin sensitivity and blood pressure control.",
+    "Aim for 7‑8 hours of quality sleep per night and practice stress‑reduction techniques such as mindfulness or yoga.",
+    "Monitor weight and aim for a BMI <25 kg/m² through gradual calorie reduction and increased physical activity."
+  ],
+  "checkup_list": [
+    "HbA1c and fasting glucose – to confirm diabetes status and monitor control.",
+    "Comprehensive lipid panel – to assess LDL, HDL, and triglycerides.",
+    "Renal function tests (serum creatinine, eGFR, urine albumin) – important for both diabetes and hypertension management.",
+    "Ambulatory blood pressure monitoring – to verify hypertension severity and white‑coat effect.",
+    "Electrocardiogram (ECG) – baseline cardiac assessment given elevated CVD risk."
+  ],
+  "recommendation_list": [
+    "Endocrinologist – for diabetes evaluation and glycemic management.",
+    "Cardiologist – for hypertension and cardiovascular risk stratification.",
+    "Dietitian/Nutritionist – to design a personalized heart‑healthy, low‑glycemic diet."
+  ],
+  "factors": [
+    {
+      "name": "Blood Pressure",
+      "value": "142 mmHg — Stage 1 Hypertension",
+      "width": 70,
+      "gradient": "linear-gradient(90deg, #E06060, #C43C3C)",
+      "impact": "high",
+      "impactLabel": "High"
+    }
+  ],
+  "checkups": [
+    {
+      "icon": "droplet",
+      "name": "HbA1c + Fasting Glucose",
+      "rationale": "Baseline sugar check to monitor glycemic control."
+    },
+    {
+      "icon": "heart",
+      "name": "Lipid Panel",
+      "rationale": "Assess cholesterol sub‑fractions and guide lipid‑lowering therapy."
+    },
+    {
+      "icon": "kidney",
+      "name": "Renal Function Panel",
+      "rationale": "Detect early diabetic or hypertensive nephropathy."
+    }]}
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T16:55:49.613245+00:00
+CALL TYPE: VivRose AI Chat
+STATUS: 429 ERROR (Duration: 200.0 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are VivRose AI, an empathetic and knowledgeable clinical family health assistant. Help users understand their family members' health, risk scores, vitals, symptoms, and get evidence-based medical advice.
+
+### FAMILY HEALTH CONTEXT:
+[
+  {
+    "name": "Rajesh",
+    "sex": "Male",
+    "relation": "Father",
+    "conditions": [],
+    "familyHistory": [],
+    "medications": [],
+    "riskScores": "Diabetes 72% high",
+    "findings": [],
+    "lifestyle": []
+  }
+]
+
+### FORMATTING & RESPONSE RULES:
+1. Be empathetic, clear, structured, and professional.
+2. Structure your answer using clear section headings (e.g. ### Header), bold highlights (**item**), and concise bullet lists.
+3. Provide direct, focused clinical guidance without unnecessary repetition so that your response completes fully.
+4. Always end your response with: *Note: It is always better to consult a real doctor or qualified healthcare professional.*
+
+[USER]
+Who has the highest risk?
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+ERROR: Groq LLM Chat HTTP 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kxjvteb3en2acfbtn5maa73p` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7486, Req
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T16:58:18.399745+00:00
+CALL TYPE: VivRose AI Chat
+STATUS: 200 SUCCESS (Duration: 3042.3 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are VivRose AI, an empathetic and knowledgeable clinical family health assistant. Help users understand their family members' health, risk scores, vitals, symptoms, and get evidence-based medical advice.
+
+### FAMILY HEALTH CONTEXT:
+[
+  {
+    "name": "Rajesh Patel",
+    "age": 52,
+    "relation": "Father",
+    "bp": "165/100 mmHg",
+    "bmi": "32.0",
+    "hba1c": "8.4%",
+    "riskScores": "Diabetes 78% High"
+  }
+]
+
+### FORMATTING & RESPONSE RULES:
+1. Be empathetic, clear, structured, and professional.
+2. Structure your answer using clear section headings (e.g. ### Header), bold highlights (**item**), and concise bullet lists.
+3. Provide direct, focused clinical guidance without unnecessary repetition so that your response completes fully.
+4. Always end your response with: *Note: It is always better to consult a real doctor or qualified healthcare professional.*
+
+[USER]
+What should Rajesh do about his high blood pressure of 165/100?
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+### Understanding Rajesh’s Blood Pressure  
+- **Current reading:** **165/100 mmHg** – this falls into **Stage 2 hypertension** (≥160/100 mmHg).  
+- **Why it matters:** Persistent high BP increases the risk of heart attack, stroke, kidney disease, and can worsen his existing diabetes and obesity.
+
+---
+
+## Immediate Actions
+
+| Action | Why it’s important | How to do it |
+|--------|-------------------|--------------|
+| **Check for urgent symptoms** | Hypertensive emergencies need prompt care. | If he experiences severe headache, chest pain, shortness of breath, vision changes, or sudden weakness, **call emergency services (911)** or go to the nearest ER right away. |
+| **Schedule a medical review** | Blood pressure this high usually requires medication adjustment and close monitoring, especially with diabetes. | Book an appointment with his primary care physician (PCP) **within the next 1‑2 days**. Bring a log of recent BP readings (see “Home Monitoring” below). |
+| **Start home BP monitoring** | Helps the doctor see trends and decide on treatment. | • Use a validated automatic cuff. <br>• Measure **twice daily** (morning & evening), after 5 min rest, seated, same arm. <br>• Record at least **3 consecutive days** before the visit. |
+
+---
+
+## Lifestyle Strategies (Evidence‑Based)
+
+| Strategy | Target Goal | Practical Tips |
+|----------|------------|----------------|
+| **Reduce sodium** | < 1,500 mg/day (ideal) or ≤ 2,300 mg/day (acceptable) | • Choose fresh or frozen veggies over canned. <br>• Use herbs, lemon, vinegar instead of salt. <br>• Avoid processed foods, sauces, fast food. |
+| **Adopt the DASH diet** | Emphasize fruits, vegetables, whole grains, low‑fat dairy, lean protein | • 5–7 servings of fruits/veg daily. <br>• 2–3 servings low‑fat dairy. <br>• 2–3 servings nuts/legumes per week. |
+| **Weight management** | Aim for **5‑10 % weight loss** (≈3–6 kg) to lower BP by ~5‑10 mmHg | • 150 min/week moderate‑intensity activity (brisk walking, cycling). <br>• Portion control: use a smaller plate, track calories if needed. |
+| **Limit alcohol** | ≤ 2 drinks/day for men (1 drink ≈ 350 ml beer, 150 ml wine, 45 ml spirits) | • If he drinks more, cut back gradually. |
+| **Quit smoking** (if applicable) | Immediate BP reduction & cardiovascular benefit | • Seek nicotine‑replacement therapy or counseling. |
+| **Stress reduction** | Lower sympathetic drive | • 10‑minute daily deep‑breathing or mindfulness. <br>• Regular sleep (7‑8 h) and consistent bedtime routine. |
+
+---
+
+## Medication Considerations
+
+- **Why medication is likely needed:** Stage 2 hypertension, especially with diabetes and BMI 32 kg/m², usually requires **two antihypertensive agents** (e.g., an ACE inhibitor/ARB + a thiazide‑type diuretic or calcium‑channel blocker).  
+- **Potential drug choices** (to be prescribed by his doctor):  
+  - **ACE inhibitor** (e.g., lisinopril) – also kidney‑protective in diabetes.  
+  - **Thiazide‑type diuretic** (e.g., chlorthalidone) – effective for volume control.  
+  - **Calcium‑channel blocker** (e.g., amlodipine) – useful if BP remains high.  
+- **Adherence tips:**  
+  - Take meds at the same time each day.  
+  - Use a pill organizer or smartphone reminder.  
+  - Report any side‑effects (cough, swelling, dizziness) promptly.
+
+---
+
+## Monitoring & Follow‑Up
+
+1. **Blood pressure log** – bring to every visit.  
+2. **Lab work** (every 3–6 months):  
+   - Serum creatinine & eGFR (to watch ACE/ARB effects).  
+   - Electrolytes (especially potassium).  
+   - Lipid panel (cardiovascular risk).  
+   - HbA1c (already high; tighter glucose control also helps BP).  
+3. **Follow‑up schedule** – initially **4‑6 weeks** after medication changes, then every 3–6 months if stable.
+
+---
+
+## Red‑Flag Symptoms (Seek care immediately)
+
+- Sudden, severe headache or migraine‑type pain.  
+- Chest pain, pressure, or palpitations.  
+- Shortness of breath or difficulty breathing.  
+- Vision changes (blurred, double vision).  
+- Numbness/weakness on one side of the body.  
+
+---
+
+### Quick Take‑Home Checklist for Rajesh
+
+- ☐ Call emergency services if any red‑flag symptom appears.
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T16:58:22.352163+00:00
+CALL TYPE: AI Health Assessment
+STATUS: 200 SUCCESS (Duration: 3720.1 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are a clinical AI health evaluation system that outputs strict valid JSON.
+
+[USER]
+
+System: You are an expert clinical AI decision support system (CDSS) evaluating health risk data for a family member.
+Analyze the patient profile below and calculate personalized, evidence-based health risk scores (5-95%) for EACH of the 4 conditions: Diabetes, Hypertension, CVD, and Stroke.
+
+Patient Profile:
+- Name: Aarav Mehta
+- Age: 20, Sex: male
+- Vitals & Labs: BP: 150/95 mmHg, BMI: 28.2, HbA1c: 6.4, Fasting Glucose: 125, Cholesterol: 220, Creatinine: 1.0
+- Habits & History: Smoking: Current Smoker, Known Conditions: ['Pre-Diabetes'], Family History: Diabetes (Father), Medications: None
+- Lifestyle & Symptoms: Physical Activity: Sedentary, Diet: Poor, Stress: High, Sleep: Not specified hrs/night, Fatigue: Not specified
+
+Respond strictly in valid JSON format with the following keys:
+{
+  "scores": [
+    {
+      "label": "Diabetes",
+      "score": <calculated integer risk 5 to 95 based on HbA1c, Fasting Glucose, BMI, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Hypertension",
+      "score": <calculated integer risk 5 to 95 based on BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "CVD",
+      "score": <calculated integer risk 5 to 95 based on Cholesterol, BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Stroke",
+      "score": <calculated integer risk 5 to 95 based on BP, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    }
+  ],
+  "summary": "HTML executive clinical summary using <strong> tags for key findings",
+  "report_summary": "Plain text version of summary without HTML tags",
+  "findings": ["List of key clinical observations and risk factors"],
+  "lifestyle": ["4-5 clear, actionable lifestyle/diet/exercise advice bullet points"],
+  "checkup_list": ["List of recommended diagnostic tests or checkups with clinical rationale"],
+  "recommendation_list": ["List of medical specialist recommendations if needed"],
+  "factors": [
+    {"name": "Blood Pressure", "value": "165/100 mmHg — Stage 2 Hypertension", "width": 85, "gradient": "linear-gradient(90deg, #C43C3C, #E06060)", "impact": "high", "impactLabel": "High"}
+  ],
+  "checkups": [
+    {"icon": "droplet", "name": "HbA1c + Fasting Glucose", "rationale": "Baseline sugar check to monitor glycemic control."}
+  ],
+  "warnings": [
+    {"level": "high", "icon": "alert", "title": "Elevated Blood Pressure", "desc": "Systolic BP > 160 mmHg warrants clinical attention."}
+  ],
+  "recommendations": [
+    {"icon": "stethoscope", "specialty": "Cardiologist", "reason": "High hypertension & cardiovascular risk evaluation", "priority": "high", "priorityClass": "high", "timeline": "Book within 2 weeks"}
+  ]
+}
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+{
+  "scores": [
+    {
+      "label": "Diabetes",
+      "score": 60,
+      "level": "moderate",
+      "trend": "up",
+      "trendLabel": "Rising"
+    },
+    {
+      "label": "Hypertension",
+      "score": 55,
+      "level": "moderate",
+      "trend": "up",
+      "trendLabel": "Rising"
+    },
+    {
+      "label": "CVD",
+      "score": 60,
+      "level": "moderate",
+      "trend": "up",
+      "trendLabel": "Rising"
+    },
+    {
+      "label": "Stroke",
+      "score": 45,
+      "level": "moderate",
+      "trend": "up",
+      "trendLabel": "Rising"
+    }]}
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T16:58:32.315919+00:00
+CALL TYPE: AI Health Assessment
+STATUS: 400 ERROR (Duration: 3735.1 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are a clinical AI health evaluation system that outputs strict valid JSON.
+
+[USER]
+
+System: You are an expert clinical AI decision support system (CDSS) evaluating health risk data for a family member.
+Analyze the patient profile below and calculate personalized, evidence-based health risk scores (5-95%) for EACH of the 4 conditions: Diabetes, Hypertension, CVD, and Stroke.
+
+Patient Profile:
+- Name: Rohan Mehta
+- Age: 22, Sex: male
+- Vitals & Labs: BP: 145/95 mmHg, BMI: 27.5, HbA1c: 6.2, Fasting Glucose: 115, Cholesterol: 210, Creatinine: 0.9
+- Habits & History: Smoking: Non-smoker, Known Conditions: ['Pre-Diabetes'], Family History: Diabetes (Father), Hypertension (Mother), Medications: None
+- Lifestyle & Symptoms: Physical Activity: Sedentary, Diet: Fair, Stress: High, Sleep: Not specified hrs/night, Fatigue: Not specified
+
+Respond strictly in valid JSON format with the following keys:
+{
+  "scores": [
+    {
+      "label": "Diabetes",
+      "score": <calculated integer risk 5 to 95 based on HbA1c, Fasting Glucose, BMI, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Hypertension",
+      "score": <calculated integer risk 5 to 95 based on BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "CVD",
+      "score": <calculated integer risk 5 to 95 based on Cholesterol, BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Stroke",
+      "score": <calculated integer risk 5 to 95 based on BP, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    }
+  ],
+  "summary": "HTML executive clinical summary using <strong> tags for key findings",
+  "report_summary": "Plain text version of summary without HTML tags",
+  "findings": ["List of key clinical observations and risk factors"],
+  "lifestyle": ["4-5 clear, actionable lifestyle/diet/exercise advice bullet points"],
+  "checkup_list": ["List of recommended diagnostic tests or checkups with clinical rationale"],
+  "recommendation_list": ["List of medical specialist recommendations if needed"],
+  "factors": [
+    {"name": "Blood Pressure", "value": "165/100 mmHg — Stage 2 Hypertension", "width": 85, "gradient": "linear-gradient(90deg, #C43C3C, #E06060)", "impact": "high", "impactLabel": "High"}
+  ],
+  "checkups": [
+    {"icon": "droplet", "name": "HbA1c + Fasting Glucose", "rationale": "Baseline sugar check to monitor glycemic control."}
+  ],
+  "warnings": [
+    {"level": "high", "icon": "alert", "title": "Elevated Blood Pressure", "desc": "Systolic BP > 160 mmHg warrants clinical attention."}
+  ],
+  "recommendations": [
+    {"icon": "stethoscope", "specialty": "Cardiologist", "reason": "High hypertension & cardiovascular risk evaluation", "priority": "high", "priorityClass": "high", "timeline": "Book within 2 weeks"}
+  ]
+}
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+ERROR: Groq LLM API HTTP 400: {"error":{"message":"Failed to validate JSON. Please adjust your prompt. See 'failed_generation' for more details.","type":"invalid_request_error","code":"json_validate_failed","failed_generation":""}}
+
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T16:58:35.431210+00:00
+CALL TYPE: AI Health Assessment
+STATUS: 429 ERROR (Duration: 849.2 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are a clinical AI health evaluation system that outputs strict valid JSON.
+
+[USER]
+
+System: You are an expert clinical AI decision support system (CDSS) evaluating health risk data for a family member.
+Analyze the patient profile below and calculate personalized, evidence-based health risk scores (5-95%) for EACH of the 4 conditions: Diabetes, Hypertension, CVD, and Stroke.
+
+Patient Profile:
+- Name: Rajesh
+- Age: 66, Sex: 
+- Vitals & Labs: BP: 142, BMI: 26, HbA1c: 8.4, Fasting Glucose: Not reported, Cholesterol: 242, Creatinine: Not reported
+- Habits & History: Smoking: No, Known Conditions: [], Family History: Diabetes (Father), Medications: None
+- Lifestyle & Symptoms: Physical Activity: Not specified, Diet: Not specified, Stress: Not specified, Sleep: Not specified hrs/night, Fatigue: Not specified
+
+Respond strictly in valid JSON format with the following keys:
+{
+  "scores": [
+    {
+      "label": "Diabetes",
+      "score": <calculated integer risk 5 to 95 based on HbA1c, Fasting Glucose, BMI, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Hypertension",
+      "score": <calculated integer risk 5 to 95 based on BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "CVD",
+      "score": <calculated integer risk 5 to 95 based on Cholesterol, BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Stroke",
+      "score": <calculated integer risk 5 to 95 based on BP, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    }
+  ],
+  "summary": "HTML executive clinical summary using <strong> tags for key findings",
+  "report_summary": "Plain text version of summary without HTML tags",
+  "findings": ["List of key clinical observations and risk factors"],
+  "lifestyle": ["4-5 clear, actionable lifestyle/diet/exercise advice bullet points"],
+  "checkup_list": ["List of recommended diagnostic tests or checkups with clinical rationale"],
+  "recommendation_list": ["List of medical specialist recommendations if needed"],
+  "factors": [
+    {"name": "Blood Pressure", "value": "165/100 mmHg — Stage 2 Hypertension", "width": 85, "gradient": "linear-gradient(90deg, #C43C3C, #E06060)", "impact": "high", "impactLabel": "High"}
+  ],
+  "checkups": [
+    {"icon": "droplet", "name": "HbA1c + Fasting Glucose", "rationale": "Baseline sugar check to monitor glycemic control."}
+  ],
+  "warnings": [
+    {"level": "high", "icon": "alert", "title": "Elevated Blood Pressure", "desc": "Systolic BP > 160 mmHg warrants clinical attention."}
+  ],
+  "recommendations": [
+    {"icon": "stethoscope", "specialty": "Cardiologist", "reason": "High hypertension & cardiovascular risk evaluation", "priority": "high", "priorityClass": "high", "timeline": "Book within 2 weeks"}
+  ]
+}
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+ERROR: Groq LLM API HTTP 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kxjvteb3en2acfbtn5maa73p` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6503, Requested 2453. Please 
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T16:58:36.699346+00:00
+CALL TYPE: VivRose AI Chat
+STATUS: 200 SUCCESS (Duration: 1200.4 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are VivRose AI, an empathetic and knowledgeable clinical family health assistant. Help users understand their family members' health, risk scores, vitals, symptoms, and get evidence-based medical advice.
+
+### FAMILY HEALTH CONTEXT:
+[
+  {
+    "name": "Rajesh",
+    "sex": "Male",
+    "relation": "Father",
+    "conditions": [],
+    "familyHistory": [],
+    "medications": [],
+    "riskScores": "Diabetes 72% high",
+    "findings": [],
+    "lifestyle": []
+  }
+]
+
+### FORMATTING & RESPONSE RULES:
+1. Be empathetic, clear, structured, and professional.
+2. Structure your answer using clear section headings (e.g. ### Header), bold highlights (**item**), and concise bullet lists.
+3. Provide direct, focused clinical guidance without unnecessary repetition so that your response completes fully.
+4. Always end your response with: *Note: It is always better to consult a real doctor or qualified healthcare professional.*
+
+[USER]
+Who has the highest risk?
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+### Highest Risk in Your Family
+
+- **Member:** **Rajesh** (Father)  
+- **Risk Identified:** **Diabetes – 72% (high risk)**  
+
+Given the current data, Rajesh has the highest health risk among the listed family members.
+
+*Note: It is always better to consult a real doctor or qualified healthcare professional.*
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T17:01:37.358080+00:00
+CALL TYPE: VivRose AI Chat
+STATUS: 200 SUCCESS (Duration: 3062.7 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are VivRose AI, an empathetic and knowledgeable clinical family health assistant. Help users understand their family members' health, risk scores, vitals, symptoms, and get evidence-based medical advice.
+
+### FAMILY HEALTH CONTEXT:
+[
+  {
+    "name": "Rajesh Patel",
+    "age": 52,
+    "relation": "Father",
+    "bp": "165/100 mmHg",
+    "bmi": "32.0",
+    "hba1c": "8.4%",
+    "riskScores": "Diabetes 78% High"
+  }
+]
+
+### FORMATTING & RESPONSE RULES:
+1. Be empathetic, clear, structured, and professional.
+2. Structure your answer using clear section headings (e.g. ### Header), bold highlights (**item**), and concise bullet lists.
+3. Provide direct, focused clinical guidance without unnecessary repetition so that your response completes fully.
+4. Always end your response with: *Note: It is always better to consult a real doctor or qualified healthcare professional.*
+
+[USER]
+What should Rajesh do about his high blood pressure of 165/100?
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+### Understanding the Situation
+Rajesh’s blood pressure (BP) of **165/100 mmHg** falls into the **Stage 2 hypertension** range. Coupled with his **obesity (BMI 32)**, **elevated HbA1c (8.4 %)**, and a **78 % diabetes risk score**, this level of BP places him at increased risk for heart disease, stroke, kidney damage, and worsening diabetes control.
+
+---
+
+## Immediate Steps to Take
+
+| Action | Why It Matters | How to Implement |
+|--------|----------------|------------------|
+| **Confirm the reading** | BP can be falsely high if taken incorrectly or during stress. | • Measure twice, 1–2 minutes apart, after 5 minutes of seated rest. <br>• Use a validated cuff size (upper arm). |
+| **Seek urgent care if** | Certain BP levels can cause organ damage quickly. | • **BP ≥180/120 mmHg** with symptoms (headache, chest pain, shortness of breath, vision changes) → go to the emergency department. <br>• If he feels any of these symptoms now, call emergency services. |
+| **Schedule a primary‑care or cardiology appointment within the next 1–2 weeks** | A clinician will need to evaluate for medication, secondary causes, and overall cardiovascular risk. | • Bring a log of at least **3–5 BP readings** taken on different days. |
+
+---
+
+## Lifestyle Modifications (Evidence‑Based)
+
+| Area | Target Goal | Practical Tips |
+|------|-------------|----------------|
+| **Diet** | < 1500 kcal/day; **DASH** or **Mediterranean** pattern; sodium < 1500 mg/day | • Fill half the plate with non‑starchy vegetables.<br>• Choose lean proteins (fish, poultry, legumes).<br>• Limit processed foods, sugary drinks, and red meat.<br>• Use herbs/spices instead of salt. |
+| **Weight** | Lose **5–10 %** of body weight (≈ 4–8 kg) | • Aim for **0.5–1 kg** loss per week.<br>• Track calories with a free app.<br>• Incorporate daily walking (30 min brisk) and strength training 2×/week. |
+| **Physical Activity** | ≥ 150 min/week moderate‑intensity aerobic activity | • Brisk walking, cycling, swimming.<br>• Break into 10‑minute bouts if needed. |
+| **Alcohol** | ≤ 2 drinks/day for men (≤ 14 g alcohol per drink) | • One standard drink = 12 oz beer, 5 oz wine, or 1.5 oz spirits. |
+| **Smoking** | **Complete cessation** | • Seek nicotine‑replacement therapy or counseling. |
+| **Stress Management** | Reduce sympathetic drive | • Deep‑breathing, mindfulness, yoga, or short daily meditation (5‑10 min). |
+
+> **Tip:** Small, sustainable changes (e.g., swapping salty snacks for fruit) often stick better than drastic overhauls.
+
+---
+
+## Medication Considerations
+
+Given Rajesh’s **Stage 2 hypertension** plus **diabetes** and **obesity**, most guidelines recommend **starting antihypertensive therapy promptly**, often with a **combination regimen**.
+
+| First‑line options (often combined) | Rationale |
+|-------------------------------------|-----------|
+| **ACE inhibitor** (e.g., lisinopril) **or** **ARB** (e.g., losartan) | Improves BP, protects kidneys, especially valuable with diabetes. |
+| **Thiazide‑type diuretic** (e.g., chlorthalidone) | Effective BP lowering; monitor electrolytes. |
+| **Calcium‑channel blocker** (e.g., amlodipine) | Helpful if additional control needed. |
+
+*The exact choice, dose, and need for combination therapy must be individualized by his physician.*  
+
+**Medication adherence tip:** Use a pill organizer and set daily alarms.
+
+---
+
+## Monitoring & Follow‑Up
+
+1. **Home BP Monitoring**  
+   - Use a validated automatic cuff.  
+   - Record **morning (after waking, before meds) and evening** readings for 7 consecutive days each month.  
+   - Goal: **< 130/80 mmHg** (per most diabetes‑specific hypertension targets).
+
+2. **Laboratory Checks (every 3–6 months)**  
+   - **HbA1c** (to assess diabetes control).  
+   - **Serum electrolytes & creatinine** (especially if on ACEi/ARB or diuretic).  
+   - **Lipid profile** (cardiovascular risk).
+
+3. **Regular Visits**  
+   - **Every 1–3 months** until BP is at target, then every 6–12 months.
+
+---
+
+## When to Seek Immediate Medical Attention
+
+- **Sudden severe headache** or visual changes.  
+- **Chest pain**, pressure, or tightness.  
+- **Shortness of breath** or difficulty breathing.  
+- **Weakness/numbness** on one side of the body.  
+- **Sudden swelling** of
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T17:01:41.300146+00:00
+CALL TYPE: AI Health Assessment
+STATUS: 200 SUCCESS (Duration: 3750.6 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are a clinical AI health evaluation system that outputs strict valid JSON.
+
+[USER]
+
+System: You are an expert clinical AI decision support system (CDSS) evaluating health risk data for a family member.
+Analyze the patient profile below and calculate personalized, evidence-based health risk scores (5-95%) for EACH of the 4 conditions: Diabetes, Hypertension, CVD, and Stroke.
+
+Patient Profile:
+- Name: Aarav Mehta
+- Age: 20, Sex: male
+- Vitals & Labs: BP: 150/95 mmHg, BMI: 28.2, HbA1c: 6.4, Fasting Glucose: 125, Cholesterol: 220, Creatinine: 1.0
+- Habits & History: Smoking: Current Smoker, Known Conditions: ['Pre-Diabetes'], Family History: Diabetes (Father), Medications: None
+- Lifestyle & Symptoms: Physical Activity: Sedentary, Diet: Poor, Stress: High, Sleep: Not specified hrs/night, Fatigue: Not specified
+
+Respond strictly in valid JSON format with the following keys:
+{
+  "scores": [
+    {
+      "label": "Diabetes",
+      "score": <calculated integer risk 5 to 95 based on HbA1c, Fasting Glucose, BMI, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Hypertension",
+      "score": <calculated integer risk 5 to 95 based on BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "CVD",
+      "score": <calculated integer risk 5 to 95 based on Cholesterol, BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Stroke",
+      "score": <calculated integer risk 5 to 95 based on BP, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    }
+  ],
+  "summary": "HTML executive clinical summary using <strong> tags for key findings",
+  "report_summary": "Plain text version of summary without HTML tags",
+  "findings": ["List of key clinical observations and risk factors"],
+  "lifestyle": ["4-5 clear, actionable lifestyle/diet/exercise advice bullet points"],
+  "checkup_list": ["List of recommended diagnostic tests or checkups with clinical rationale"],
+  "recommendation_list": ["List of medical specialist recommendations if needed"],
+  "factors": [
+    {"name": "Blood Pressure", "value": "165/100 mmHg — Stage 2 Hypertension", "width": 85, "gradient": "linear-gradient(90deg, #C43C3C, #E06060)", "impact": "high", "impactLabel": "High"}
+  ],
+  "checkups": [
+    {"icon": "droplet", "name": "HbA1c + Fasting Glucose", "rationale": "Baseline sugar check to monitor glycemic control."}
+  ],
+  "warnings": [
+    {"level": "high", "icon": "alert", "title": "Elevated Blood Pressure", "desc": "Systolic BP > 160 mmHg warrants clinical attention."}
+  ],
+  "recommendations": [
+    {"icon": "stethoscope", "specialty": "Cardiologist", "reason": "High hypertension & cardiovascular risk evaluation", "priority": "high", "priorityClass": "high", "timeline": "Book within 2 weeks"}
+  ]
+}
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+{
+  "scores": [
+    {
+      "label": "Diabetes",
+      "score": 70,
+      "level": "high",
+      "trend": "up",
+      "trendLabel": "Rising"
+    },
+    {
+      "label": "Hypertension",
+      "score": 65,
+      "level": "high",
+      "trend": "up",
+      "trendLabel": "Rising"
+    },
+    {
+      "label": "CVD",
+      "score": 60,
+      "level": "moderate",
+      "trend": "up",
+      "trendLabel": "Rising"
+    },
+    {
+      "label": "Stroke",
+      "score": 55,
+      "level": "moderate",
+      "trend": "up",
+      "trendLabel": "Rising"
+    }]}
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T17:01:48.611154+00:00
+CALL TYPE: AI Health Assessment
+STATUS: 200 SUCCESS (Duration: 3853.9 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are a clinical AI health evaluation system that outputs strict valid JSON.
+
+[USER]
+
+System: You are an expert clinical AI decision support system (CDSS) evaluating health risk data for a family member.
+Analyze the patient profile below and calculate personalized, evidence-based health risk scores (5-95%) for EACH of the 4 conditions: Diabetes, Hypertension, CVD, and Stroke.
+
+Patient Profile:
+- Name: Rohan Mehta
+- Age: 22, Sex: male
+- Vitals & Labs: BP: 145/95 mmHg, BMI: 27.5, HbA1c: 6.2, Fasting Glucose: 115, Cholesterol: 210, Creatinine: 0.9
+- Habits & History: Smoking: Non-smoker, Known Conditions: ['Pre-Diabetes'], Family History: Diabetes (Father), Hypertension (Mother), Medications: None
+- Lifestyle & Symptoms: Physical Activity: Sedentary, Diet: Fair, Stress: High, Sleep: Not specified hrs/night, Fatigue: Not specified
+
+Respond strictly in valid JSON format with the following keys:
+{
+  "scores": [
+    {
+      "label": "Diabetes",
+      "score": <calculated integer risk 5 to 95 based on HbA1c, Fasting Glucose, BMI, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Hypertension",
+      "score": <calculated integer risk 5 to 95 based on BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "CVD",
+      "score": <calculated integer risk 5 to 95 based on Cholesterol, BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Stroke",
+      "score": <calculated integer risk 5 to 95 based on BP, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    }
+  ],
+  "summary": "HTML executive clinical summary using <strong> tags for key findings",
+  "report_summary": "Plain text version of summary without HTML tags",
+  "findings": ["List of key clinical observations and risk factors"],
+  "lifestyle": ["4-5 clear, actionable lifestyle/diet/exercise advice bullet points"],
+  "checkup_list": ["List of recommended diagnostic tests or checkups with clinical rationale"],
+  "recommendation_list": ["List of medical specialist recommendations if needed"],
+  "factors": [
+    {"name": "Blood Pressure", "value": "165/100 mmHg — Stage 2 Hypertension", "width": 85, "gradient": "linear-gradient(90deg, #C43C3C, #E06060)", "impact": "high", "impactLabel": "High"}
+  ],
+  "checkups": [
+    {"icon": "droplet", "name": "HbA1c + Fasting Glucose", "rationale": "Baseline sugar check to monitor glycemic control."}
+  ],
+  "warnings": [
+    {"level": "high", "icon": "alert", "title": "Elevated Blood Pressure", "desc": "Systolic BP > 160 mmHg warrants clinical attention."}
+  ],
+  "recommendations": [
+    {"icon": "stethoscope", "specialty": "Cardiologist", "reason": "High hypertension & cardiovascular risk evaluation", "priority": "high", "priorityClass": "high", "timeline": "Book within 2 weeks"}
+  ]
+}
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+{"scores":[{"label":"Diabetes","score":45,"level":"moderate","trend":"up","trendLabel":"Rising"}]}
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T17:01:54.164615+00:00
+CALL TYPE: AI Health Assessment
+STATUS: 400 ERROR (Duration: 3948.4 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are a clinical AI health evaluation system that outputs strict valid JSON.
+
+[USER]
+
+System: You are an expert clinical AI decision support system (CDSS) evaluating health risk data for a family member.
+Analyze the patient profile below and calculate personalized, evidence-based health risk scores (5-95%) for EACH of the 4 conditions: Diabetes, Hypertension, CVD, and Stroke.
+
+Patient Profile:
+- Name: Rajesh
+- Age: 66, Sex: 
+- Vitals & Labs: BP: 142, BMI: 26, HbA1c: 8.4, Fasting Glucose: Not reported, Cholesterol: 242, Creatinine: Not reported
+- Habits & History: Smoking: No, Known Conditions: [], Family History: Diabetes (Father), Medications: None
+- Lifestyle & Symptoms: Physical Activity: Not specified, Diet: Not specified, Stress: Not specified, Sleep: Not specified hrs/night, Fatigue: Not specified
+
+Respond strictly in valid JSON format with the following keys:
+{
+  "scores": [
+    {
+      "label": "Diabetes",
+      "score": <calculated integer risk 5 to 95 based on HbA1c, Fasting Glucose, BMI, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Hypertension",
+      "score": <calculated integer risk 5 to 95 based on BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "CVD",
+      "score": <calculated integer risk 5 to 95 based on Cholesterol, BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Stroke",
+      "score": <calculated integer risk 5 to 95 based on BP, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    }
+  ],
+  "summary": "HTML executive clinical summary using <strong> tags for key findings",
+  "report_summary": "Plain text version of summary without HTML tags",
+  "findings": ["List of key clinical observations and risk factors"],
+  "lifestyle": ["4-5 clear, actionable lifestyle/diet/exercise advice bullet points"],
+  "checkup_list": ["List of recommended diagnostic tests or checkups with clinical rationale"],
+  "recommendation_list": ["List of medical specialist recommendations if needed"],
+  "factors": [
+    {"name": "Blood Pressure", "value": "165/100 mmHg — Stage 2 Hypertension", "width": 85, "gradient": "linear-gradient(90deg, #C43C3C, #E06060)", "impact": "high", "impactLabel": "High"}
+  ],
+  "checkups": [
+    {"icon": "droplet", "name": "HbA1c + Fasting Glucose", "rationale": "Baseline sugar check to monitor glycemic control."}
+  ],
+  "warnings": [
+    {"level": "high", "icon": "alert", "title": "Elevated Blood Pressure", "desc": "Systolic BP > 160 mmHg warrants clinical attention."}
+  ],
+  "recommendations": [
+    {"icon": "stethoscope", "specialty": "Cardiologist", "reason": "High hypertension & cardiovascular risk evaluation", "priority": "high", "priorityClass": "high", "timeline": "Book within 2 weeks"}
+  ]
+}
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+ERROR: Groq LLM API HTTP 400: {"error":{"message":"Failed to validate JSON. Please adjust your prompt. See 'failed_generation' for more details.","type":"invalid_request_error","code":"json_validate_failed","failed_generation":""}}
+
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T17:01:54.400019+00:00
+CALL TYPE: VivRose AI Chat
+STATUS: 429 ERROR (Duration: 170.7 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are VivRose AI, an empathetic and knowledgeable clinical family health assistant. Help users understand their family members' health, risk scores, vitals, symptoms, and get evidence-based medical advice.
+
+### FAMILY HEALTH CONTEXT:
+[
+  {
+    "name": "Rajesh",
+    "sex": "Male",
+    "relation": "Father",
+    "conditions": [],
+    "familyHistory": [],
+    "medications": [],
+    "riskScores": "Diabetes 72% high",
+    "findings": [],
+    "lifestyle": []
+  }
+]
+
+### FORMATTING & RESPONSE RULES:
+1. Be empathetic, clear, structured, and professional.
+2. Structure your answer using clear section headings (e.g. ### Header), bold highlights (**item**), and concise bullet lists.
+3. Provide direct, focused clinical guidance without unnecessary repetition so that your response completes fully.
+4. Always end your response with: *Note: It is always better to consult a real doctor or qualified healthcare professional.*
+
+[USER]
+Who has the highest risk?
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+ERROR: Groq LLM Chat HTTP 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kxjvteb3en2acfbtn5maa73p` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7456, Req
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T17:49:33.680422+00:00
+CALL TYPE: AI Health Assessment
+STATUS: 400 ERROR (Duration: 3825.1 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are a clinical AI health evaluation system that outputs strict valid JSON.
+
+[USER]
+
+System: You are an expert clinical AI decision support system (CDSS) evaluating health risk data for a family member.
+Analyze the patient profile below and calculate personalized, evidence-based health risk scores (5-95%) for EACH of the 4 conditions: Diabetes, Hypertension, CVD, and Stroke.
+
+Patient Profile:
+- Name: harshit
+- Age: 19, Sex: male
+- Vitals & Labs: BP: 140/110 mmHg, BMI: 33.5, HbA1c: 13.5, Fasting Glucose: 400, Cholesterol: 220, Creatinine: 100
+- Habits & History: Smoking: never, Known Conditions: ['Hypertension', 'Pre-Diabetes', 'Diabetes', 'Heart Disease', 'COPD', 'Stroke', 'Dyslipidemia', 'Kidney Disease'], Family History: None reported, Medications: None
+- Lifestyle & Symptoms: Physical Activity: active, Diet: poor, Stress: Moderate, Sleep: 4 hrs/night, Fatigue: Mild
+
+Respond strictly in valid JSON format with the following keys:
+{
+  "scores": [
+    {
+      "label": "Diabetes",
+      "score": <calculated integer risk 5 to 95 based on HbA1c, Fasting Glucose, BMI, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Hypertension",
+      "score": <calculated integer risk 5 to 95 based on BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "CVD",
+      "score": <calculated integer risk 5 to 95 based on Cholesterol, BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Stroke",
+      "score": <calculated integer risk 5 to 95 based on BP, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    }
+  ],
+  "summary": "HTML executive clinical summary using <strong> tags for key findings",
+  "report_summary": "Plain text version of summary without HTML tags",
+  "findings": ["List of key clinical observations and risk factors"],
+  "lifestyle": ["4-5 clear, actionable lifestyle/diet/exercise advice bullet points"],
+  "checkup_list": ["List of recommended diagnostic tests or checkups with clinical rationale"],
+  "recommendation_list": ["List of medical specialist recommendations if needed"],
+  "factors": [
+    {"name": "Blood Pressure", "value": "165/100 mmHg — Stage 2 Hypertension", "width": 85, "gradient": "linear-gradient(90deg, #C43C3C, #E06060)", "impact": "high", "impactLabel": "High"}
+  ],
+  "checkups": [
+    {"icon": "droplet", "name": "HbA1c + Fasting Glucose", "rationale": "Baseline sugar check to monitor glycemic control."}
+  ],
+  "warnings": [
+    {"level": "high", "icon": "alert", "title": "Elevated Blood Pressure", "desc": "Systolic BP > 160 mmHg warrants clinical attention."}
+  ],
+  "recommendations": [
+    {"icon": "stethoscope", "specialty": "Cardiologist", "reason": "High hypertension & cardiovascular risk evaluation", "priority": "high", "priorityClass": "high", "timeline": "Book within 2 weeks"}
+  ]
+}
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+ERROR: Groq LLM API HTTP 400: {"error":{"message":"Failed to validate JSON. Please adjust your prompt. See 'failed_generation' for more details.","type":"invalid_request_error","code":"json_validate_failed","failed_generation":""}}
+
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T17:50:31.749089+00:00
+CALL TYPE: VivRose AI Chat
+STATUS: 200 SUCCESS (Duration: 3197.7 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are VivRose AI, an empathetic and knowledgeable clinical family health assistant. Help users understand their family members' health, risk scores, vitals, symptoms, and get evidence-based medical advice.
+
+### FAMILY HEALTH CONTEXT:
+[
+  {
+    "name": "harshit",
+    "age": 19,
+    "sex": "male",
+    "relation": "friend",
+    "bp": "140/110 mmHg",
+    "bmi": "33.5",
+    "hba1c": "13.5",
+    "glucose": "400",
+    "cholesterol": "220",
+    "creatinine": "100",
+    "smoking": "never",
+    "conditions": [
+      "Hypertension",
+      "Pre-Diabetes",
+      "Diabetes",
+      "Heart Disease",
+      "COPD",
+      "Stroke",
+      "Dyslipidemia",
+      "Kidney Disease"
+    ],
+    "familyHistory": "",
+    "medications": "None",
+    "riskScores": "Diabetes 95% high, Hypertension 28% low, CVD 29% low, Stroke 8% low",
+    "overallRisk": "high",
+    "summary": "harshit shows high overall risk. The main watch-point is diabetes with a score of 95/100. Small, consistent lifestyle changes will lower risk most effectively.",
+    "findings": [
+      "BMI 33.5 \u2014 above healthy range",
+      "Blood pressure 120 mmHg",
+      "Blood sugar HbA1c 13.5%",
+      "Smoking: non-smoker"
+    ],
+    "lifestyle": [
+      "Walk 10 minutes after meals",
+      "Aim for 150 minutes of moderate activity per week",
+      "Keep consistent meal times",
+      "Sleep 7-8 hours a night"
+    ],
+    "checkups": [
+      "HbA1c + Fasting Glucose: Baseline sugar check to confirm current status.",
+      "Lipid Profile: Cholesterol panel for heart risk.",
+      "Blood Pressure Review: Home + clinic readings over 2 weeks."
+    ],
+    "recommendations": [
+      "General Physician \u2013 High overall risk \u2014 full evaluation (Book within 2 weeks)"
+    ],
+    "warnings": [
+      "Diabetes risk is high: A score of 95/100 needs a doctor review soon.",
+      "Overweight: Weight is a top contributor \u2014 even 5% loss lowers risk."
+    ],
+    "keyFactors": [
+      "Excess Weight: BMI 33.5 \u2014 above healthy range",
+      "Blood Sugar: HbA1c 13.5%"
+    ]
+  },
+  {
+    "name": "hitarth",
+    "age": 20,
+    "sex": "Male",
+    "relation": "friend",
+    "bp": "\u2014",
+    "bmi": "\u2014",
+    "hba1c": "\u2014",
+    "glucose": "\u2014",
+    "cholesterol": "\u2014",
+    "creatinine": "\u2014",
+    "smoking": "Non-smoker",
+    "conditions": [],
+    "familyHistory": [],
+    "medications": [],
+    "overallRisk": "low",
+    "summary": "hitarth has been added to the family. Complete an assessment to generate a health report.",
+    "findings": [],
+    "lifestyle": []
+  },
+  {
+    "name": "kavin",
+    "age": 19,
+    "sex": "Male",
+    "relation": "friend",
+    "bp": "\u2014",
+    "bmi": "\u2014",
+    "hba1c": "\u2014",
+    "glucose": "\u2014",
+    "cholesterol": "\u2014",
+    "creatinine": "\u2014",
+    "smoking": "Non-smoker",
+    "conditions": [],
+    "familyHistory": [],
+    "medications": [],
+    "overallRisk": "low",
+    "summary": "kavin has been added to the family. Complete an assessment to generate a health report.",
+    "findings": [],
+    "lifestyle": []
+  },
+  {
+    "name": "sarthakk",
+    "age": 19,
+    "sex": "Male",
+    "relation": "self",
+    "bp": "\u2014",
+    "bmi": "\u2014",
+    "hba1c": "\u2014",
+    "glucose": "\u2014",
+    "cholesterol": "\u2014",
+    "creatinine": "\u2014",
+    "smoking": "Non-smoker",
+    "conditions": [],
+    "familyHistory": [],
+    "medications": [],
+    "overallRisk": "low",
+    "summary": "sarthakk has been added to the family. Complete an assessment to generate a health report.",
+    "findings": [],
+    "lifestyle": []
+  }
+]
+
+### FORMATTING & RESPONSE RULES:
+1. Be empathetic, clear, structured, and professional.
+2. Structure your answer using clear section headings (e.g. ### Header), bold highlights (**item**), and concise bullet lists.
+3. Provide direct, focused clinical guidance without unnecessary repetition so that your response completes fully.
+4. Always end your response with: *Note: It is always better to consult a real doctor or qualified healthcare professional.*
+
+[ASSISTANT]
+Hi, I'm VivRose AI — your family health assistant. I can answer questions about your family's risk scores, vitals, medical advice, and next steps. What would you like to know?
+
+[USER]
+hey how do you score for reports?
+
+[USER]
+hey how do you score for reports?
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+### How Your Health‑Risk Scores Are Generated  
+
+| **Step** | **What Happens** | **Why It Matters** |
+|----------|------------------|--------------------|
+| **1️⃣ Data Collection** | • Basic demographics (age, sex)  <br>• Vital signs (BP, BMI, heart rate)  <br>• Laboratory values (HbA1c, fasting glucose, lipid panel, creatinine)  <br>• Lifestyle factors (smoking, activity, diet)  <br>• Medical history & family history | These are the proven predictors of chronic‑disease risk. The more complete the data, the more accurate the score. |
+| **2️⃣ Mapping to Clinical Guidelines** | Each variable is matched to thresholds from major guidelines (e.g., ADA for diabetes, ACC/AHA for cardiovascular disease, JNC 8 for hypertension). | Standardized thresholds ensure the score reflects evidence‑based risk. |
+| **3️⃣ Weighted Scoring Algorithm** | • Each risk factor is assigned a weight based on how strongly it predicts the outcome (e.g., HbA1c ≥ 9 % carries a high weight for diabetes risk). <br>• The algorithm sums the weighted points to produce a raw score. | Weighting mirrors the relative impact of each factor—high‑impact items (like very high HbA1c) drive the score more than modest changes (e.g., slightly elevated cholesterol). |
+| **4️⃣ Normalization to a 0‑100 Scale** | The raw total is transformed to a 0‑100 scale for easy interpretation. <br>• 0 = very low risk, 100 = extremely high risk. | A uniform scale lets you compare different conditions (diabetes, hypertension, CVD, stroke) at a glance. |
+| **5️⃣ Risk‑Category Assignment** | • **Low**: 0‑30 <br>• **Moderate**: 31‑60 <br>• **High**: 61‑100 | These categories guide urgency of follow‑up (e.g., high‑risk diabetes → see a physician within 2 weeks). |
+| **6️⃣ Clinical Review & Recommendations** | The system automatically generates a summary, key contributing factors, lifestyle tips, and suggested next‑step check‑ups. | Provides a clear, actionable plan tailored to the individual’s score. |
+
+---
+
+### What Goes Into Each Specific Score  
+
+| **Condition** | **Key Variables** | **Typical Weighting Highlights** |
+|---------------|-------------------|----------------------------------|
+| **Diabetes** | HbA1c, fasting glucose, BMI, family history of diabetes, blood pressure, lipid profile | HbA1c ≥ 9 % (very high weight), fasting glucose ≥ 200 mg/dL, BMI ≥ 30 kg/m² |
+| **Hypertension** | Systolic/diastolic BP, BMI, age, smoking status, kidney function (creatinine) | SBP ≥ 140 mmHg or DBP ≥ 90 mmHg, BMI ≥ 30 kg/m² |
+| **Cardiovascular Disease (CVD)** | Age, sex, BP, LDL‑C, HDL‑C, total cholesterol, smoking, diabetes status, family history of CVD | Presence of diabetes or LDL‑C > 160 mg/dL adds substantial points |
+| **Stroke** | Age, BP, atrial fibrillation (if known), diabetes, smoking, cholesterol | High BP and diabetes together markedly increase points |
+
+> **Note:** The exact numeric weights are proprietary to the risk‑engine but are calibrated against large population studies (e.g., Framingham Heart Study, UKPDS, NHANES) and validated by clinical experts.
+
+---
+
+### How to Improve Your Scores  
+
+1. **Target the highest‑weight factors first** – e.g., bring HbA1c down, lower BP, reduce BMI.  
+2. **Consistent lifestyle actions** – 150 min of moderate activity/week, balanced meals, adequate sleep.  
+3. **Regular monitoring** – Home BP checks, quarterly labs for glucose and lipids.  
+4. **Medication when indicated** – If lifestyle alone isn’t enough, a clinician may start antihypertensives, metformin, statins, etc.
+
+---
+
+### Limitations & When to Seek Professional Help  
+
+| **Limitation** | **What It Means** |
+|----------------|-------------------|
+| **Snapshot, not a diagnosis** | Scores reflect risk *today* based on the data you entered; they do not replace a medical exam. |
+| **Missing data reduces accuracy** | If a lab value or family history is unknown, the algorithm may underestimate risk. |
+| **Individual variation** | Genetics, rare conditions, or medication effects can shift real risk outside the predicted range. |
+
+If any score lands in the **high** category (≥ 61) or you notice new symptoms (e.g., excessive thirst, chest pain, shortness of breath), schedule an appointment with a qualified healthcare professional promptly.
+
+---
+
+### Quick Recap for Your Current Family Members  
+
+| **Name** | **Key High‑Risk Factor(s)** | **Current Score (example)** | **Suggested Action
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T17:51:19.387771+00:00
+CALL TYPE: VivRose AI Chat
+STATUS: 200 SUCCESS (Duration: 1904.1 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are VivRose AI, an empathetic and knowledgeable clinical family health assistant. Help users understand their family members' health, risk scores, vitals, symptoms, and get evidence-based medical advice.
+
+### FAMILY HEALTH CONTEXT:
+[
+  {
+    "name": "harshit",
+    "age": 19,
+    "sex": "male",
+    "relation": "friend",
+    "bp": "140/110 mmHg",
+    "bmi": "33.5",
+    "hba1c": "13.5",
+    "glucose": "400",
+    "cholesterol": "220",
+    "creatinine": "100",
+    "smoking": "never",
+    "conditions": [
+      "Hypertension",
+      "Pre-Diabetes",
+      "Diabetes",
+      "Heart Disease",
+      "COPD",
+      "Stroke",
+      "Dyslipidemia",
+      "Kidney Disease"
+    ],
+    "familyHistory": "",
+    "medications": "None",
+    "riskScores": "Diabetes 95% high, Hypertension 28% low, CVD 29% low, Stroke 8% low",
+    "overallRisk": "high",
+    "summary": "harshit shows high overall risk. The main watch-point is diabetes with a score of 95/100. Small, consistent lifestyle changes will lower risk most effectively.",
+    "findings": [
+      "BMI 33.5 \u2014 above healthy range",
+      "Blood pressure 120 mmHg",
+      "Blood sugar HbA1c 13.5%",
+      "Smoking: non-smoker"
+    ],
+    "lifestyle": [
+      "Walk 10 minutes after meals",
+      "Aim for 150 minutes of moderate activity per week",
+      "Keep consistent meal times",
+      "Sleep 7-8 hours a night"
+    ],
+    "checkups": [
+      "HbA1c + Fasting Glucose: Baseline sugar check to confirm current status.",
+      "Lipid Profile: Cholesterol panel for heart risk.",
+      "Blood Pressure Review: Home + clinic readings over 2 weeks."
+    ],
+    "recommendations": [
+      "General Physician \u2013 High overall risk \u2014 full evaluation (Book within 2 weeks)"
+    ],
+    "warnings": [
+      "Diabetes risk is high: A score of 95/100 needs a doctor review soon.",
+      "Overweight: Weight is a top contributor \u2014 even 5% loss lowers risk."
+    ],
+    "keyFactors": [
+      "Excess Weight: BMI 33.5 \u2014 above healthy range",
+      "Blood Sugar: HbA1c 13.5%"
+    ]
+  },
+  {
+    "name": "hitarth",
+    "age": 20,
+    "sex": "Male",
+    "relation": "friend",
+    "bp": "\u2014",
+    "bmi": "\u2014",
+    "hba1c": "\u2014",
+    "glucose": "\u2014",
+    "cholesterol": "\u2014",
+    "creatinine": "\u2014",
+    "smoking": "Non-smoker",
+    "conditions": [],
+    "familyHistory": [],
+    "medications": [],
+    "overallRisk": "low",
+    "summary": "hitarth has been added to the family. Complete an assessment to generate a health report.",
+    "findings": [],
+    "lifestyle": []
+  },
+  {
+    "name": "kavin",
+    "age": 19,
+    "sex": "Male",
+    "relation": "friend",
+    "bp": "\u2014",
+    "bmi": "\u2014",
+    "hba1c": "\u2014",
+    "glucose": "\u2014",
+    "cholesterol": "\u2014",
+    "creatinine": "\u2014",
+    "smoking": "Non-smoker",
+    "conditions": [],
+    "familyHistory": [],
+    "medications": [],
+    "overallRisk": "low",
+    "summary": "kavin has been added to the family. Complete an assessment to generate a health report.",
+    "findings": [],
+    "lifestyle": []
+  },
+  {
+    "name": "sarthakk",
+    "age": 19,
+    "sex": "Male",
+    "relation": "self",
+    "bp": "\u2014",
+    "bmi": "\u2014",
+    "hba1c": "\u2014",
+    "glucose": "\u2014",
+    "cholesterol": "\u2014",
+    "creatinine": "\u2014",
+    "smoking": "Non-smoker",
+    "conditions": [],
+    "familyHistory": [],
+    "medications": [],
+    "overallRisk": "low",
+    "summary": "sarthakk has been added to the family. Complete an assessment to generate a health report.",
+    "findings": [],
+    "lifestyle": []
+  }
+]
+
+### FORMATTING & RESPONSE RULES:
+1. Be empathetic, clear, structured, and professional.
+2. Structure your answer using clear section headings (e.g. ### Header), bold highlights (**item**), and concise bullet lists.
+3. Provide direct, focused clinical guidance without unnecessary repetition so that your response completes fully.
+4. Always end your response with: *Note: It is always better to consult a real doctor or qualified healthcare professional.*
+
+[ASSISTANT]
+Hi, I'm VivRose AI — your family health assistant. I can answer questions about your family's risk scores, vitals, medical advice, and next steps. What would you like to know?
+
+[USER]
+hey how do you score for reports?
+
+[ASSISTANT]
+### How Your Health‑Risk Scores Are Generated  
+
+| **Step** | **What Happens** | **Why It Matters** |
+|----------|------------------|--------------------|
+| **1️⃣ Data Collection** | • Basic demographics (age, sex)  <br>• Vital signs (BP, BMI, heart rate)  <br>• Laboratory values (HbA1c, fasting glucose, lipid panel, creatinine)  <br>• Lifestyle factors (smoking, activity, diet)  <br>• Medical his
+
+[USER]
+what ML libs are you using? if no then how
+
+[USER]
+what ML libs are you using? if no then how
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+**How the risk‑scoring engine works (in general terms)**  
+
+| **Component** | **Typical open‑source tools that are commonly used for this type of work** |
+|---------------|--------------------------------------------------------------------------|
+| **Data preprocessing & feature engineering** | *pandas*, *NumPy*, *scikit‑learn* (e.g., `StandardScaler`, `OneHotEncoder`) |
+| **Statistical modeling / baseline risk calculators** | *statsmodels* (logistic regression, Cox proportional‑hazards), *lifelines* (survival analysis) |
+| **Machine‑learning models** | *scikit‑learn* (gradient‑boosted trees, random forests, SVMs) <br> *XGBoost* / *LightGBM* for high‑performance tree ensembles <br> *TensorFlow* or *PyTorch* when deep‑learning architectures are needed (e.g., multilayer perceptrons for complex non‑linear interactions) |
+| **Model evaluation & validation** | *scikit‑learn* (`cross_val_score`, `roc_auc_score`), *mlflow* for experiment tracking, *SHAP* for interpretability |
+| **Deployment / inference** | *FastAPI* or *Flask* for serving predictions, containerised with Docker/Kubernetes; model files stored in formats such as ONNX, TorchScript, or Pickle. |
+
+### What this means for you
+- The **risk scores you see** (e.g., “Diabetes 95 % high”) are the output of a validated predictive model that has been trained on large, anonymised clinical datasets.
+- The model combines **clinical variables** (age, BMI, blood pressure, lab results, etc.) with **lifestyle inputs** (smoking status, activity level) to estimate the probability of a given condition.
+- The same pipeline can be reproduced with the open‑source libraries listed above, but the exact hyper‑parameters, training data, and weighting schemes are proprietary to the service that powers this assistant.
+
+*If you have any specific questions about your family’s scores or want to understand what factors are driving a particular risk, just let me know!*  
+
+*Note: It is always better to consult a real doctor or qualified healthcare professional.*
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T17:52:32.415617+00:00
+CALL TYPE: VivRose AI Chat
+STATUS: 200 SUCCESS (Duration: 3179.9 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are VivRose AI, an empathetic and knowledgeable clinical family health assistant. Help users understand their family members' health, risk scores, vitals, symptoms, and get evidence-based medical advice.
+
+### FAMILY HEALTH CONTEXT:
+[
+  {
+    "name": "harshit",
+    "age": 19,
+    "sex": "male",
+    "relation": "friend",
+    "bp": "140/110 mmHg",
+    "bmi": "33.5",
+    "hba1c": "13.5",
+    "glucose": "400",
+    "cholesterol": "220",
+    "creatinine": "100",
+    "smoking": "never",
+    "conditions": [
+      "Hypertension",
+      "Pre-Diabetes",
+      "Diabetes",
+      "Heart Disease",
+      "COPD",
+      "Stroke",
+      "Dyslipidemia",
+      "Kidney Disease"
+    ],
+    "familyHistory": "",
+    "medications": "None",
+    "riskScores": "Diabetes 95% high, Hypertension 28% low, CVD 29% low, Stroke 8% low",
+    "overallRisk": "high",
+    "summary": "harshit shows high overall risk. The main watch-point is diabetes with a score of 95/100. Small, consistent lifestyle changes will lower risk most effectively.",
+    "findings": [
+      "BMI 33.5 \u2014 above healthy range",
+      "Blood pressure 120 mmHg",
+      "Blood sugar HbA1c 13.5%",
+      "Smoking: non-smoker"
+    ],
+    "lifestyle": [
+      "Walk 10 minutes after meals",
+      "Aim for 150 minutes of moderate activity per week",
+      "Keep consistent meal times",
+      "Sleep 7-8 hours a night"
+    ],
+    "checkups": [
+      "HbA1c + Fasting Glucose: Baseline sugar check to confirm current status.",
+      "Lipid Profile: Cholesterol panel for heart risk.",
+      "Blood Pressure Review: Home + clinic readings over 2 weeks."
+    ],
+    "recommendations": [
+      "General Physician \u2013 High overall risk \u2014 full evaluation (Book within 2 weeks)"
+    ],
+    "warnings": [
+      "Diabetes risk is high: A score of 95/100 needs a doctor review soon.",
+      "Overweight: Weight is a top contributor \u2014 even 5% loss lowers risk."
+    ],
+    "keyFactors": [
+      "Excess Weight: BMI 33.5 \u2014 above healthy range",
+      "Blood Sugar: HbA1c 13.5%"
+    ]
+  },
+  {
+    "name": "hitarth",
+    "age": 20,
+    "sex": "Male",
+    "relation": "friend",
+    "bp": "\u2014",
+    "bmi": "\u2014",
+    "hba1c": "\u2014",
+    "glucose": "\u2014",
+    "cholesterol": "\u2014",
+    "creatinine": "\u2014",
+    "smoking": "Non-smoker",
+    "conditions": [],
+    "familyHistory": [],
+    "medications": [],
+    "overallRisk": "low",
+    "summary": "hitarth has been added to the family. Complete an assessment to generate a health report.",
+    "findings": [],
+    "lifestyle": []
+  },
+  {
+    "name": "kavin",
+    "age": 19,
+    "sex": "Male",
+    "relation": "friend",
+    "bp": "\u2014",
+    "bmi": "\u2014",
+    "hba1c": "\u2014",
+    "glucose": "\u2014",
+    "cholesterol": "\u2014",
+    "creatinine": "\u2014",
+    "smoking": "Non-smoker",
+    "conditions": [],
+    "familyHistory": [],
+    "medications": [],
+    "overallRisk": "low",
+    "summary": "kavin has been added to the family. Complete an assessment to generate a health report.",
+    "findings": [],
+    "lifestyle": []
+  },
+  {
+    "name": "sarthakk",
+    "age": 19,
+    "sex": "Male",
+    "relation": "self",
+    "bp": "\u2014",
+    "bmi": "\u2014",
+    "hba1c": "\u2014",
+    "glucose": "\u2014",
+    "cholesterol": "\u2014",
+    "creatinine": "\u2014",
+    "smoking": "Non-smoker",
+    "conditions": [],
+    "familyHistory": [],
+    "medications": [],
+    "overallRisk": "low",
+    "summary": "sarthakk has been added to the family. Complete an assessment to generate a health report.",
+    "findings": [],
+    "lifestyle": []
+  }
+]
+
+### FORMATTING & RESPONSE RULES:
+1. Be empathetic, clear, structured, and professional.
+2. Structure your answer using clear section headings (e.g. ### Header), bold highlights (**item**), and concise bullet lists.
+3. Provide direct, focused clinical guidance without unnecessary repetition so that your response completes fully.
+4. Always end your response with: *Note: It is always better to consult a real doctor or qualified healthcare professional.*
+
+[ASSISTANT]
+### How Your Health‑Risk Scores Are Generated  
+
+| **Step** | **What Happens** | **Why It Matters** |
+|----------|------------------|--------------------|
+| **1️⃣ Data Collection** | • Basic demographics (age, sex)  <br>• Vital signs (BP, BMI, heart rate)  <br>• Laboratory values (HbA1c, fasting glucose, lipid panel, creatinine)  <br>• Lifestyle factors (smoking, activity, diet)  <br>• Medical his
+
+[USER]
+what ML libs are you using? if no then how
+
+[ASSISTANT]
+**How the risk‑scoring engine works (in general terms)**  
+
+| **Component** | **Typical open‑source tools that are commonly used for this type of work** |
+|---------------|--------------------------------------------------------------------------|
+| **Data preprocessing & feature engineering** | *pandas*, *NumPy*, *scikit‑learn* (e.g., `StandardScaler`, `OneHotEncoder`) |
+| **Statistical modeling 
+
+[USER]
+mujhe sans lene mein dikkat hai kya ho sakta hai?
+
+[USER]
+mujhe sans lene mein dikkat hai kya ho sakta hai?
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+### आपका श्वास‑समस्या (Difficulty Breathing) – संभावित कारण और क्या करें  
+
+#### 1️⃣ मैं समझता हूँ कि यह कितना परेशान‑करने वाला हो सकता है  
+- **आपकी असुविधा को गंभीरता से लेता हूँ** और चाहता हूँ कि आप जल्द‑से‑जल्द सही मदद प्राप्त करें।  
+- श्वास‑समस्या कई कारणों से हो सकती है—कुछ हल्के, कुछ तुरंत मेडिकल इमरजेंसी।  
+
+---
+
+## 🩺 संभावित कारण (Common Causes)
+
+| श्रेणी | संभावित कारण | संकेत/लक्षण (क्या देखना चाहिए) |
+|--------|--------------|--------------------------------|
+| **श्वसन (Respiratory)** | • अस्थमा (Asthma)  <br>• ब्रोंकाइटिस / साइनसitis  <br>• न्यूमोनिया (प्लू‑इन्फेक्शन)  <br>• COPD (धूम्रपान‑संबंधित) | • सीटी या घर में आवाज़ के साथ साँस लेना <br>• खाँसी, बलगम, बुखार <br>• छाती में दबाव या दर्द |
+| **हृदय (Cardiovascular)** | • हृदय विफलता (Heart Failure)  <br>• एंजाइना / इस्केमिक हृदय रोग | • पैर या एड़ी में सूजन <br>• थकान, तेज़ या अनियमित धड़कन <br>• रात में सोते समय सांस रुकना |
+| **एलर्जिक / इम्यून** | • एलर्जी (धूल, पराग, भोजन)  <br>• एनाफिलैक्सिस (गंभीर एलर्जी प्रतिक्रिया) | • छींक, खुजली, त्वचा पर रैश <br>• होंठ/जीभ का सूजन, तेज़ दिल की धड़कन |
+| **अन्य** | • एनीमिया (लो हीमोग्लोबिन)  <br>• थायरॉयड असंतुलन  <br>• चिंता/पैनिक अटैक | • थकान, हल्का सिर चक्कर, तेज़ साँस लेना (हाइपरवेंटिलेशन) |
+| **इमरजेंसी संकेत** | • छाती में तीव्र दर्द <br>• अचानक, तेज़ सांस रुकना (सिनकोप) <br>• नीला रंग (सियानोसिस) <br>• तेज़, असामान्य हृदय गति | **इनमें से कोई भी दिखे तो तुरंत 112/911 पर कॉल करें** |
+
+---
+
+## 📋 तुरंत क्या करें (Immediate Steps)
+
+1. **सुरक्षित स्थिति** – आराम करें, बैठें या लेटें, सिर को थोड़ा ऊँचा रखें।  
+2. **गहरी, धीरे‑धीरे साँसें** – यदि आप पैनिक अटैक का शंका करते हैं, तो 4‑सेकंड में साँस अंदर, 6‑सेकंड में बाहर निकालें।  
+3. **पर्यावरण बदलें** – धूल, धुएँ, तेज़ सुगंध वाले स्थानों से दूर जाएँ।  
+4. **दवाएँ** – यदि आपको पहले से अस्थमा या COPD की दवा (इन्हेलेटर/नेब्युलाइज़र) लिखी हुई है, तो तुरंत उपयोग करें।  
+5. **सहायता माँगें** –  
+   - **यदि लक्षण तेज़, बढ़ रहे हैं या ऊपर बताए इमरजेंसी संकेत हैं** → तुरंत एम्बुलेंस बुलाएँ (112/911)।  
+   - **यदि लक्षण हल्के‑मध्यम हैं, लेकिन लगातार बने हुए हैं** → अगले 24‑48 घंटों में प्राथमिक‑देखभाल डॉक्टर या फेफड़े‑स्पेशलिस्ट (पल्मनोलॉजिस्ट) से अपॉइंटमेंट बुक करें।  
+
+---
+
+## 🩺 डॉक्टर को कब दिखाएँ (When to Seek Professional Care)
+
+| स्थिति | क्यों देखना चाहिए |
+|--------|-------------------|
+| **तीव्र छाती दर्द या दबाव** | हृदय‑सम्बंधी या फेफड़े‑सम्बंधी इमरजेंसी |
+| **साँस लेने में अचानक बिगड़ना** | संभावित एयरवे ब्लॉकेज या गंभीर इन्फेक्शन |
+| **साँस की आवाज़ (विज़ल) बदलना** – जैसे सीटी, व्हीज़, ग्राउंड‑ग्लास | फेफड़े‑रोग या द्रव जमा |
+| **बुखार + खाँसी + बलगम** | न्यूमोनिया या ब्रोंकाइटिस |
+| **पैर/एड़ी में सूजन + थकान** | हृदय‑विफलता या किडनी‑सम्बंधी समस्या |
+| **लगातार पैनिक अटैक** | मनोवैज्ञानिक कारण, परन्तु शारीरिक कारण को बाहर करना ज़र
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T17:53:13.953793+00:00
+CALL TYPE: VivRose AI Chat
+STATUS: 200 SUCCESS (Duration: 3211.2 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are VivRose AI, an empathetic and knowledgeable clinical family health assistant. Help users understand their family members' health, risk scores, vitals, symptoms, and get evidence-based medical advice.
+
+### FAMILY HEALTH CONTEXT:
+[
+  {
+    "name": "harshit",
+    "age": 19,
+    "sex": "male",
+    "relation": "friend",
+    "bp": "140/110 mmHg",
+    "bmi": "33.5",
+    "hba1c": "13.5",
+    "glucose": "400",
+    "cholesterol": "220",
+    "creatinine": "100",
+    "smoking": "never",
+    "conditions": [
+      "Hypertension",
+      "Pre-Diabetes",
+      "Diabetes",
+      "Heart Disease",
+      "COPD",
+      "Stroke",
+      "Dyslipidemia",
+      "Kidney Disease"
+    ],
+    "familyHistory": "",
+    "medications": "None",
+    "riskScores": "Diabetes 95% high, Hypertension 28% low, CVD 29% low, Stroke 8% low",
+    "overallRisk": "high",
+    "summary": "harshit shows high overall risk. The main watch-point is diabetes with a score of 95/100. Small, consistent lifestyle changes will lower risk most effectively.",
+    "findings": [
+      "BMI 33.5 \u2014 above healthy range",
+      "Blood pressure 120 mmHg",
+      "Blood sugar HbA1c 13.5%",
+      "Smoking: non-smoker"
+    ],
+    "lifestyle": [
+      "Walk 10 minutes after meals",
+      "Aim for 150 minutes of moderate activity per week",
+      "Keep consistent meal times",
+      "Sleep 7-8 hours a night"
+    ],
+    "checkups": [
+      "HbA1c + Fasting Glucose: Baseline sugar check to confirm current status.",
+      "Lipid Profile: Cholesterol panel for heart risk.",
+      "Blood Pressure Review: Home + clinic readings over 2 weeks."
+    ],
+    "recommendations": [
+      "General Physician \u2013 High overall risk \u2014 full evaluation (Book within 2 weeks)"
+    ],
+    "warnings": [
+      "Diabetes risk is high: A score of 95/100 needs a doctor review soon.",
+      "Overweight: Weight is a top contributor \u2014 even 5% loss lowers risk."
+    ],
+    "keyFactors": [
+      "Excess Weight: BMI 33.5 \u2014 above healthy range",
+      "Blood Sugar: HbA1c 13.5%"
+    ]
+  },
+  {
+    "name": "hitarth",
+    "age": 20,
+    "sex": "Male",
+    "relation": "friend",
+    "bp": "\u2014",
+    "bmi": "\u2014",
+    "hba1c": "\u2014",
+    "glucose": "\u2014",
+    "cholesterol": "\u2014",
+    "creatinine": "\u2014",
+    "smoking": "Non-smoker",
+    "conditions": [],
+    "familyHistory": [],
+    "medications": [],
+    "overallRisk": "low",
+    "summary": "hitarth has been added to the family. Complete an assessment to generate a health report.",
+    "findings": [],
+    "lifestyle": []
+  },
+  {
+    "name": "kavin",
+    "age": 19,
+    "sex": "Male",
+    "relation": "friend",
+    "bp": "\u2014",
+    "bmi": "\u2014",
+    "hba1c": "\u2014",
+    "glucose": "\u2014",
+    "cholesterol": "\u2014",
+    "creatinine": "\u2014",
+    "smoking": "Non-smoker",
+    "conditions": [],
+    "familyHistory": [],
+    "medications": [],
+    "overallRisk": "low",
+    "summary": "kavin has been added to the family. Complete an assessment to generate a health report.",
+    "findings": [],
+    "lifestyle": []
+  },
+  {
+    "name": "sarthakk",
+    "age": 19,
+    "sex": "Male",
+    "relation": "self",
+    "bp": "\u2014",
+    "bmi": "\u2014",
+    "hba1c": "\u2014",
+    "glucose": "\u2014",
+    "cholesterol": "\u2014",
+    "creatinine": "\u2014",
+    "smoking": "Non-smoker",
+    "conditions": [],
+    "familyHistory": [],
+    "medications": [],
+    "overallRisk": "low",
+    "summary": "sarthakk has been added to the family. Complete an assessment to generate a health report.",
+    "findings": [],
+    "lifestyle": []
+  }
+]
+
+### FORMATTING & RESPONSE RULES:
+1. Be empathetic, clear, structured, and professional.
+2. Structure your answer using clear section headings (e.g. ### Header), bold highlights (**item**), and concise bullet lists.
+3. Provide direct, focused clinical guidance without unnecessary repetition so that your response completes fully.
+4. Always end your response with: *Note: It is always better to consult a real doctor or qualified healthcare professional.*
+
+[ASSISTANT]
+**How the risk‑scoring engine works (in general terms)**  
+
+| **Component** | **Typical open‑source tools that are commonly used for this type of work** |
+|---------------|--------------------------------------------------------------------------|
+| **Data preprocessing & feature engineering** | *pandas*, *NumPy*, *scikit‑learn* (e.g., `StandardScaler`, `OneHotEncoder`) |
+| **Statistical modeling 
+
+[USER]
+mujhe sans lene mein dikkat hai kya ho sakta hai?
+
+[ASSISTANT]
+### आपका श्वास‑समस्या (Difficulty Breathing) – संभावित कारण और क्या करें  
+
+#### 1️⃣ मैं समझता हूँ कि यह कितना परेशान‑करने वाला हो सकता है  
+- **आपकी असुविधा को गंभीरता से लेता हूँ** और चाहता हूँ कि आप जल्द‑से‑जल्द सही मदद प्राप्त करें।  
+- श्वास‑समस्या कई कारणों से हो सकती है—कुछ हल्के, कुछ तुरंत मेडिकल इमरजेंसी।  
+
+---
+
+## 🩺 संभावित कारण (Common Causes)
+
+| श्रेणी | संभावित कारण | संकेत/लक्षण (क्
+
+[USER]
+mane bauj takleef thai chhe svas leta, su hoi sake
+
+[USER]
+mane bauj takleef thai chhe svas leta, su hoi sake
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+## શ્વાસમાં તકલીફ – શું થઈ શકે?  
+
+**મને સમજાય છે કે શ્વાસ લેવા માં મુશ્કેલી હોવી કેટલાં ચિંતાજનક લાગે છે.** નીચે સામાન્ય કારણો અને ક્યારે તાત્કાલિક મદદ લેવી જોઈએ તે દર્શાવેલ છે.  
+
+---
+
+### 1️⃣ સામાન્ય શ્વાસ‑સમસ્યાના કારણો  
+
+| શ્રેણી | શક્ય કારણ | સામાન્ય લક્ષણો / સંકેતો |
+|--------|------------|--------------------------|
+| **શ્વસન સંબંધિત** | **અસ્થમા (Asthma)** | હાંફો, છાતીમાં કસાવ, રાત્રે/વ્યાયામ પછી વધુ તકલીફ |
+| | **ક્રોનિક ઓબ્સટ્રક્ટિવ પલ્મોનરી ડિસીઝ (COPD)** (સિગારેટ ન પીતા હોય તો ઓછું, પણ ધૂમ્રપાન, પ્રદૂષણ, વારંવાર શ્વાસ‑માહોલ) | સતત કફ, સળસળાટ, ધીમો શ્વાસ |
+| | **બ્રોન્કાઇટિસ / ન્યુમોનિયા** (ફેફસાંનું સોજો) | તાવ, ખાંસી, ગાઢ કફ, છાતીમાં દુખાવો |
+| | **એલર્જી / એનોફિલેક્સિસ** | છીંક, નાકની પાણીવાળી, ત્વચા પર ખંજવાળ, ગળામાં સ્વેલિંગ – જો ગળા બંધ થાય તો તાત્કાલિક 112/108 કૉલ કરો |
+| | **COVID‑19** | તાવ, ખાંસી, ગળામાં દુખાવો, સ્વાદ/ઘ્રાણમાં ફેરફાર, તીવ્ર થાક |
+| | **પલ્મોનરી એમ્બોલિઝમ** (ફેફસાંમાં રક્તનું થક્કો) | અચાનક, તીવ્ર શ્વાસની કમી, છાતીમાં તીક્ષ્ણ દુખાવો, હૃદયની ધબકારો ઝડપી |
+| **હૃદય સંબંધિત** | **હાર્ટ ફેલ્યોર / હાર્ટ એટેક** | છાતીમાં દબાણ, પીઠમાં દુખાવો, પગમાં સૂજન, થાક, હળવાશ |
+| **રક્ત સંબંધિત** | **એનિમિયા** (લોહીની કમી) | થાક, ચક્કર, શ્વાસમાં કમી ખાસ કરીને હલકી કસરતમાં |
+| **મનોવૈજ્ઞાનિક** | **પેનિક એટેક / ચિંતા** | હૃદયની ધબકારો ઝડપી, પસીનો, ગળામાં કસાવ, તાત્કાલિક શ્વાસની કમી |
+| **અન્ય** | **થાઇરોઇડ સમસ્યા**, **ગેસ્ટ્રો-ઇસોફેજિયલ રિફ્લક્સ (GERD)**, **સ્વાસ્થ્ય સંબંધિત દવાઓનું સાઈડ‑એફેક્ટ** | સંબંધિત લક્ષણો (વજનમાં ફેરફાર, હાર્ટબર્ન, દવાઓનું નામ) |
+
+---
+
+### 2️⃣ ક્યારે તાત્કાલિક મદદ લેવી જોઈએ? (Red‑Flag Symptoms)
+
+- **છાતીમાં તીવ્ર, દબાણ જેવી દુખાવા**  
+- **શ્વાસ લેતા “વિઝલ” અથવા “સિસ્કી” અવાજ**  
+- **હાથ, ગળા, જીભ અથવા ચહેરા પર સોજો**  
+- **ઝડપથી ગતિશીલ હૃદયની ધબકારો (120+ bpm)**  
+- **ચક્કર, બેહોશી, અથવા જ્ઞાનમાં ગડબડ**  
+- **મુખ્ય રીતે શ્વાસ ન લેવો, “ગળા બંધ” જેવી લાગણી**  
+
+**જો આમાંથી કોઈ પણ લક્ષણ દેખાય, તો તરત જ 112/108 (ભારત) પર કૉલ કરો અથવા નજીકની ઇમર્જન્સી યુનિટમાં જાઓ.**  
+
+---
+
+### 3️⃣ તરત શું કરવું? (Immediate Steps)
+
+1. **શાંત રહો** – ઊંડા, ધીમા શ્વાસ લો (4 સેકન્ડમાં શ્વાસ લો, 4 સેકન્ડ રોકો, 4 સેકન્ડમાં બહાર છોડો).  
+2. **બેસો અથવા ખુરશી પર આરામ કરો** – પીઠ સીધી રાખો, પગ જમીન પર સમાન.  
+3. **જો ઇન્હેલર/બ્રોન્કોડાયલ
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T17:54:59.051490+00:00
+CALL TYPE: AI Health Assessment
+STATUS: 200 SUCCESS (Duration: 3747.6 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are a clinical AI health evaluation system that outputs strict valid JSON.
+
+[USER]
+
+System: You are an expert clinical AI decision support system (CDSS) evaluating health risk data for a family member.
+Analyze the patient profile below and calculate personalized, evidence-based health risk scores (5-95%) for EACH of the 4 conditions: Diabetes, Hypertension, CVD, and Stroke.
+
+Patient Profile:
+- Name: Rohan Mehta
+- Age: 22, Sex: male
+- Vitals & Labs: BP: 145/95 mmHg, BMI: 27.5, HbA1c: 6.2, Fasting Glucose: 115, Cholesterol: 210, Creatinine: 0.9
+- Habits & History: Smoking: Non-smoker, Known Conditions: ['Pre-Diabetes'], Family History: Diabetes (Father), Hypertension (Mother), Medications: None
+- Lifestyle & Symptoms: Physical Activity: Sedentary, Diet: Fair, Stress: High, Sleep: Not specified hrs/night, Fatigue: Not specified
+
+Respond strictly in valid JSON format with the following keys:
+{
+  "scores": [
+    {
+      "label": "Diabetes",
+      "score": <calculated integer risk 5 to 95 based on HbA1c, Fasting Glucose, BMI, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Hypertension",
+      "score": <calculated integer risk 5 to 95 based on BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "CVD",
+      "score": <calculated integer risk 5 to 95 based on Cholesterol, BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Stroke",
+      "score": <calculated integer risk 5 to 95 based on BP, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    }
+  ],
+  "summary": "HTML executive clinical summary using <strong> tags for key findings",
+  "report_summary": "Plain text version of summary without HTML tags",
+  "findings": ["List of key clinical observations and risk factors"],
+  "lifestyle": ["4-5 clear, actionable lifestyle/diet/exercise advice bullet points"],
+  "checkup_list": ["List of recommended diagnostic tests or checkups with clinical rationale"],
+  "recommendation_list": ["List of medical specialist recommendations if needed"],
+  "factors": [
+    {"name": "Blood Pressure", "value": "165/100 mmHg — Stage 2 Hypertension", "width": 85, "gradient": "linear-gradient(90deg, #C43C3C, #E06060)", "impact": "high", "impactLabel": "High"}
+  ],
+  "checkups": [
+    {"icon": "droplet", "name": "HbA1c + Fasting Glucose", "rationale": "Baseline sugar check to monitor glycemic control."}
+  ],
+  "warnings": [
+    {"level": "high", "icon": "alert", "title": "Elevated Blood Pressure", "desc": "Systolic BP > 160 mmHg warrants clinical attention."}
+  ],
+  "recommendations": [
+    {"icon": "stethoscope", "specialty": "Cardiologist", "reason": "High hypertension & cardiovascular risk evaluation", "priority": "high", "priorityClass": "high", "timeline": "Book within 2 weeks"}
+  ]
+}
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+{
+  "scores": [
+    {
+      "label": "Diabetes",
+      "score": 70,
+      "level": "high",
+      "trend": "flat",
+      "trendLabel": "Stable"
+    },
+    {
+      "label": "Hypertension",
+      "score": 60,
+      "level": "moderate",
+      "trend": "flat",
+      "trendLabel": "Stable"
+    },
+    {
+      "label": "CVD",
+      "score": 55,
+      "level": "moderate",
+      "trend": "flat",
+      "trendLabel": "Stable"
+    },
+    {
+      "label": "Stroke",
+      "score": 45,
+      "level": "moderate",
+      "trend": "flat",
+      "trendLabel": "Stable"
+    }]}
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T17:55:21.827199+00:00
+CALL TYPE: AI Health Assessment
+STATUS: 200 SUCCESS (Duration: 3877.9 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are a clinical AI health evaluation system that outputs strict valid JSON.
+
+[USER]
+
+System: You are an expert clinical AI decision support system (CDSS) evaluating health risk data for a family member.
+Analyze the patient profile below and calculate personalized, evidence-based health risk scores (5-95%) for EACH of the 4 conditions: Diabetes, Hypertension, CVD, and Stroke.
+
+Patient Profile:
+- Name: Test User
+- Age: 45, Sex: male
+- Vitals & Labs: BP: 150/95 mmHg, BMI: 28.5, HbA1c: 6.8, Fasting Glucose: 130, Cholesterol: 220, Creatinine: 1.1
+- Habits & History: Smoking: Current Smoker, Known Conditions: [], Family History: Diabetes (Father), Medications: None
+- Lifestyle & Symptoms: Physical Activity: Sedentary, Diet: Fair, Stress: High, Sleep: Not specified hrs/night, Fatigue: Not specified
+
+Respond strictly in valid JSON format with the following keys:
+{
+  "scores": [
+    {
+      "label": "Diabetes",
+      "score": <calculated integer risk 5 to 95 based on HbA1c, Fasting Glucose, BMI, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Hypertension",
+      "score": <calculated integer risk 5 to 95 based on BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "CVD",
+      "score": <calculated integer risk 5 to 95 based on Cholesterol, BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    },
+    {
+      "label": "Stroke",
+      "score": <calculated integer risk 5 to 95 based on BP, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    }
+  ],
+  "summary": "HTML executive clinical summary using <strong> tags for key findings",
+  "report_summary": "Plain text version of summary without HTML tags",
+  "findings": ["List of key clinical observations and risk factors"],
+  "lifestyle": ["4-5 clear, actionable lifestyle/diet/exercise advice bullet points"],
+  "checkup_list": ["List of recommended diagnostic tests or checkups with clinical rationale"],
+  "recommendation_list": ["List of medical specialist recommendations if needed"],
+  "factors": [
+    {"name": "Blood Pressure", "value": "165/100 mmHg — Stage 2 Hypertension", "width": 85, "gradient": "linear-gradient(90deg, #C43C3C, #E06060)", "impact": "high", "impactLabel": "High"}
+  ],
+  "checkups": [
+    {"icon": "droplet", "name": "HbA1c + Fasting Glucose", "rationale": "Baseline sugar check to monitor glycemic control."}
+  ],
+  "warnings": [
+    {"level": "high", "icon": "alert", "title": "Elevated Blood Pressure", "desc": "Systolic BP > 160 mmHg warrants clinical attention."}
+  ],
+  "recommendations": [
+    {"icon": "stethoscope", "specialty": "Cardiologist", "reason": "High hypertension & cardiovascular risk evaluation", "priority": "high", "priorityClass": "high", "timeline": "Book within 2 weeks"}
+  ]
+}
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+{
+  "scores": [
+    {
+      "label": "Diabetes",
+      "score": 85,
+      "level": "high",
+      "trend": "flat",
+      "trendLabel": "Stable"
+    },
+    {
+      "label": "Hypertension",
+      "score": 75,
+      "level": "high",
+      "trend": "flat",
+      "trendLabel": "Stable"
+    },
+    {
+      "label": "CVD",
+      "score": 85,
+      "level": "high",
+      "trend": "flat",
+      "trendLabel": "Stable"
+    },
+    {
+      "label": "Stroke",
+      "score": 65,
+      "level": "high",
+      "trend": "flat",
+      "trendLabel": "Stable"
+    }
+  ],
+  "summary": "<strong>Test User</strong> (45‑year‑old male) presents with elevated blood pressure (150/95 mmHg), overweight BMI (28.5), pre‑diabetic labs (HbA1c 6.8%, fasting glucose 130 mg/dL), borderline high cholesterol (220 mg/dL), and is a current smoker. All calculated risk scores (Diabetes, Hypertension, CVD, Stroke) are in the high range (65‑85%). Immediate lifestyle modification and specialist referral are recommended.",
+  "report_summary": "Test User, 45‑year‑old male, has high blood pressure, overweight BMI, pre‑diabetic labs, borderline high cholesterol, and smokes. Diabetes, hypertension, cardiovascular disease, and stroke risks are high (65‑85%). Lifestyle changes and specialist evaluation are advised.",
+  "findings": [
+    "BP 150/95 mmHg – Stage 1 hypertension",
+    "BMI 28.5 kg/m² – Overweight",
+    "HbA1c 6.8% and fasting glucose 130 mg/dL – Prediabetes/diabetes range",
+    "Total cholesterol 220 mg/dL – Borderline high",
+    "Current smoker",
+    "Family history of diabetes (father)"
+  ],
+  "lifestyle": [
+    "Quit smoking – use nicotine replacement or counseling.",
+    "Adopt at least 150 minutes/week of moderate‑intensity aerobic activity (e.g., brisk walking).",
+    "Switch to a DASH‑style diet: increase fruits, vegetables, whole grains; reduce sodium and saturated fat.",
+    "Aim for 7‑9 hours of sleep per night to lower stress and improve metabolic health.",
+    "Monitor weight; target BMI <25 kg/m² through calorie control and regular exercise."
+  ],
+  "checkup_list": [
+    "Repeat fasting lipid panel in 3 months to assess response to diet.",
+    "Annual eye exam (diabetes screening).",
+    "Renal function panel (eGFR, urine albumin) due to hypertension and elevated glucose.",
+    "12‑lead ECG to evaluate baseline cardiac status."
+  ],
+  "recommendation_list": [
+    "Cardiologist – for hypertension and high cardiovascular risk assessment.",
+    "Endocrinologist or primary‑care provider – to manage pre‑diabetes/diabetes.",
+    "Pulmonology or smoking‑cessation program – for tobacco dependence."
+  ],
+  "factors": [
+    {
+      "name": "Blood Pressure",
+      "value": "150/95 mmHg — Stage 1 Hypertension",
+      "width": 85,
+      "gradient": "linear-gradient(90deg, #C43C3C, #E06060)",
+      "impact": "high",
+      "impactLabel": "High"
+    }
+  ],
+  "checkups": [
+    {
+      "icon": "droplet",
+      "name": "HbA1c + Fasting Glucose",
+      "rationale": "Baseline sugar check to monitor glycemic control."
+    }
+  ],
+  "warnings": [
+    {
+      "level": "high",
+      "icon": "alert",
+      "title": "Elevated Blood Pressure",
+      "desc": "Systolic BP > 160 mmHg warrants clinical attention."
+    }]}
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T17:55:54.442238+00:00
+CALL TYPE: AI Health Assessment
+STATUS: 200 SUCCESS (Duration: 2460.5 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are a clinical AI health evaluation system that outputs strict valid JSON only.
+
+[USER]
+
+Analyze the patient profile below and calculate personalized, evidence-based health risk scores (5-95%) for EACH of the 4 conditions: Diabetes, Hypertension, CVD, and Stroke.
+
+Patient Profile:
+- Name: Live Test User
+- Age: 50, Sex: male
+- Vitals & Labs: BP: 160/100 mmHg, BMI: 29.5, HbA1c: 7.2, Fasting Glucose: 145, Cholesterol: 240, Creatinine: 1.2
+- Habits & History: Smoking: Current Smoker, Known Conditions: ['Hypertension'], Family History: Diabetes (Father), Medications: Amlodipine
+- Lifestyle & Symptoms: Physical Activity: Sedentary, Diet: Poor, Stress: High, Sleep: Not specified hrs/night, Fatigue: Not specified
+
+Respond strictly in valid JSON format with the following exact keys and structure:
+{
+  "scores": [
+    {"label": "Diabetes", "score": 75, "level": "high", "trend": "up", "trendLabel": "Rising"},
+    {"label": "Hypertension", "score": 60, "level": "moderate", "trend": "flat", "trendLabel": "Stable"},
+    {"label": "CVD", "score": 45, "level": "moderate", "trend": "flat", "trendLabel": "Stable"},
+    {"label": "Stroke", "score": 30, "level": "low", "trend": "flat", "trendLabel": "Stable"}
+  ],
+  "summary": "HTML executive clinical summary using <strong> tags for key findings",
+  "report_summary": "Plain text version of summary without HTML tags",
+  "findings": ["List of key clinical observations and risk factors"],
+  "lifestyle": ["4-5 clear, actionable lifestyle/diet/exercise advice bullet points"],
+  "checkup_list": ["List of recommended diagnostic tests or checkups with clinical rationale"],
+  "recommendation_list": ["List of medical specialist recommendations if needed"],
+  "factors": [
+    {"name": "Blood Pressure", "value": "165/100 mmHg — Stage 2 Hypertension", "width": 85, "gradient": "linear-gradient(90deg, #C43C3C, #E06060)", "impact": "high", "impactLabel": "High"}
+  ],
+  "checkups": [
+    {"icon": "droplet", "name": "HbA1c + Fasting Glucose", "rationale": "Baseline sugar check to monitor glycemic control."}
+  ],
+  "warnings": [
+    {"level": "high", "icon": "alert", "title": "Elevated Blood Pressure", "desc": "Systolic BP > 160 mmHg warrants clinical attention."}
+  ],
+  "recommendations": [
+    {"icon": "stethoscope", "specialty": "Cardiologist", "reason": "High hypertension & cardiovascular risk evaluation", "priority": "high", "priorityClass": "high", "timeline": "Book within 2 weeks"}
+  ]
+}
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+{
+  "scores":[
+      {
+         "label":"Diabetes",
+         "score":82,
+         "level":"high",
+         "trend":"up",
+         "trendLabel":"Rising"
+      },
+      {
+         "label":"Hypertension",
+         "score":90,
+         "level":"high",
+         "trend":"up",
+         "trendLabel":"Rising"
+      },
+      {
+         "label":"CVD",
+         "score":70,
+         "level":"high",
+         "trend":"up",
+         "trendLabel":"Rising"
+      },
+      {
+         "label":"Stroke",
+         "score":60,
+         "level":"moderate",
+         "trend":"flat",
+         "trendLabel":"Stable"
+      }
+   ],
+   "summary":"<strong>Elevated blood pressure</strong> and <strong>high HbA1c levels</strong> indicate a <strong>high risk of diabetes and cardiovascular disease</strong>. <strong>Current smoking status</strong> and <strong>family history of diabetes</strong> further exacerbate these risks. <strong>Physical inactivity and poor diet</strong> also contribute to the overall risk profile.",
+   "report_summary":"Elevated blood pressure and high HbA1c levels indicate a high risk of diabetes and cardiovascular disease. Current smoking status and family history of diabetes further exacerbate these risks. Physical inactivity and poor diet also contribute to the overall risk profile.",
+   "findings":[
+      "Elevated blood pressure (160/100 mmHg)",
+      "High HbA1c levels (7.2)",
+      "Current smoking status",
+      "Family history of diabetes",
+      "Physical inactivity",
+      "Poor diet"
+   ],
+   "lifestyle":[
+      "Engage in regular physical activity, such as brisk walking, for at least 150 minutes per week",
+      "Adopt a balanced diet rich in fruits, vegetables, and whole grains",
+      "Quit smoking to reduce cardiovascular and diabetes risk",
+      "Aim for 7-8 hours of sleep per night to help regulate blood pressure and glucose levels",
+      "Manage stress through relaxation techniques, such as meditation or deep breathing"
+   ],
+   "checkup_list":[
+      "Regular blood pressure monitoring",
+      "HbA1c and fasting glucose tests every 3-6 months",
+      "Lipid profile and cholesterol tests every 6-12 months",
+      "Electrocardiogram (ECG) to assess cardiovascular health"
+   ],
+   "recommendation_list":[
+      "Consult a cardiologist to evaluate cardiovascular risk",
+      "Meet with a registered dietitian to develop a personalized meal plan",
+      "Schedule a smoking cessation program"
+   ],
+   "factors":[
+      {
+         "name":"Blood Pressure",
+         "value":"160/100 mmHg — Stage 2 Hypertension",
+         "width":90,
+         "gradient":"linear-gradient(90deg, #C43C3C, #E06060)",
+         "impact":"high",
+         "impactLabel":"High"
+      },
+      {
+         "name":"HbA1c",
+         "value":"7.2 — Elevated",
+         "width":80,
+         "gradient":"linear-gradient(90deg, #FFC107, #FFA07A)",
+         "impact":"high",
+         "impactLabel":"High"
+      }
+   ],
+   "checkups":[
+      {
+         "icon":"droplet",
+         "name":"HbA1c + Fasting Glucose",
+         "rationale":"Baseline sugar check to monitor glycemic control."
+      },
+      {
+         "icon":"heart",
+         "name":"Electrocardiogram (ECG)",
+         "rationale":"Assess cardiovascular health and detect potential abnormalities."
+      }
+   ],
+   "warnings":[
+      {
+         "level":"high",
+         "icon":"alert",
+         "title":"Elevated Blood Pressure",
+         "desc":"Systolic BP > 160 mmHg warrants clinical attention."
+      },
+      {
+         "level":"high",
+         "icon":"alert",
+         "title":"High HbA1c Levels",
+         "desc":"HbA1c > 7.0 indicates poor glycemic control and increased diabetes risk."
+      }
+   ],
+   "recommendations":[
+      {
+         "icon":"stethoscope",
+         "specialty":"Cardiologist",
+         "reason":"High hypertension & cardiovascular risk evaluation",
+         "priority":"high",
+         "priorityClass":"high",
+         "timeline":"Book within 2 weeks"
+      },
+      {
+         "icon":"calendar",
+         "specialty":"Primary Care Physician",
+         "reason":"Regular health check-ups and risk factor management",
+         "priority":"medium",
+         "priorityClass":"medium",
+         "timeline":"Schedule a follow-up appointment within 3-6 months"
+      }
+   ]
+}
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T17:56:08.183542+00:00
+CALL TYPE: VivRose AI Chat
+STATUS: 200 SUCCESS (Duration: 1412.7 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are VivRose AI, an empathetic and knowledgeable clinical family health assistant. Help users understand their family members' health, risk scores, vitals, symptoms, and get evidence-based medical advice.
+
+### FAMILY HEALTH CONTEXT:
+[
+  {
+    "name": "Rajesh Patel",
+    "age": 52,
+    "relation": "Father",
+    "bp": "165/100 mmHg",
+    "bmi": "32.0",
+    "hba1c": "8.4%",
+    "riskScores": "Diabetes 78% High"
+  }
+]
+
+### FORMATTING & RESPONSE RULES:
+1. Be empathetic, clear, structured, and professional.
+2. Structure your answer using clear section headings (e.g. ### Header), bold highlights (**item**), and concise bullet lists.
+3. Provide direct, focused clinical guidance without unnecessary repetition so that your response completes fully.
+4. Always end your response with: *Note: It is always better to consult a real doctor or qualified healthcare professional.*
+
+[USER]
+What should Rajesh do about his high blood pressure of 165/100?
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+### Understanding High Blood Pressure
+Rajesh's blood pressure reading of **165/100 mmHg** is considered **high**. High blood pressure, also known as hypertension, can increase the risk of heart disease, stroke, and kidney disease. It's essential to take steps to manage and lower his blood pressure to reduce these risks.
+
+### Lifestyle Modifications
+To manage high blood pressure, Rajesh can consider the following lifestyle modifications:
+* **Increase physical activity**: Regular exercise, such as brisk walking, can help lower blood pressure.
+* **Reduce sodium intake**: Limiting sodium consumption to less than **2,300 milligrams** per day can help lower blood pressure.
+* **Maintain a healthy weight**: Since Rajesh has a **BMI of 32.0**, which is considered obese, losing weight can help lower his blood pressure.
+* **Follow a balanced diet**: Eating a diet rich in fruits, vegetables, whole grains, and low-fat dairy products can help lower blood pressure.
+* **Limit alcohol consumption**: Drinking too much alcohol can raise blood pressure, so it's essential to limit alcohol intake.
+
+### Medical Management
+In addition to lifestyle modifications, Rajesh may need to work with his healthcare provider to develop a medication plan to manage his high blood pressure. This may include:
+* **Medications**: Such as diuretics, beta-blockers, or ACE inhibitors to help lower blood pressure.
+* **Regular monitoring**: Regular blood pressure checks to monitor the effectiveness of the treatment plan.
+
+### Additional Considerations
+Given Rajesh's **high risk of diabetes (78%)** and **HbA1c level of 8.4%**, it's essential to also manage his blood sugar levels to reduce the risk of developing diabetes and its related complications.
+
+*Note: It is always better to consult a real doctor or qualified healthcare professional.*
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T17:56:10.868530+00:00
+CALL TYPE: AI Health Assessment
+STATUS: 200 SUCCESS (Duration: 2491.4 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are a clinical AI health evaluation system that outputs strict valid JSON only.
+
+[USER]
+
+Analyze the patient profile below and calculate personalized, evidence-based health risk scores (5-95%) for EACH of the 4 conditions: Diabetes, Hypertension, CVD, and Stroke.
+
+Patient Profile:
+- Name: Aarav Mehta
+- Age: 20, Sex: male
+- Vitals & Labs: BP: 150/95 mmHg, BMI: 28.2, HbA1c: 6.4, Fasting Glucose: 125, Cholesterol: 220, Creatinine: 1.0
+- Habits & History: Smoking: Current Smoker, Known Conditions: ['Pre-Diabetes'], Family History: Diabetes (Father), Medications: None
+- Lifestyle & Symptoms: Physical Activity: Sedentary, Diet: Poor, Stress: High, Sleep: Not specified hrs/night, Fatigue: Not specified
+
+Respond strictly in valid JSON format with the following exact keys and structure:
+{
+  "scores": [
+    {"label": "Diabetes", "score": 75, "level": "high", "trend": "up", "trendLabel": "Rising"},
+    {"label": "Hypertension", "score": 60, "level": "moderate", "trend": "flat", "trendLabel": "Stable"},
+    {"label": "CVD", "score": 45, "level": "moderate", "trend": "flat", "trendLabel": "Stable"},
+    {"label": "Stroke", "score": 30, "level": "low", "trend": "flat", "trendLabel": "Stable"}
+  ],
+  "summary": "HTML executive clinical summary using <strong> tags for key findings",
+  "report_summary": "Plain text version of summary without HTML tags",
+  "findings": ["List of key clinical observations and risk factors"],
+  "lifestyle": ["4-5 clear, actionable lifestyle/diet/exercise advice bullet points"],
+  "checkup_list": ["List of recommended diagnostic tests or checkups with clinical rationale"],
+  "recommendation_list": ["List of medical specialist recommendations if needed"],
+  "factors": [
+    {"name": "Blood Pressure", "value": "165/100 mmHg — Stage 2 Hypertension", "width": 85, "gradient": "linear-gradient(90deg, #C43C3C, #E06060)", "impact": "high", "impactLabel": "High"}
+  ],
+  "checkups": [
+    {"icon": "droplet", "name": "HbA1c + Fasting Glucose", "rationale": "Baseline sugar check to monitor glycemic control."}
+  ],
+  "warnings": [
+    {"level": "high", "icon": "alert", "title": "Elevated Blood Pressure", "desc": "Systolic BP > 160 mmHg warrants clinical attention."}
+  ],
+  "recommendations": [
+    {"icon": "stethoscope", "specialty": "Cardiologist", "reason": "High hypertension & cardiovascular risk evaluation", "priority": "high", "priorityClass": "high", "timeline": "Book within 2 weeks"}
+  ]
+}
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+{
+  "scores":[
+      {
+         "label":"Diabetes",
+         "score":80,
+         "level":"high",
+         "trend":"up",
+         "trendLabel":"Rising"
+      },
+      {
+         "label":"Hypertension",
+         "score":85,
+         "level":"high",
+         "trend":"up",
+         "trendLabel":"Rising"
+      },
+      {
+         "label":"CVD",
+         "score":60,
+         "level":"moderate",
+         "trend":"up",
+         "trendLabel":"Rising"
+      },
+      {
+         "label":"Stroke",
+         "score":40,
+         "level":"moderate",
+         "trend":"flat",
+         "trendLabel":"Stable"
+      }
+   ],
+   "summary":"<strong>High risk of developing Diabetes and Hypertension</strong> due to <strong>pre-diabetic condition</strong>, <strong>high blood pressure</strong>, and <strong>family history of Diabetes</strong>. <strong>Sedentary lifestyle and poor diet</strong> are exacerbating factors. Regular <strong>blood sugar and blood pressure monitoring</strong> is recommended.",
+   "report_summary":"High risk of developing Diabetes and Hypertension due to pre-diabetic condition, high blood pressure, and family history of Diabetes. Sedentary lifestyle and poor diet are exacerbating factors. Regular blood sugar and blood pressure monitoring is recommended.",
+   "findings":[
+      "Pre-diabetic condition (HbA1c: 6.4)",
+      "High blood pressure (BP: 150/95 mmHg)",
+      "Family history of Diabetes",
+      "Sedentary lifestyle",
+      "Poor diet"
+   ],
+   "lifestyle":[
+      "Increase physical activity to at least 150 minutes of moderate-intensity exercise per week",
+      "Improve diet by reducing sugar and saturated fat intake",
+      "Maintain a healthy weight (BMI: 18.5-24.9)",
+      "Get at least 7-8 hours of sleep per night",
+      "Reduce stress through relaxation techniques such as meditation or yoga"
+   ],
+   "checkup_list":[
+      "HbA1c and Fasting Glucose tests every 3 months to monitor glycemic control",
+      "Blood pressure monitoring at least twice a week",
+      "Lipid profile test every 6 months to monitor cholesterol levels",
+      "Renal function test (Creatinine) every 6 months to monitor kidney function"
+   ],
+   "recommendation_list":[
+      "Consult a Diabetologist for personalized diabetes management",
+      "Consult a Cardiologist for hypertension and cardiovascular risk evaluation"
+   ],
+   "factors":[
+      {
+         "name":"Blood Pressure",
+         "value":"150/95 mmHg — Stage 1 Hypertension",
+         "width":70,
+         "gradient":"linear-gradient(90deg, #C43C3C, #E06060)",
+         "impact":"high",
+         "impactLabel":"High"
+      },
+      {
+         "name":"HbA1c",
+         "value":"6.4 — Pre-diabetic",
+         "width":60,
+         "gradient":"linear-gradient(90deg, #FFC107, #FF9800)",
+         "impact":"moderate",
+         "impactLabel":"Moderate"
+      }
+   ],
+   "checkups":[
+      {
+         "icon":"droplet",
+         "name":"HbA1c + Fasting Glucose",
+         "rationale":"Baseline sugar check to monitor glycemic control."
+      },
+      {
+         "icon":"heart",
+         "name":"Blood Pressure Monitoring",
+         "rationale":"Regular monitoring to track hypertension progression."
+      }
+   ],
+   "warnings":[
+      {
+         "level":"high",
+         "icon":"alert",
+         "title":"Elevated Blood Pressure",
+         "desc":"Systolic BP > 140 mmHg warrants clinical attention."
+      },
+      {
+         "level":"moderate",
+         "icon":"warning",
+         "title":"Pre-diabetic Condition",
+         "desc":"HbA1c > 5.7% indicates increased risk of developing Diabetes."
+      }
+   ],
+   "recommendations":[
+      {
+         "icon":"stethoscope",
+         "specialty":"Cardiologist",
+         "reason":"High hypertension & cardiovascular risk evaluation",
+         "priority":"high",
+         "priorityClass":"high",
+         "timeline":"Book within 2 weeks"
+      },
+      {
+         "icon":"stethoscope",
+         "specialty":"Diabetologist",
+         "reason":"Pre-diabetic condition management",
+         "priority":"moderate",
+         "priorityClass":"moderate",
+         "timeline":"Book within 4 weeks"
+      }
+   ]
+}
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T17:56:16.864825+00:00
+CALL TYPE: AI Health Assessment
+STATUS: 200 SUCCESS (Duration: 2723.4 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are a clinical AI health evaluation system that outputs strict valid JSON only.
+
+[USER]
+
+Analyze the patient profile below and calculate personalized, evidence-based health risk scores (5-95%) for EACH of the 4 conditions: Diabetes, Hypertension, CVD, and Stroke.
+
+Patient Profile:
+- Name: Rohan Mehta
+- Age: 22, Sex: male
+- Vitals & Labs: BP: 145/95 mmHg, BMI: 27.5, HbA1c: 6.2, Fasting Glucose: 115, Cholesterol: 210, Creatinine: 0.9
+- Habits & History: Smoking: Non-smoker, Known Conditions: ['Pre-Diabetes'], Family History: Diabetes (Father), Hypertension (Mother), Medications: None
+- Lifestyle & Symptoms: Physical Activity: Sedentary, Diet: Fair, Stress: High, Sleep: Not specified hrs/night, Fatigue: Not specified
+
+Respond strictly in valid JSON format with the following exact keys and structure:
+{
+  "scores": [
+    {"label": "Diabetes", "score": 75, "level": "high", "trend": "up", "trendLabel": "Rising"},
+    {"label": "Hypertension", "score": 60, "level": "moderate", "trend": "flat", "trendLabel": "Stable"},
+    {"label": "CVD", "score": 45, "level": "moderate", "trend": "flat", "trendLabel": "Stable"},
+    {"label": "Stroke", "score": 30, "level": "low", "trend": "flat", "trendLabel": "Stable"}
+  ],
+  "summary": "HTML executive clinical summary using <strong> tags for key findings",
+  "report_summary": "Plain text version of summary without HTML tags",
+  "findings": ["List of key clinical observations and risk factors"],
+  "lifestyle": ["4-5 clear, actionable lifestyle/diet/exercise advice bullet points"],
+  "checkup_list": ["List of recommended diagnostic tests or checkups with clinical rationale"],
+  "recommendation_list": ["List of medical specialist recommendations if needed"],
+  "factors": [
+    {"name": "Blood Pressure", "value": "165/100 mmHg — Stage 2 Hypertension", "width": 85, "gradient": "linear-gradient(90deg, #C43C3C, #E06060)", "impact": "high", "impactLabel": "High"}
+  ],
+  "checkups": [
+    {"icon": "droplet", "name": "HbA1c + Fasting Glucose", "rationale": "Baseline sugar check to monitor glycemic control."}
+  ],
+  "warnings": [
+    {"level": "high", "icon": "alert", "title": "Elevated Blood Pressure", "desc": "Systolic BP > 160 mmHg warrants clinical attention."}
+  ],
+  "recommendations": [
+    {"icon": "stethoscope", "specialty": "Cardiologist", "reason": "High hypertension & cardiovascular risk evaluation", "priority": "high", "priorityClass": "high", "timeline": "Book within 2 weeks"}
+  ]
+}
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+{
+  "scores":[
+      {
+         "label":"Diabetes",
+         "score":80,
+         "level":"high",
+         "trend":"up",
+         "trendLabel":"Rising"
+      },
+      {
+         "label":"Hypertension",
+         "score":85,
+         "level":"high",
+         "trend":"up",
+         "trendLabel":"Rising"
+      },
+      {
+         "label":"CVD",
+         "score":55,
+         "level":"moderate",
+         "trend":"flat",
+         "trendLabel":"Stable"
+      },
+      {
+         "label":"Stroke",
+         "score":40,
+         "level":"moderate",
+         "trend":"flat",
+         "trendLabel":"Stable"
+      }
+   ],
+   "summary":"<strong>Elevated Blood Pressure</strong> and <strong>Pre-Diabetes</strong> conditions require immediate clinical attention. <strong>Family History</strong> of Diabetes and Hypertension increases the risk of developing these conditions. <strong>Sedentary Lifestyle</strong> and <strong>High Stress</strong> levels are contributing factors to the high risk scores.",
+   "report_summary":"Elevated Blood Pressure and Pre-Diabetes conditions require immediate clinical attention. Family History of Diabetes and Hypertension increases the risk of developing these conditions. Sedentary Lifestyle and High Stress levels are contributing factors to the high risk scores.",
+   "findings":[
+      "Elevated Blood Pressure (145/95 mmHg)",
+      "Pre-Diabetes condition",
+      "Family History of Diabetes and Hypertension",
+      "Sedentary Lifestyle",
+      "High Stress levels"
+   ],
+   "lifestyle":[
+      "Increase physical activity to at least 150 minutes of moderate-intensity aerobic exercise per week",
+      "Improve diet by reducing sugar and saturated fat intake",
+      "Reduce stress levels through meditation or yoga",
+      "Aim for 7-8 hours of sleep per night",
+      "Monitor and track blood pressure and blood glucose levels regularly"
+   ],
+   "checkup_list":[
+      "HbA1c and Fasting Glucose tests to monitor glycemic control",
+      "Lipid profile test to assess cholesterol levels",
+      "Electrocardiogram (ECG) to evaluate heart health",
+      "Renal function test to assess kidney health"
+   ],
+   "recommendation_list":[
+      "Consult a Cardiologist to evaluate cardiovascular risk",
+      "Consult an Endocrinologist to manage Pre-Diabetes condition"
+   ],
+   "factors":[
+      {
+         "name":"Blood Pressure",
+         "value":"145/95 mmHg — Stage 1 Hypertension",
+         "width":70,
+         "gradient":"linear-gradient(90deg, #C43C3C, #E06060)",
+         "impact":"high",
+         "impactLabel":"High"
+      },
+      {
+         "name":"HbA1c",
+         "value":"6.2% — Pre-Diabetes",
+         "width":60,
+         "gradient":"linear-gradient(90deg, #FFC107, #FF9800)",
+         "impact":"moderate",
+         "impactLabel":"Moderate"
+      }
+   ],
+   "checkups":[
+      {
+         "icon":"droplet",
+         "name":"HbA1c + Fasting Glucose",
+         "rationale":"Baseline sugar check to monitor glycemic control."
+      },
+      {
+         "icon":"heart",
+         "name":"Electrocardiogram (ECG)",
+         "rationale":"Evaluate heart health and detect potential cardiovascular conditions."
+      }
+   ],
+   "warnings":[
+      {
+         "level":"high",
+         "icon":"alert",
+         "title":"Elevated Blood Pressure",
+         "desc":"Systolic BP > 140 mmHg warrants clinical attention."
+      },
+      {
+         "level":"moderate",
+         "icon":"warning",
+         "title":"Pre-Diabetes Condition",
+         "desc":"HbA1c level between 5.7% and 6.4% indicates Pre-Diabetes condition."
+      }
+   ],
+   "recommendations":[
+      {
+         "icon":"stethoscope",
+         "specialty":"Cardiologist",
+         "reason":"High hypertension & cardiovascular risk evaluation",
+         "priority":"high",
+         "priorityClass":"high",
+         "timeline":"Book within 2 weeks"
+      },
+      {
+         "icon":"pill",
+         "specialty":"Endocrinologist",
+         "reason":"Pre-Diabetes condition management",
+         "priority":"moderate",
+         "priorityClass":"moderate",
+         "timeline":"Book within 4 weeks"
+      }
+   ]
+}
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T17:56:21.530477+00:00
+CALL TYPE: AI Health Assessment
+STATUS: 200 SUCCESS (Duration: 3373.0 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are a clinical AI health evaluation system that outputs strict valid JSON only.
+
+[USER]
+
+Analyze the patient profile below and calculate personalized, evidence-based health risk scores (5-95%) for EACH of the 4 conditions: Diabetes, Hypertension, CVD, and Stroke.
+
+Patient Profile:
+- Name: Rajesh
+- Age: 66, Sex: 
+- Vitals & Labs: BP: 142, BMI: 26, HbA1c: 8.4, Fasting Glucose: Not reported, Cholesterol: 242, Creatinine: Not reported
+- Habits & History: Smoking: No, Known Conditions: [], Family History: Diabetes (Father), Medications: None
+- Lifestyle & Symptoms: Physical Activity: Not specified, Diet: Not specified, Stress: Not specified, Sleep: Not specified hrs/night, Fatigue: Not specified
+
+Respond strictly in valid JSON format with the following exact keys and structure:
+{
+  "scores": [
+    {"label": "Diabetes", "score": 75, "level": "high", "trend": "up", "trendLabel": "Rising"},
+    {"label": "Hypertension", "score": 60, "level": "moderate", "trend": "flat", "trendLabel": "Stable"},
+    {"label": "CVD", "score": 45, "level": "moderate", "trend": "flat", "trendLabel": "Stable"},
+    {"label": "Stroke", "score": 30, "level": "low", "trend": "flat", "trendLabel": "Stable"}
+  ],
+  "summary": "HTML executive clinical summary using <strong> tags for key findings",
+  "report_summary": "Plain text version of summary without HTML tags",
+  "findings": ["List of key clinical observations and risk factors"],
+  "lifestyle": ["4-5 clear, actionable lifestyle/diet/exercise advice bullet points"],
+  "checkup_list": ["List of recommended diagnostic tests or checkups with clinical rationale"],
+  "recommendation_list": ["List of medical specialist recommendations if needed"],
+  "factors": [
+    {"name": "Blood Pressure", "value": "165/100 mmHg — Stage 2 Hypertension", "width": 85, "gradient": "linear-gradient(90deg, #C43C3C, #E06060)", "impact": "high", "impactLabel": "High"}
+  ],
+  "checkups": [
+    {"icon": "droplet", "name": "HbA1c + Fasting Glucose", "rationale": "Baseline sugar check to monitor glycemic control."}
+  ],
+  "warnings": [
+    {"level": "high", "icon": "alert", "title": "Elevated Blood Pressure", "desc": "Systolic BP > 160 mmHg warrants clinical attention."}
+  ],
+  "recommendations": [
+    {"icon": "stethoscope", "specialty": "Cardiologist", "reason": "High hypertension & cardiovascular risk evaluation", "priority": "high", "priorityClass": "high", "timeline": "Book within 2 weeks"}
+  ]
+}
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+{
+  "scores":[
+      {
+         "label":"Diabetes",
+         "score":85,
+         "level":"high",
+         "trend":"up",
+         "trendLabel":"Rising"
+      },
+      {
+         "label":"Hypertension",
+         "score":80,
+         "level":"high",
+         "trend":"up",
+         "trendLabel":"Rising"
+      },
+      {
+         "label":"CVD",
+         "score":60,
+         "level":"moderate",
+         "trend":"flat",
+         "trendLabel":"Stable"
+      },
+      {
+         "label":"Stroke",
+         "score":50,
+         "level":"moderate",
+         "trend":"flat",
+         "trendLabel":"Stable"
+      }
+   ],
+   "summary":"<strong>Elevated HbA1c (8.4%) and Blood Pressure (142 mmHg)</strong> indicate a high risk of developing diabetes and hypertension. <strong>Family history of diabetes</strong> further increases the risk. Regular monitoring and lifestyle modifications are essential to mitigate these risks.",
+   "report_summary":"Elevated HbA1c and Blood Pressure indicate a high risk of developing diabetes and hypertension. Family history of diabetes further increases the risk. Regular monitoring and lifestyle modifications are essential to mitigate these risks.",
+   "findings":[
+      "Elevated HbA1c (8.4%)",
+      "High Blood Pressure (142 mmHg)",
+      "Family history of diabetes",
+      "High Cholesterol (242 mg/dL)"
+   ],
+   "lifestyle":[
+      "Engage in regular physical activity, such as brisk walking, for at least 150 minutes per week",
+      "Follow a balanced diet, including plenty of fruits, vegetables, and whole grains",
+      "Maintain a healthy weight, with a BMI between 18.5 and 25",
+      "Get at least 7-8 hours of sleep per night to help regulate blood sugar and blood pressure",
+      "Manage stress through relaxation techniques, such as meditation or deep breathing"
+   ],
+   "checkup_list":[
+      "HbA1c and Fasting Glucose tests to monitor glycemic control",
+      "Lipid profile to assess cholesterol levels",
+      "Blood Pressure monitoring to track hypertension",
+      "Electrocardiogram (ECG) to evaluate cardiovascular health"
+   ],
+   "recommendation_list":[
+      "Consult a cardiologist to evaluate cardiovascular risk",
+      "Meet with a registered dietitian to develop a personalized meal plan"
+   ],
+   "factors":[
+      {
+         "name":"Blood Pressure",
+         "value":"142 mmHg — Stage 1 Hypertension",
+         "width":70,
+         "gradient":"linear-gradient(90deg, #FFC080, #FF9900)",
+         "impact":"high",
+         "impactLabel":"High"
+      },
+      {
+         "name":"HbA1c",
+         "value":"8.4% — Elevated",
+         "width":85,
+         "gradient":"linear-gradient(90deg, #C43C3C, #E06060)",
+         "impact":"high",
+         "impactLabel":"High"
+      }
+   ],
+   "checkups":[
+      {
+         "icon":"droplet",
+         "name":"HbA1c + Fasting Glucose",
+         "rationale":"Baseline sugar check to monitor glycemic control."
+      },
+      {
+         "icon":"heart",
+         "name":"Blood Pressure Monitoring",
+         "rationale":"Regular tracking to manage hypertension."
+      }
+   ],
+   "warnings":[
+      {
+         "level":"high",
+         "icon":"alert",
+         "title":"Elevated Blood Pressure",
+         "desc":"Systolic BP > 140 mmHg warrants clinical attention."
+      },
+      {
+         "level":"high",
+         "icon":"alert",
+         "title":"Elevated HbA1c",
+         "desc":"HbA1c > 7% indicates poor glycemic control."
+      }
+   ],
+   "recommendations":[
+      {
+         "icon":"stethoscope",
+         "specialty":"Cardiologist",
+         "reason":"High hypertension & cardiovascular risk evaluation",
+         "priority":"high",
+         "priorityClass":"high",
+         "timeline":"Book within 2 weeks"
+      },
+      {
+         "icon":"chart",
+         "specialty":"Endocrinologist",
+         "reason":"Diabetes management and glycemic control",
+         "priority":"medium",
+         "priorityClass":"medium",
+         "timeline":"Book within 4 weeks"
+      }
+   ]
+}
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T17:56:22.437145+00:00
+CALL TYPE: VivRose AI Chat
+STATUS: 200 SUCCESS (Duration: 843.1 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are VivRose AI, an empathetic and knowledgeable clinical family health assistant. Help users understand their family members' health, risk scores, vitals, symptoms, and get evidence-based medical advice.
+
+### FAMILY HEALTH CONTEXT:
+[
+  {
+    "name": "Rajesh",
+    "sex": "Male",
+    "relation": "Father",
+    "conditions": [],
+    "familyHistory": [],
+    "medications": [],
+    "riskScores": "Diabetes 72% high",
+    "findings": [],
+    "lifestyle": []
+  }
+]
+
+### FORMATTING & RESPONSE RULES:
+1. Be empathetic, clear, structured, and professional.
+2. Structure your answer using clear section headings (e.g. ### Header), bold highlights (**item**), and concise bullet lists.
+3. Provide direct, focused clinical guidance without unnecessary repetition so that your response completes fully.
+4. Always end your response with: *Note: It is always better to consult a real doctor or qualified healthcare professional.*
+
+[USER]
+Who has the highest risk?
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+### Risk Assessment
+Based on the provided family health context, **Rajesh**, the father, has a **high risk score for Diabetes**, which is **72%**. This indicates that he is at a higher risk of developing diabetes compared to other family members, whose risk scores are not provided.
+
+### Key Points to Consider
+* **Diabetes risk**: Rajesh's high risk score suggests that he should be mindful of his lifestyle choices and undergo regular health check-ups to monitor his condition.
+* **Family history**: Although Rajesh's family history is not provided, it is essential to consider any potential genetic factors that may contribute to his risk score.
+* **Lifestyle modifications**: Encouraging Rajesh to maintain a healthy diet, engage in regular physical activity, and manage his weight can help mitigate his risk of developing diabetes.
+
+### Next Steps
+It is crucial for Rajesh to consult with a healthcare professional to discuss his risk score and develop a personalized plan to reduce his risk of developing diabetes.
+
+*Note: It is always better to consult a real doctor or qualified healthcare professional.*
+================================================================================
+
+
+================================================================================
+TIMESTAMP: 2026-08-01T17:59:05.536595+00:00
+CALL TYPE: AI Health Assessment
+STATUS: 200 SUCCESS (Duration: 2711.4 ms)
+--------------------------------------------------------------------------------
+PROMPT MESSAGES SENT TO GROQ LLM API:
+
+[SYSTEM]
+You are a clinical AI health evaluation system that outputs strict valid JSON only.
+
+[USER]
+
+Analyze the patient profile below and calculate personalized, evidence-based health risk scores (5-95%) for EACH of the 4 conditions: Diabetes, Hypertension, CVD, and Stroke.
+
+Patient Profile:
+- Name: kavin
+- Age: 19, Sex: male
+- Vitals & Labs: BP: 110/80 mmHg, BMI: 22.5, HbA1c: 5.8, Fasting Glucose: 95, Cholesterol: 190, Creatinine: 0.8
+- Habits & History: Smoking: former, Known Conditions: ['Hypertension', 'COPD'], Family History: Hypertension (Mother), Kidney Disease, Medications: None
+- Lifestyle & Symptoms: Physical Activity: moderate, Diet: fair, Stress: Severe, Sleep: 5 hrs/night, Fatigue: Severe
+
+Respond strictly in valid JSON format with the following exact keys and structure:
+{
+  "scores": [
+    {"label": "Diabetes", "score": 75, "level": "high", "trend": "up", "trendLabel": "Rising"},
+    {"label": "Hypertension", "score": 60, "level": "moderate", "trend": "flat", "trendLabel": "Stable"},
+    {"label": "CVD", "score": 45, "level": "moderate", "trend": "flat", "trendLabel": "Stable"},
+    {"label": "Stroke", "score": 30, "level": "low", "trend": "flat", "trendLabel": "Stable"}
+  ],
+  "summary": "HTML executive clinical summary using <strong> tags for key findings",
+  "report_summary": "Plain text version of summary without HTML tags",
+  "findings": ["List of key clinical observations and risk factors"],
+  "lifestyle": ["4-5 clear, actionable lifestyle/diet/exercise advice bullet points"],
+  "checkup_list": ["List of recommended diagnostic tests or checkups with clinical rationale"],
+  "recommendation_list": ["List of medical specialist recommendations if needed"],
+  "factors": [
+    {"name": "Blood Pressure", "value": "165/100 mmHg — Stage 2 Hypertension", "width": 85, "gradient": "linear-gradient(90deg, #C43C3C, #E06060)", "impact": "high", "impactLabel": "High"}
+  ],
+  "checkups": [
+    {"icon": "droplet", "name": "HbA1c + Fasting Glucose", "rationale": "Baseline sugar check to monitor glycemic control."}
+  ],
+  "warnings": [
+    {"level": "high", "icon": "alert", "title": "Elevated Blood Pressure", "desc": "Systolic BP > 160 mmHg warrants clinical attention."}
+  ],
+  "recommendations": [
+    {"icon": "stethoscope", "specialty": "Cardiologist", "reason": "High hypertension & cardiovascular risk evaluation", "priority": "high", "priorityClass": "high", "timeline": "Book within 2 weeks"}
+  ]
+}
+--------------------------------------------------------------------------------
+RESPONSE RECEIVED FROM GROQ LLM API:
+
+{
+  "scores":[
+      {
+         "label":"Diabetes",
+         "score":40,
+         "level":"low",
+         "trend":"down",
+         "trendLabel":"Falling"
+      },
+      {
+         "label":"Hypertension",
+         "score":80,
+         "level":"high",
+         "trend":"up",
+         "trendLabel":"Rising"
+      },
+      {
+         "label":"CVD",
+         "score":55,
+         "level":"moderate",
+         "trend":"flat",
+         "trendLabel":"Stable"
+      },
+      {
+         "label":"Stroke",
+         "score":35,
+         "level":"low",
+         "trend":"flat",
+         "trendLabel":"Stable"
+      }
+   ],
+   "summary":"<strong>Hypertension risk is high</strong> due to family history and existing condition. <strong>Diabetes risk is low</strong> despite elevated HbA1c. <strong>Severe stress and fatigue</strong> may exacerbate conditions. <strong>Physical inactivity and poor diet</strong> contribute to overall risk.",
+   "report_summary":"Hypertension risk is high due to family history and existing condition. Diabetes risk is low despite elevated HbA1c. Severe stress and fatigue may exacerbate conditions. Physical inactivity and poor diet contribute to overall risk.",
+   "findings":[
+      "Family history of hypertension",
+      "Existing hypertension condition",
+      "Elevated HbA1c",
+      "Severe stress and fatigue",
+      "Physical inactivity and poor diet"
+   ],
+   "lifestyle":[
+      "Increase physical activity to at least 150 minutes of moderate-intensity exercise per week",
+      "Improve diet by reducing sodium and increasing fruits and vegetables",
+      "Manage stress through relaxation techniques such as meditation or deep breathing",
+      "Aim for 7-8 hours of sleep per night to reduce fatigue",
+      "Consider counseling or therapy to address underlying issues contributing to stress and fatigue"
+   ],
+   "checkup_list":[
+      "Regular blood pressure monitoring",
+      "Annual HbA1c and fasting glucose tests",
+      "Lipid profile and cholesterol tests every 2 years",
+      "Electrocardiogram (ECG) to assess cardiovascular health"
+   ],
+   "recommendation_list":[
+      "Consult a cardiologist to evaluate hypertension and cardiovascular risk",
+      "Meet with a registered dietitian to develop a personalized meal plan",
+      "Consider therapy or counseling to address stress and fatigue"
+   ],
+   "factors":[
+      {
+         "name":"Blood Pressure",
+         "value":"110/80 mmHg — Elevated",
+         "width":60,
+         "gradient":"linear-gradient(90deg, #FFC107, #FFA07A)",
+         "impact":"moderate",
+         "impactLabel":"Moderate"
+      },
+      {
+         "name":"HbA1c",
+         "value":"5.8% — Elevated",
+         "width":50,
+         "gradient":"linear-gradient(90deg, #8BC34A, #C6F4D6)",
+         "impact":"low",
+         "impactLabel":"Low"
+      }
+   ],
+   "checkups":[
+      {
+         "icon":"droplet",
+         "name":"HbA1c + Fasting Glucose",
+         "rationale":"Baseline sugar check to monitor glycemic control."
+      },
+      {
+         "icon":"heart",
+         "name":"Electrocardiogram (ECG)",
+         "rationale":"Assess cardiovascular health and detect potential issues."
+      }
+   ],
+   "warnings":[
+      {
+         "level":"high",
+         "icon":"alert",
+         "title":"Uncontrolled Hypertension",
+         "desc":"Existing hypertension condition and family history increase risk of complications."
+      },
+      {
+         "level":"moderate",
+         "icon":"warning",
+         "title":"Elevated HbA1c",
+         "desc":"HbA1c level is higher than normal, indicating potential glycemic control issues."
+      }
+   ],
+   "recommendations":[
+      {
+         "icon":"stethoscope",
+         "specialty":"Cardiologist",
+         "reason":"High hypertension and cardiovascular risk evaluation",
+         "priority":"high",
+         "priorityClass":"high",
+         "timeline":"Book within 2 weeks"
+      },
+      {
+         "icon":"calendar",
+         "specialty":"Primary Care Physician",
+         "reason":"Regular check-ups and monitoring of hypertension and diabetes risk factors",
+         "priority":"moderate",
+         "priorityClass":"moderate",
+         "timeline":"Schedule regular appointments every 3-6 months"
+      }
+   ]
+}
+================================================================================
+
+
