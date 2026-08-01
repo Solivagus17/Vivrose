@@ -17,24 +17,17 @@ export function MemberProvider({ children }) {
   const [memberId, setMemberId] = React.useState(null);
   const member = (memberId && members.find((m) => m.id === memberId)) || members[0] || null;
 
-  // Initial load from Supabase after auth is ready
+  // Initial load from Supabase backend after auth is ready
   React.useEffect(() => {
-    if (authLoading || !user) return;
+    if (authLoading) return;
     refreshMembers().then((list) => {
-      setMembers(list);
+      setMembers(list || []);
       if (list && list.length && !memberId) {
         setMemberId(list[0].id);
       }
     });
-  }, [user, authLoading]);
+  }, [authLoading]);
 
-  // Clear members when user logs out
-  React.useEffect(() => {
-    if (!user) {
-      setMembers([]);
-      setMemberId(null);
-    }
-  }, [user]);
 
   const add = async (profile) => {
     const created = await addMember(profile);

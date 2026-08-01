@@ -71,13 +71,18 @@ def _rule_reply(message, members):
 
     total = sum(_top_score(m) for m in members)
     average = total // len(members)
-    return (f"Across your family of {len(members)}, the average top risk score is {average}/100. "
-            "I can tell you about diabetes, blood pressure, smoking, or who needs attention most — just ask.")
+    res = (f"Across your family of {len(members)}, the average top risk score is {average}/100. "
+           "I can tell you about diabetes, blood pressure, smoking, or who needs attention most — just ask.")
+    return f"{res}\n\n*Note: It's always better to consult a real doctor for medical advice and clinical diagnosis.*"
 
 
-def reply(message, members):
+def reply(message, members, history=None):
     """Answer user query using Groq API (llama-3.1-8b-instant), fallback to rule-based engine."""
-    ai_answer = groq_service.chat_reply(message, members)
+    ai_answer = groq_service.chat_reply(message, members, history=history)
     if ai_answer:
         return ai_answer
-    return _rule_reply(message, members)
+    rule_ans = _rule_reply(message, members)
+    if "consult a real doctor" not in rule_ans:
+        rule_ans += "\n\n*Note: It's always better to consult a real doctor for medical advice and clinical diagnosis.*"
+    return rule_ans
+

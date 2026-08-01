@@ -6,6 +6,17 @@ from .db import db
 from .routes import ALL_BLUEPRINTS
 
 
+from sqlalchemy import text
+
+def _ensure_columns():
+    try:
+        db.session.execute(text("ALTER TABLE family_members ADD COLUMN IF NOT EXISTS llm_status TEXT;"))
+        db.session.execute(text("ALTER TABLE family_members ADD COLUMN IF NOT EXISTS llm_error TEXT;"))
+        db.session.commit()
+    except Exception as exc:
+        print("Column migration notice:", exc)
+        db.session.rollback()
+
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
@@ -26,6 +37,9 @@ def create_app(config_class=Config):
     db.init_app(app)
     CORS(app, resources={r'/api/*': {'origins': '*'}})
 
+    with app.app_context():
+        _ensure_columns()
+
     for bp in ALL_BLUEPRINTS:
         app.register_blueprint(bp)
 
@@ -38,3 +52,4 @@ def create_app(config_class=Config):
         return {'error': f'Internal server error: {error}'}, 500
 
     return app
+

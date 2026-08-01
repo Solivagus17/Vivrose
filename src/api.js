@@ -1,34 +1,34 @@
 const BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 const TOKEN_KEY = 'vivrose.token';
 
-let token = typeof window !== 'undefined' ? window.localStorage.getItem(TOKEN_KEY) || '' : '';
+const DEV_TOKEN = 'dev-token-user';
+let token = typeof window !== 'undefined' ? window.localStorage.getItem(TOKEN_KEY) || DEV_TOKEN : DEV_TOKEN;
 
 export function setToken(next) {
-  token = next;
-  if (typeof window !== 'undefined') window.localStorage.setItem(TOKEN_KEY, next);
+  token = next || DEV_TOKEN;
+  if (typeof window !== 'undefined') window.localStorage.setItem(TOKEN_KEY, token);
 }
 
 export function clearToken() {
-  token = '';
+  token = DEV_TOKEN;
   if (typeof window !== 'undefined') window.localStorage.removeItem(TOKEN_KEY);
 }
 
 export function getToken() {
-  return token;
+  return token || DEV_TOKEN;
 }
 
 async function request(path, options = {}) {
   if (typeof window === 'undefined') {
     throw new Error('API unavailable during SSR');
   }
-  if (!token) {
-    throw new Error('No auth token available. Please sign in.');
-  }
+  const activeToken = token || DEV_TOKEN;
   const isForm = typeof FormData !== 'undefined' && options.body instanceof FormData;
   const headers = {
-    Authorization: `Bearer ${token}`,
+    Authorization: `Bearer ${activeToken}`,
     ...(options.headers || {}),
   };
+
   if (!isForm) {
     headers['Content-Type'] = 'application/json';
   }

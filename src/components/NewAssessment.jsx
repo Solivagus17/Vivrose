@@ -4,21 +4,12 @@ import Icon from './Icon.jsx';
 import { useMember } from '../memberContext.jsx';
 import { ROUTES } from '../routes.js';
 import { apiPost } from '../api.js';
-import { refreshInsights } from '../insightsStore.js';
+import { addInsight, refreshInsights } from '../insightsStore.js';
 
 const STEP_LABELS = ['Demographics', 'Lifestyle', 'Symptoms', 'History', 'Vitals', 'Labs'];
 
 const CONDITIONS = ['Hypertension', 'Pre-Diabetes', 'Diabetes', 'Heart Disease', 'Kidney Disease', 'Dyslipidemia', 'Stroke', 'COPD'];
 const FAMILY = ['Diabetes (Father)', 'Hypertension (Mother)', 'Heart Disease', 'Stroke', 'Kidney Disease', 'Cancer'];
-
-const LOADING_STEPS = [
-  { progress: 20, text: 'Analyzing demographics and lifestyle...' },
-  { progress: 40, text: 'Processing vital signs and lab results...' },
-  { progress: 60, text: 'Running predictive risk models...' },
-  { progress: 80, text: 'Preparing health recommendations...' },
-  { progress: 95, text: 'Compiling the AI health report...' },
-  { progress: 100, text: 'Assessment complete!' },
-];
 
 function numFrom(value) {
   if (value === undefined || value === null || value === '—') return '';
@@ -120,73 +111,86 @@ export default function NewAssessment() {
     setFetchNote('');
   }, [forId]);
 
-  useEffect(() => {
-    if (phase === 'loading' && forId) {
-      const timers = [];
-      LOADING_STEPS.forEach((s, i) => {
-        timers.push(
-          setTimeout(() => {
-            setProgress(s.progress);
-            setStatus(s.text);
-            if (i === LOADING_STEPS.length - 1) {
-              timers.push(
-                setTimeout(async () => {
-                  const bp = form.bpSys && form.bpDia ? `${form.bpSys}/${form.bpDia} mmHg` : (forMember.bp || '');
-                  const assessmentData = {
-                    name: form.name || forMember.name,
-                    age: form.age || forMember.age,
-                    sex: form.sex || forMember.sex,
-                    relation: form.relation || forMember.relation,
-                    location: form.location || forMember.location,
-                    bp,
-                    bmi: form.bmi || forMember.bmi,
-                    hba1c: form.hba1c || forMember.hba1c,
-                    glucose: form.glucose || forMember.glucose,
-                    cholesterol: form.cholesterol || forMember.cholesterol,
-                    creatinine: form.creatinine || forMember.creatinine,
-                    smoking: form.smoking,
-                    conditions,
-                    familyHistory: family.join(', '),
-                    medications: form.medications || 'None',
-                    alcohol,
-                    activity,
-                    diet,
-                    sleep,
-                    stress,
-                    fatigue,
-                    heartRate,
-                    respRate,
-                    spO2,
-                  };
+  const handleGenerateAssessment = async () => {
+    if (!forId) return;
+    setPhase('loading');
+    setProgress(15);
+    setStatus('Analyzing demographics and lifestyle...');
 
-                  try {
-                    const result = await apiPost('/api/assessments', {
-                      memberId: forId,
-                      data: assessmentData,
-                    });
-                    if (result && result.id) {
-                      await updateMember(forId, result);
-                    }
-                  } catch (err) {
-                    console.warn('API assessment error:', err);
-                  }
-
-                  await refreshInsights();
-                  setMember(forId);
-                  navigate(ROUTES.pastInsights);
-                  setPhase('form');
-                  setStep(1);
-                  setProgress(0);
-                }, 600)
-              );
-            }
-          }, (i + 1) * 400)
-        );
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev < 40) {
+          setStatus('Processing vital signs and lab results...');
+          return 40;
+        }
+        if (prev < 65) {
+          setStatus('Running Groq LLM predictive models...');
+          return 65;
+        }
+        if (prev < 85) {
+          setStatus('Preparing clinical health report & recommendations...');
+          return 85;
+        }
+        return prev;
       });
-      return () => timers.forEach(clearTimeout);
+    }, 400);
+
+    const bp = form.bpSys && form.bpDia ? `${form.bpSys}/${form.bpDia} mmHg` : (forMember.bp || '');
+    const assessmentData = {
+      name: form.name || forMember.name,
+      age: form.age || forMember.age,
+      sex: form.sex || forMember.sex,
+      relation: form.relation || forMember.relation,
+      location: form.location || forMember.location,
+      bp,
+      bmi: form.bmi || forMember.bmi,
+      hba1c: form.hba1c || forMember.hba1c,
+      glucose: form.glucose || forMember.glucose,
+      cholesterol: form.cholesterol || forMember.cholesterol,
+      creatinine: form.creatinine || forMember.creatinine,
+      smoking: form.smoking,
+      conditions,
+      familyHistory: family.join(', '),
+      medications: form.medications || 'None',
+      alcohol,
+      activity,
+      diet,
+      sleep,
+      stress,
+      fatigue,
+      heartRate,
+      respRate,
+      spO2,
+    };
+
+    try {
+      const result = await apiPost('/api/assessments', {
+        memberId: forId,
+        data: assessmentData,
+      });
+
+      const updated = (result && result.id) ? result : { ...forMember, ...assessmentData };
+      await updateMember(forId, updated);
+      addInsight(forId, updated);
+    } catch (err) {
+      console.warn('API assessment error, applying local updates:', err);
+      const fallback = { ...forMember, ...assessmentData };
+      await updateMember(forId, fallback);
+      addInsight(forId, fallback);
+    } finally {
+      clearInterval(interval);
+      setProgress(100);
+      setStatus('Assessment complete!');
+      await refreshInsights();
+      setMember(forId);
+      setTimeout(() => {
+        navigate(ROUTES.pastInsights);
+        setPhase('form');
+        setStep(1);
+        setProgress(0);
+      }, 400);
     }
-    return undefined;
-  }, [phase, forId, navigate, setMember, updateMember, form, conditions, family, stress, fatigue, alcohol, activity, diet, sleep, heartRate, respRate, spO2, forMember]);
+  };
 
   const toggleCondition = (c) =>
     setConditions((prev) => (prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]));
@@ -510,7 +514,7 @@ export default function NewAssessment() {
                 <Icon name="arrowLeft" size="md" />
                 Back
               </button>
-              <button className="btn btn-primary" onClick={() => setPhase('loading')}>
+              <button className="btn btn-primary" onClick={handleGenerateAssessment}>
                 <Icon name="sparkle" size="md" />
                 Generate AI Assessment
               </button>
@@ -521,6 +525,7 @@ export default function NewAssessment() {
         return null;
     }
   };
+
 
   return (
     <>

@@ -14,7 +14,24 @@ def _chat():
     message = (payload.get('message') or '').strip()
     if not message:
         return {'error': 'message is required'}, 400
-    members = FamilyMember.query.filter_by(household_id=g.household_id).all()
-    from ..serializers import serialize
-    reply = assistant.reply(message, [serialize(m) for m in members])
+    history = payload.get('history') or []
+    client_members = payload.get('members')
+    
+    if isinstance(client_members, list) and len(client_members) > 0:
+        members_data = client_members
+    else:
+        members = FamilyMember.query.filter_by(household_id=g.household_id).all()
+        from ..serializers import serialize
+        members_data = [serialize(m) for m in members]
+
+    reply = assistant.reply(message, members_data, history=history)
     return {'reply': reply}
+
+
+@bp.get('/logs')
+@require_user
+def _logs():
+    from ..services.groq_service import get_llm_logs
+    return {'logs': get_llm_logs()}
+
+

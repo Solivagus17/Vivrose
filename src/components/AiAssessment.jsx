@@ -31,11 +31,16 @@ export default function AiAssessment() {
               <Icon name="brain" size="sm" />
               Past Insights
             </button>
+            <button className="btn btn-ghost btn-sm" onClick={() => navigate(ROUTES.aiAssistant)}>
+              <Icon name="sparkles" size="sm" />
+              View LLM Logs
+            </button>
             <button className="btn btn-primary btn-sm" onClick={() => navigate(ROUTES.assessment)}>
               <Icon name="sparkle" size="sm" />
               Run AI Assessment
             </button>
           </div>
+
         </div>
         {members.length > 0 && (
           <div className="assess-for-chips">

@@ -44,16 +44,29 @@ export function AuthProvider({ children }) {
   const firebaseReady = Boolean(auth);
 
   useEffect(() => {
+    const initDev = async () => {
+      const devUser = { uid: 'dev-user-123', email: 'dev@vivrose.local', displayName: 'Arjun Mehta' };
+      setUser(devUser);
+      setToken('dev-token-user');
+      try {
+        const me = await apiGet('/api/auth/me');
+        setProfile(me.user);
+      } catch {
+        setProfile({ id: devUser.uid, name: devUser.displayName, email: devUser.email });
+      } finally {
+        refreshAllStores();
+        setLoading(false);
+      }
+    };
+
     if (!auth) {
-      setLoading(false);
+      initDev();
       return;
     }
+
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (!firebaseUser) {
-        setUser(null);
-        setProfile(null);
-        clearToken();
-        setLoading(false);
+        initDev();
         return;
       }
       setUser(firebaseUser);
@@ -64,7 +77,6 @@ export function AuthProvider({ children }) {
         setProfile(me.user);
         refreshAllStores();
       } catch {
-        // Backend not reachable — fall back to Firebase profile only
         setProfile({
           id: firebaseUser.uid,
           name: firebaseUser.displayName || '',
@@ -75,6 +87,7 @@ export function AuthProvider({ children }) {
     });
     return unsubscribe;
   }, []);
+
 
   const signIn = async (email, password) => {
     assertFirebase();

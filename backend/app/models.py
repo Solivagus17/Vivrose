@@ -78,6 +78,10 @@ class FamilyMember(db.Model, TimestampMixin):
     warnings = db.Column(JSON_TYPE, default=list)
     recommendations = db.Column(JSON_TYPE, default=list)
 
+    llm_status = db.Column(db.Text)
+    llm_error = db.Column(db.Text)
+
+
 
 class InsightSnapshot(db.Model):
     __tablename__ = 'insight_snapshots'

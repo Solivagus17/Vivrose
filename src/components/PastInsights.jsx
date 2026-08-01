@@ -5,6 +5,7 @@ import InsightView from './InsightView.jsx';
 import { useMember } from '../memberContext.jsx';
 import { ROUTES } from '../routes.js';
 import { apiGet } from '../api.js';
+import { loadInsights } from '../insightsStore.js';
 
 function formatDate(iso) {
   if (!iso) return 'Recent';
@@ -23,14 +24,14 @@ function riskLabel(snapshot) {
 export default function PastInsights() {
   const navigate = useNavigate();
   const { members, member, setMember } = useMember();
-  const [insights, setInsights] = useState([]);
+  const [insights, setInsights] = useState(() => loadInsights() || []);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
 
   const activeMemberId = member?.id || (members.length ? members[0].id : '');
 
-  /* Fetch insights from the backend */
+  /* Fetch insights from the backend and merge with local store */
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
@@ -39,14 +40,19 @@ export default function PastInsights() {
     apiGet('/api/insights')
       .then((list) => {
         if (!cancelled) {
-          setInsights(Array.isArray(list) ? list : []);
+          const serverList = Array.isArray(list) ? list : [];
+          const localList = loadInsights() || [];
+          const map = new Map();
+          [...localList, ...serverList].forEach((item) => {
+            if (item && item.id) map.set(item.id, item);
+          });
+          setInsights(Array.from(map.values()));
         }
       })
       .catch((err) => {
-        console.error('[PastInsights] Failed to fetch insights:', err);
+        console.warn('[PastInsights] Failed to fetch server insights, using local cache:', err);
         if (!cancelled) {
-          setError(err?.message || 'Failed to load insights');
-          setInsights([]);
+          setInsights(loadInsights() || []);
         }
       })
       .finally(() => {
@@ -56,17 +62,29 @@ export default function PastInsights() {
     return () => { cancelled = true; };
   }, [activeMemberId]);
 
+
   /* Filter and sort by selected member */
+  const activeMemberObj = members.find((m) => m.id === activeMemberId);
+  const activeName = activeMemberObj?.name?.trim().toLowerCase();
+
   const list = useMemo(() => {
     if (!activeMemberId) return insights;
     return insights
-      .filter((s) => s.memberId === activeMemberId)
-      .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
-  }, [insights, activeMemberId]);
+      .filter((s) => {
+        if (!s) return false;
+        const mId = s.memberId || s.member_id || s.member?.id || s.id;
+        if (mId === activeMemberId) return true;
+        const mName = (s.memberName || s.member_name || s.member?.name || s.name || '').trim().toLowerCase();
+        if (activeName && mName && activeName === mName) return true;
+        return false;
+      })
+      .sort((a, b) => new Date(b.createdAt || b.created_at || 0) - new Date(a.createdAt || a.created_at || 0));
+  }, [insights, activeMemberId, activeName]);
 
   const selected = list.find((s) => s.id === selectedId) || list[0] || null;
-  const rawData = selected?.member || selected?.snapshot || null;
-  const snapshotData = typeof rawData === 'string' ? (() => { try { return JSON.parse(rawData); } catch { return null; } })() : rawData;
+  const rawData = selected?.member || selected?.snapshot || selected?.data || (selected?.scores ? selected : null);
+  const snapshotData = typeof rawData === 'string' ? (() => { try { return JSON.parse(rawData); } catch { return selected; } })() : (rawData || selected);
+
 
   const selectMember = (id) => {
     setMember(id);
@@ -83,10 +101,17 @@ export default function PastInsights() {
       <div className="assess-for" style={{ marginBottom: 24 }}>
         <div className="assess-for-head">
           <span className="assess-for-label">Showing insights for</span>
-          <button className="btn btn-primary btn-sm" onClick={() => navigate(ROUTES.assessment)}>
-            <Icon name="sparkle" size="sm" />
-            Run AI Assessment
-          </button>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button className="btn btn-ghost btn-sm" onClick={() => navigate(ROUTES.aiAssistant)}>
+              <Icon name="sparkles" size="sm" />
+              View LLM Logs
+            </button>
+            <button className="btn btn-primary btn-sm" onClick={() => navigate(ROUTES.assessment)}>
+              <Icon name="sparkle" size="sm" />
+              Run AI Assessment
+            </button>
+          </div>
+
         </div>
         {members.length > 0 && (
           <div className="assess-for-chips">

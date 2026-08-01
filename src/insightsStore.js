@@ -32,11 +32,14 @@ export function addInsight(memberId, memberSnapshot) {
     memberInitials: memberSnapshot.initials || '',
     createdAt: new Date().toISOString(),
     member: { ...memberSnapshot },
+    snapshot: { ...memberSnapshot },
   };
-  cache = [snapshot, ...cache];
+  cache = [snapshot, ...cache.filter((s) => s.id !== snapshot.id)];
+  loaded = true;
   if (typeof window !== 'undefined') apiPost('/api/insights', snapshot).catch(() => {});
   return snapshot;
 }
+
 
 export function refreshInsights() {
   return refresh();
