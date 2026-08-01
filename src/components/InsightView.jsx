@@ -41,10 +41,10 @@ export default function InsightView({ data }) {
                   <Icon name="ruler" size="xs" /> BMI {member.bmi}
                 </span>
                 <span>
-                  <Icon name="pill" size="xs" /> {Array.isArray(member.conditions) ? (member.conditions.join(', ') || 'None') : (member.conditions || 'None')}
+                  <Icon name="pill" size="xs" /> {Array.isArray(member.conditions) ? (member.conditions.join(', ') || 'None') : (typeof member.conditions === 'string' ? member.conditions : 'None')}
                 </span>
                 <span>
-                  <Icon name="calendar" size="xs" /> Assessed {member.assessed}
+                  <Icon name="calendar" size="xs" /> Assessed {typeof member.assessed === 'string' ? member.assessed : (member.assessed ? String(member.assessed) : '—')}
                 </span>
               </div>
             </div>
@@ -61,7 +61,7 @@ export default function InsightView({ data }) {
       </div>
 
       <div className="risk-cards-grid stagger-children">
-        {(member.scores || []).map((r) => (
+        {(Array.isArray(member.scores) ? member.scores : []).map((r) => (
           <div className="risk-card" key={r.label}>
             <div className={`risk-card-accent ${r.level}`}></div>
             <div className="risk-card-title">{r.label}</div>

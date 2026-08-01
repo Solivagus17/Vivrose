@@ -65,7 +65,8 @@ export default function PastInsights() {
   }, [insights, activeMemberId]);
 
   const selected = list.find((s) => s.id === selectedId) || list[0] || null;
-  const snapshotData = selected?.member || selected?.snapshot || null;
+  const rawData = selected?.member || selected?.snapshot || null;
+  const snapshotData = typeof rawData === 'string' ? (() => { try { return JSON.parse(rawData); } catch { return null; } })() : rawData;
 
   const selectMember = (id) => {
     setMember(id);
