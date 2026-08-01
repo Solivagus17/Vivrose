@@ -67,6 +67,16 @@ try {
     console.log(`OK  ${name}  (${html.length} chars)`);
   }
 
+  for (const name of ['Login', 'Register']) {
+    const mod = await server.ssrLoadModule(`/src/pages/${name}.jsx`);
+    const Comp = mod.default;
+    const html = renderToString(
+      React.createElement(MemoryRouter, { initialEntries: [`/${name.toLowerCase()}`] }, React.createElement(Comp))
+    );
+    if (!html || html.length < 100) throw new Error(`Suspiciously small render for ${name}`);
+    console.log(`OK  ${name}  (${html.length} chars)`);
+  }
+
   const appMod = await server.ssrLoadModule('/src/App.jsx');
   const App = appMod.default;
 
@@ -79,15 +89,15 @@ try {
   const dash = renderToString(
     withProvider(React.createElement(MemoryRouter, { initialEntries: [ROUTES.dashboard] }, React.createElement(App)))
   );
-  if (!dash || dash.length < 100) throw new Error('Suspiciously small render for App dashboard');
-  console.log(`OK  App (dashboard view)  (${dash.length} chars)`);
+  if (!dash.includes('auth-loading')) throw new Error('App dashboard should be behind the auth gate during SSR');
+  console.log(`OK  App (dashboard view, auth-gated)  (${dash.length} chars)`);
 
   const editPath = ROUTES.reportsEdit.replace(':id', 'rep-seed-1');
   const edit = renderToString(
     withProvider(React.createElement(MemoryRouter, { initialEntries: [editPath] }, React.createElement(App)))
   );
-  if (!edit || edit.length < 100) throw new Error('Suspiciously small render for App edit view');
-  console.log(`OK  App (edit report view)  (${edit.length} chars)`);
+  if (!edit.includes('auth-loading')) throw new Error('App edit view should be behind the auth gate during SSR');
+  console.log(`OK  App (edit report view, auth-gated)  (${edit.length} chars)`);
 
   console.log('ALL SMOKE TESTS PASSED');
 } finally {

@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../authContext.jsx';
+import Icon from './Icon.jsx';
+import { ROUTES } from '../routes.js';
 
 function Toggle({ on, onChange }) {
   return (
@@ -21,6 +25,8 @@ function SettingsRow({ label, desc, children }) {
 }
 
 export default function Settings() {
+  const { user, profile, signOut } = useAuth();
+  const navigate = useNavigate();
   const [autoSuggest, setAutoSuggest] = useState(true);
   const [highAlerts, setHighAlerts] = useState(true);
   const [missingReminders, setMissingReminders] = useState(true);
@@ -28,6 +34,26 @@ export default function Settings() {
   const [explainLevel, setExplainLevel] = useState('Standard');
   const [highThreshold, setHighThreshold] = useState(70);
   const [modThreshold, setModThreshold] = useState(40);
+  const [signingOut, setSigningOut] = useState(false);
+
+  const displayName = profile?.name || user?.displayName || 'Family Health Manager';
+  const displayEmail = profile?.email || user?.email || '';
+  const initials = (displayName || 'U')
+    .split(/\s+/)
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
+
+  const handleSignOut = async () => {
+    setSigningOut(true);
+    try {
+      await signOut();
+      navigate(ROUTES.home);
+    } finally {
+      setSigningOut(false);
+    }
+  };
 
   return (
     <>
@@ -37,6 +63,28 @@ export default function Settings() {
       </div>
 
       <div className="settings-grid">
+
+        {/* Account Card */}
+        <div className="settings-section">
+          <h3>Account</h3>
+          <div className="section-desc">Your signed-in identity and session controls.</div>
+          <div className="settings-account-card">
+            <div className="avatar settings-avatar">{initials}</div>
+            <div className="settings-account-info">
+              <div className="settings-account-name">{displayName}</div>
+              {displayEmail && (
+                <div className="settings-account-email">{displayEmail}</div>
+              )}
+              <div className="settings-account-provider">
+                {user?.providerData?.[0]?.providerId === 'google.com'
+                  ? '🔐 Signed in with Google'
+                  : '🔐 Signed in with email'}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Health Monitoring */}
         <div className="settings-section">
           <h3>Health Monitoring</h3>
           <div className="section-desc">Configure risk thresholds and health parameters.</div>
@@ -66,6 +114,7 @@ export default function Settings() {
           </SettingsRow>
         </div>
 
+        {/* Notification Preferences */}
         <div className="settings-section">
           <h3>Notification Preferences</h3>
           <div className="section-desc">Manage how you receive health alerts.</div>
@@ -80,6 +129,7 @@ export default function Settings() {
           </SettingsRow>
         </div>
 
+        {/* AI Preferences */}
         <div className="settings-section">
           <h3>AI Preferences</h3>
           <div className="section-desc">Adjust how AI explanations are presented.</div>
@@ -104,6 +154,29 @@ export default function Settings() {
             </select>
           </SettingsRow>
         </div>
+
+        {/* Session / Sign Out */}
+        <div className="settings-section">
+          <h3>Session</h3>
+          <div className="section-desc">Sign out to end your session on this device.</div>
+          <div className="settings-signout-row">
+            <div>
+              <div className="settings-row-label">Sign Out</div>
+              <div className="settings-row-desc">You will be returned to the home screen.</div>
+            </div>
+            <button
+              id="settings-signout-btn"
+              type="button"
+              className="btn settings-signout-btn"
+              onClick={handleSignOut}
+              disabled={signingOut}
+            >
+              <Icon name="logout" size="sm" />
+              {signingOut ? 'Signing out\u2026' : 'Sign Out'}
+            </button>
+          </div>
+        </div>
+
       </div>
     </>
   );

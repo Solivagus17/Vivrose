@@ -1,3 +1,5 @@
+import { createApiStore } from './storeUtils.js';
+
 export const MEDICINES_STORAGE_KEY = 'vivrose.medicines.v1';
 
 export const MEDICINE_STATUS = ['Active', 'Completed', 'Discontinued'];
@@ -54,23 +56,14 @@ export const SEED_MEDICINES = [
   },
 ];
 
+const store = createApiStore({ seed: SEED_MEDICINES, listPath: '/api/medicines', bulkPath: '/api/medicines/bulk' });
+
 export function loadMedicines() {
-  if (typeof window === 'undefined') return SEED_MEDICINES;
-  try {
-    const raw = window.localStorage.getItem(MEDICINES_STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch {
-    /* ignore */
-  }
-  return SEED_MEDICINES;
+  return store.load();
 }
 
 export function saveMedicines(medicines) {
-  try {
-    window.localStorage.setItem(MEDICINES_STORAGE_KEY, JSON.stringify(medicines));
-  } catch {
-    /* ignore */
-  }
+  store.save(medicines);
 }
 
 export function addMedicine(medicine) {
@@ -84,3 +77,5 @@ export function updateMedicine(id, medicine) {
   saveMedicines(next);
   return next;
 }
+
+export const refreshMedicines = () => store.refresh();

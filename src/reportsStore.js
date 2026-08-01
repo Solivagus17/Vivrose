@@ -1,3 +1,5 @@
+import { createApiStore } from './storeUtils.js';
+
 export const REPORTS_STORAGE_KEY = 'vivrose.medical-reports.v1';
 
 export const REPORT_TYPES = [
@@ -49,23 +51,14 @@ export const SEED_REPORTS = [
   },
 ];
 
+const store = createApiStore({ seed: SEED_REPORTS, listPath: '/api/reports', bulkPath: '/api/reports/bulk' });
+
 export function loadReports() {
-  if (typeof window === 'undefined') return SEED_REPORTS;
-  try {
-    const raw = window.localStorage.getItem(REPORTS_STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch {
-    /* ignore */
-  }
-  return SEED_REPORTS;
+  return store.load();
 }
 
 export function saveReports(records) {
-  try {
-    window.localStorage.setItem(REPORTS_STORAGE_KEY, JSON.stringify(records));
-  } catch {
-    /* ignore */
-  }
+  store.save(records);
 }
 
 export function addReport(record) {
@@ -79,3 +72,5 @@ export function updateReport(id, record) {
   saveReports(next);
   return next;
 }
+
+export const refreshReports = () => store.refresh();

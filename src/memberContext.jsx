@@ -1,11 +1,11 @@
 import React from 'react';
-import { FAMILY_MEMBERS, createFamilyMember } from './data/data.js';
+import { addMember, loadMembers, refreshMembers, removeMember, updateMember } from './membersStore.js';
 
 const DEFAULT_ID = 'rajesh';
 
 export const MemberContext = React.createContext({
-  members: FAMILY_MEMBERS,
-  member: FAMILY_MEMBERS.find((m) => m.id === DEFAULT_ID) || FAMILY_MEMBERS[0],
+  members: loadMembers(),
+  member: loadMembers().find((m) => m.id === DEFAULT_ID) || loadMembers()[0],
   setMember: () => {},
   addMember: () => {},
   updateMember: () => {},
@@ -13,33 +13,40 @@ export const MemberContext = React.createContext({
 });
 
 export function MemberProvider({ children }) {
-  const [members, setMembers] = React.useState(FAMILY_MEMBERS);
+  const [members, setMembers] = React.useState(loadMembers);
   const [memberId, setMemberId] = React.useState(DEFAULT_ID);
   const member = members.find((m) => m.id === memberId) || members[0];
 
-  const addMember = (profile) => {
-    const newMember = createFamilyMember(profile);
-    setMembers((prev) => [...prev, newMember]);
+  React.useEffect(() => {
+    refreshMembers().then(setMembers);
+  }, []);
+
+  const sync = () => setMembers(loadMembers());
+
+  const add = (profile) => {
+    const newMember = addMember(profile);
+    sync();
     return newMember;
   };
 
-  const updateMember = (id, patch) => {
-    setMembers((prev) => prev.map((m) => (m.id === id ? { ...m, ...patch } : m)));
+  const update = (id, patch) => {
+    updateMember(id, patch);
+    sync();
   };
 
-  const removeMember = (id) => {
-    setMembers((prev) => (prev.length <= 1 ? prev : prev.filter((m) => m.id !== id)));
+  const remove = (id) => {
+    if (members.length <= 1) return;
+    removeMember(id);
     setMemberId((prevId) => {
       if (prevId !== id) return prevId;
-      const remaining = members.filter((m) => m.id !== id);
+      const remaining = loadMembers();
       return remaining.length ? remaining[0].id : prevId;
     });
+    sync();
   };
 
   return (
-    <MemberContext.Provider
-      value={{ members, member, setMember: setMemberId, addMember, updateMember, removeMember }}
-    >
+    <MemberContext.Provider value={{ members, member, setMember: setMemberId, addMember: add, updateMember: update, removeMember: remove }}>
       {children}
     </MemberContext.Provider>
   );

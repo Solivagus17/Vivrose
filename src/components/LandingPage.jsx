@@ -61,7 +61,7 @@ export default function LandingPage() {
           <a href="#">For Families</a>
           <a href="#">Health AI</a>
           <a href="#">About</a>
-          <button className="btn btn-primary" onClick={() => navigate(ROUTES.dashboard)}>
+          <button className="btn btn-primary" onClick={() => navigate(ROUTES.login)}>
             Open App
           </button>
         </div>
@@ -89,11 +89,11 @@ export default function LandingPage() {
               family. One account, one dashboard, plain-language guidance.
             </p>
             <div className="hero-actions">
-              <button className="btn btn-primary btn-lg" onClick={() => navigate(ROUTES.dashboard)}>
+              <button className="btn btn-primary btn-lg" onClick={() => navigate(ROUTES.login)}>
                 <Icon name="sparkle" size="md" />
                 Start with My Family
               </button>
-              <button className="btn btn-secondary btn-lg" onClick={() => navigate(ROUTES.assessment)}>
+              <button className="btn btn-secondary btn-lg" onClick={() => navigate(ROUTES.login)}>
                 Take a Health Assessment
                 <Icon name="arrowRight" size="md" />
               </button>

@@ -1,7 +1,8 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import Icon from './Icon.jsx';
 import { ROUTES } from '../routes.js';
+import { useAuth } from '../authContext.jsx';
 
 const NAV_SECTIONS = [
   {
@@ -42,6 +43,21 @@ const NAV_SECTIONS = [
 ];
 
 export default function Sidebar() {
+  const { user, profile, signOut } = useAuth();
+  const navigate = useNavigate();
+  const name = profile?.name || user?.displayName || 'Family Health Manager';
+  const initials = (name || 'U')
+    .split(/\s+/)
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
+
+  const onSignOut = async () => {
+    await signOut();
+    navigate(ROUTES.home);
+  };
+
   return (
     <aside className="sidebar">
       <div className="sidebar-logo">
@@ -91,11 +107,20 @@ export default function Sidebar() {
 
       <div className="sidebar-footer">
         <div className="sidebar-user">
-          <div className="avatar">AM</div>
+          <div className="avatar">{initials}</div>
           <div className="user-info">
-            <div className="user-name">Arjun Mehta</div>
+            <div className="user-name">{name}</div>
             <div className="user-role">Family Health Manager</div>
           </div>
+          <button
+            type="button"
+            className="logout-btn"
+            title="Sign out"
+            aria-label="Sign out"
+            onClick={onSignOut}
+          >
+            <Icon name="logout" size="sm" />
+          </button>
         </div>
       </div>
     </aside>

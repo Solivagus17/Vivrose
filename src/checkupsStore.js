@@ -1,3 +1,5 @@
+import { createApiStore } from './storeUtils.js';
+
 export const CHECKUPS_STORAGE_KEY = 'vivrose.checkups.v1';
 
 export const CHECKUP_STATUS = ['Scheduled', 'Completed', 'Cancelled'];
@@ -38,23 +40,14 @@ export const SEED_CHECKUPS = [
   },
 ];
 
+const store = createApiStore({ seed: SEED_CHECKUPS, listPath: '/api/checkups', bulkPath: '/api/checkups/bulk' });
+
 export function loadCheckups() {
-  if (typeof window === 'undefined') return SEED_CHECKUPS;
-  try {
-    const raw = window.localStorage.getItem(CHECKUPS_STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch {
-    /* ignore */
-  }
-  return SEED_CHECKUPS;
+  return store.load();
 }
 
 export function saveCheckups(checkups) {
-  try {
-    window.localStorage.setItem(CHECKUPS_STORAGE_KEY, JSON.stringify(checkups));
-  } catch {
-    /* ignore */
-  }
+  store.save(checkups);
 }
 
 export function addCheckup(checkup) {
@@ -68,3 +61,5 @@ export function updateCheckup(id, checkup) {
   saveCheckups(next);
   return next;
 }
+
+export const refreshCheckups = () => store.refresh();

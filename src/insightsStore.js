@@ -1,40 +1,29 @@
-import { FAMILY_MEMBERS } from './data/data.js';
+import { apiGet, apiPost } from './api.js';
 
 export const INSIGHTS_STORAGE_KEY = 'vivrose.insights.v1';
 
-function toIso(dateString) {
-  const d = new Date(dateString);
-  return Number.isNaN(d.getTime()) ? null : d.toISOString();
-}
+let cache = [];
+let loaded = false;
 
-export const SEED_INSIGHTS = FAMILY_MEMBERS.filter((m) => toIso(m.assessed))
-  .map((m) => ({
-    id: `ins-seed-${m.id}`,
-    memberId: m.id,
-    memberName: m.name,
-    memberInitials: m.initials,
-    createdAt: toIso(m.assessed),
-    member: { ...m },
-  }))
-  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+async function refresh() {
+  if (typeof window === 'undefined') return cache;
+  try {
+    const list = await apiGet('/api/insights');
+    cache = Array.isArray(list) ? list : [];
+    loaded = true;
+  } catch {
+    /* offline — keep cache */
+  }
+  return cache;
+}
 
 export function loadInsights() {
-  if (typeof window === 'undefined') return SEED_INSIGHTS;
-  try {
-    const raw = window.localStorage.getItem(INSIGHTS_STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch {
-    /* ignore */
-  }
-  return SEED_INSIGHTS;
+  if (typeof window !== 'undefined' && !loaded) refresh();
+  return cache;
 }
 
-export function saveInsights(insights) {
-  try {
-    window.localStorage.setItem(INSIGHTS_STORAGE_KEY, JSON.stringify(insights));
-  } catch {
-    /* ignore */
-  }
+export function saveInsights() {
+  /* insights are appended individually via addInsight */
 }
 
 export function addInsight(memberId, memberSnapshot) {
@@ -46,7 +35,11 @@ export function addInsight(memberId, memberSnapshot) {
     createdAt: new Date().toISOString(),
     member: { ...memberSnapshot },
   };
-  const next = [snapshot, ...loadInsights()];
-  saveInsights(next);
+  cache = [snapshot, ...cache];
+  if (typeof window !== 'undefined') apiPost('/api/insights', snapshot).catch(() => {});
   return snapshot;
+}
+
+export function refreshInsights() {
+  return refresh();
 }

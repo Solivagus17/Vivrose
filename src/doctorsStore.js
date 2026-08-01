@@ -1,3 +1,5 @@
+import { createApiStore } from './storeUtils.js';
+
 export const DOCTORS_STORAGE_KEY = 'vivrose.doctors.v1';
 
 export const SPECIALTIES = [
@@ -56,23 +58,14 @@ export const SEED_DOCTORS = [
   },
 ];
 
+const store = createApiStore({ seed: SEED_DOCTORS, listPath: '/api/doctors', bulkPath: '/api/doctors/bulk' });
+
 export function loadDoctors() {
-  if (typeof window === 'undefined') return SEED_DOCTORS;
-  try {
-    const raw = window.localStorage.getItem(DOCTORS_STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch {
-    /* ignore */
-  }
-  return SEED_DOCTORS;
+  return store.load();
 }
 
 export function saveDoctors(doctors) {
-  try {
-    window.localStorage.setItem(DOCTORS_STORAGE_KEY, JSON.stringify(doctors));
-  } catch {
-    /* ignore */
-  }
+  store.save(doctors);
 }
 
 export function addDoctor(doctor) {
@@ -86,3 +79,5 @@ export function updateDoctor(id, doctor) {
   saveDoctors(next);
   return next;
 }
+
+export const refreshDoctors = () => store.refresh();
