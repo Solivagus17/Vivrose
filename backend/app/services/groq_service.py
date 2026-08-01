@@ -6,7 +6,7 @@ import requests
 from flask import current_app
 
 GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions'
-MODEL_NAME = 'llama-3.1-8b-instant'
+MODEL_NAME = 'openai/gpt-oss-120b'
 
 LLM_LOGS = []
 
@@ -37,7 +37,11 @@ def _log_interaction(call_type, messages, response_content, status_code, duratio
     print(f"\n==================== [LLM LOG: {call_type}] ====================")
     print(f"Time: {entry['timestamp']} | Status: {entry['statusCode']} | Duration: {entry['durationMs']}ms")
     print(f"Messages Payload:\n{json.dumps(messages, indent=2)}")
-    print(f"Response:\n{response_content if response_content else f'ERROR: {error}'}")
+    resp_str = str(response_content if response_content else f'ERROR: {error}')
+    try:
+        print(f"Response:\n{resp_str}")
+    except UnicodeEncodeError:
+        print(f"Response:\n{resp_str.encode('ascii', 'replace').decode('ascii')}")
     print("=================================================================\n")
 
     # Append interaction to local groq_api_conversations.txt file
@@ -78,7 +82,7 @@ def get_llm_logs():
 
 
 def analyze_health(data, baseline_result):
-    """Call Groq API (llama-3.1-8b-instant) to generate a comprehensive AI clinical health report."""
+    """Call Groq API (openai/gpt-oss-120b) to generate a comprehensive AI clinical health report."""
     api_key = _get_api_key()
     if not api_key:
         _log_interaction('AI Health Assessment', [], None, 401, 0, 'GROQ_API_KEY missing')
@@ -105,7 +109,7 @@ def analyze_health(data, baseline_result):
 
     prompt = f"""
 System: You are an expert clinical AI decision support system (CDSS) evaluating health risk data for a family member.
-Analyze the patient profile below and generate an exhaustive, evidence-based AI health assessment.
+Analyze the patient profile below and calculate personalized, evidence-based health risk scores (5-95%) for EACH of the 4 conditions: Diabetes, Hypertension, CVD, and Stroke.
 
 Patient Profile:
 - Name: {name}
@@ -117,10 +121,34 @@ Patient Profile:
 Respond strictly in valid JSON format with the following keys:
 {{
   "scores": [
-    {{"label": "Diabetes", "score": 75, "level": "high", "trend": "up", "trendLabel": "Rising", "points": "2,10 10,18 18,11 26,26 34,34 38,38", "color": "#C43C3C"}},
-    {{"label": "Hypertension", "score": 60, "level": "moderate", "trend": "flat", "trendLabel": "Stable", "points": "2,10 10,12 18,10 26,9 34,9 38,9", "color": "#D49A2A"}},
-    {{"label": "CVD", "score": 45, "level": "moderate", "trend": "flat", "trendLabel": "Stable", "points": "2,10 10,12 18,10 26,9 34,9 38,9", "color": "#D49A2A"}},
-    {{"label": "Stroke", "score": 30, "level": "low", "trend": "flat", "trendLabel": "Stable", "points": "2,10 10,9 18,9 26,9 34,9 38,9", "color": "#2E9E6A"}}
+    {{
+      "label": "Diabetes",
+      "score": <calculated integer risk 5 to 95 based on HbA1c, Fasting Glucose, BMI, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    }},
+    {{
+      "label": "Hypertension",
+      "score": <calculated integer risk 5 to 95 based on BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    }},
+    {{
+      "label": "CVD",
+      "score": <calculated integer risk 5 to 95 based on Cholesterol, BP, BMI, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    }},
+    {{
+      "label": "Stroke",
+      "score": <calculated integer risk 5 to 95 based on BP, smoking, family history>,
+      "level": "<low|moderate|high>",
+      "trend": "<up|flat|down>",
+      "trendLabel": "<Rising|Stable|Improving>"
+    }}
   ],
   "summary": "HTML executive clinical summary using <strong> tags for key findings",
   "report_summary": "Plain text version of summary without HTML tags",
@@ -184,8 +212,38 @@ Respond strictly in valid JSON format with the following keys:
             if isinstance(parsed.get('recommendation_list'), list) and parsed['recommendation_list']:
                 merged['recommendationList'] = parsed['recommendation_list']
             if isinstance(parsed.get('scores'), list) and parsed['scores']:
-                merged['scores'] = parsed['scores']
-                top = max(parsed['scores'], key=lambda s: int(s.get('score', 0)))
+                processed_scores = []
+                for s in parsed['scores']:
+                    label = s.get('label', 'Risk')
+                    try:
+                        score = max(5, min(95, int(s.get('score', 20))))
+                    except (ValueError, TypeError):
+                        score = 20
+                    level = s.get('level')
+                    if level not in ('low', 'moderate', 'high'):
+                        level = 'low' if score < 30 else 'moderate' if score <= 60 else 'high'
+                    trend = s.get('trend') or ('up' if level == 'high' else 'flat')
+                    trend_label = s.get('trendLabel') or ('Rising' if trend == 'up' else 'Stable')
+                    color = '#C43C3C' if level == 'high' else '#D49A2A' if level == 'moderate' else '#2E9E6A'
+                    
+                    peaks = {'up': [2, 10, 10, 9, 18, 11, 26, 12, 34, 13, 38, 13],
+                             'down': [2, 12, 10, 11, 18, 10, 26, 9, 34, 8, 38, 7],
+                             'flat': [2, 10, 10, 9, 18, 9, 26, 9, 34, 9, 38, 9]}
+                    scale = 0.6 + (score / 100.0) * 0.8
+                    raw_pts = peaks.get(trend, peaks['flat'])
+                    points = ' '.join(f"{raw_pts[i]},{round(raw_pts[i + 1] * scale, 1)}" for i in range(0, len(raw_pts), 2))
+
+                    processed_scores.append({
+                        'label': label,
+                        'score': score,
+                        'level': level,
+                        'trend': trend,
+                        'trendLabel': trend_label,
+                        'points': s.get('points') or points,
+                        'color': color
+                    })
+                merged['scores'] = processed_scores
+                top = max(processed_scores, key=lambda s: int(s.get('score', 0)))
                 merged['level'] = top.get('level', merged.get('level'))
                 merged['risk'] = top.get('label', merged.get('risk'))
             if isinstance(parsed.get('factors'), list) and parsed['factors']:
@@ -293,14 +351,15 @@ def chat_reply(message, members_data, history=None):
         members_summary = "No family members added yet."
 
     system_prompt = (
-        "You are VivRose AI, an empathetic and knowledgeable family health assistant. "
+        "You are VivRose AI, an empathetic and knowledgeable clinical family health assistant. "
         "Help users understand their family members' health, risk scores, vitals, symptoms, and get evidence-based medical advice.\n\n"
         "### FAMILY HEALTH CONTEXT:\n"
         f"{members_summary}\n\n"
-        "### RULES:\n"
-        "1. Be empathetic, clear, and professional.\n"
-        "2. Use the family health context above to give accurate, personalised answers.\n"
-        "3. For any medical advice or health guidance, always end with: "
+        "### FORMATTING & RESPONSE RULES:\n"
+        "1. Be empathetic, clear, structured, and professional.\n"
+        "2. Structure your answer using clear section headings (e.g. ### Header), bold highlights (**item**), and concise bullet lists.\n"
+        "3. Provide direct, focused clinical guidance without unnecessary repetition so that your response completes fully.\n"
+        "4. Always end your response with: "
         "*Note: It is always better to consult a real doctor or qualified healthcare professional.*"
     )
 
@@ -324,7 +383,7 @@ def chat_reply(message, members_data, history=None):
         'model': MODEL_NAME,
         'messages': messages,
         'temperature': 0.4,
-        'max_tokens': 600,
+        'max_tokens': 1200,
     }
 
     start_t = time.time()

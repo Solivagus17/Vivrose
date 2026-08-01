@@ -17,13 +17,17 @@ function stripHtml(html) {
   return String(html || '').replace(/<[^>]+>/g, '');
 }
 
-function formatInlineBold(text) {
+function formatInline(text) {
   if (!text) return '';
-  const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
+  const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`)/g);
   return parts.map((part, i) => {
     if ((part.startsWith('**') && part.endsWith('**')) || (part.startsWith('*') && part.endsWith('*') && part.length > 2)) {
-      const boldText = part.slice(part.startsWith('**') ? 2 : 1, part.endsWith('**') ? -2 : -1);
-      return <strong key={i} style={{ fontWeight: 600 }}>{boldText}</strong>;
+      const inner = part.slice(part.startsWith('**') ? 2 : 1, part.endsWith('**') ? -2 : -1);
+      return <strong key={i} style={{ fontWeight: 600 }}>{inner}</strong>;
+    }
+    if (part.startsWith('`') && part.endsWith('`')) {
+      const code = part.slice(1, -1);
+      return <code key={i} style={{ background: '#f1f5f9', padding: '1px 5px', borderRadius: 4, fontFamily: 'monospace', fontSize: '0.85em' }}>{code}</code>;
     }
     return part;
   });
@@ -31,16 +35,79 @@ function formatInlineBold(text) {
 
 function renderFormattedText(text) {
   if (!text) return null;
-  const lines = String(text).split('\n');
 
-  return lines.map((line, idx) => {
+  const rawLines = String(text).split('\n');
+  const elements = [];
+  let i = 0;
+
+  while (i < rawLines.length) {
+    const line = rawLines[i];
     const trimmed = line.trim();
-    if (!trimmed) return <div key={idx} style={{ height: 6 }} />;
 
+    // Markdown Table Parser (| col 1 | col 2 |)
+    if (trimmed.startsWith('|') && trimmed.endsWith('|') && trimmed.includes('|')) {
+      const tableRows = [];
+      while (i < rawLines.length && rawLines[i].trim().startsWith('|') && rawLines[i].trim().endsWith('|')) {
+        const rowStr = rawLines[i].trim();
+        if (!/^\|[\s:\-|\+]+\|$/.test(rowStr)) {
+          const cells = rowStr.slice(1, -1).split('|').map((c) => c.trim());
+          tableRows.push(cells);
+        }
+        i++;
+      }
+      if (tableRows.length > 0) {
+        const [headerRow, ...bodyRows] = tableRows;
+        elements.push(
+          <div key={`table-${i}`} style={{ overflowX: 'auto', margin: '10px 0' }}>
+            <table style={{
+              width: '100%',
+              borderCollapse: 'collapse',
+              fontSize: '0.85rem',
+              border: '1px solid #e2e8f0',
+              borderRadius: 8,
+              background: '#ffffff'
+            }}>
+              {headerRow && (
+                <thead>
+                  <tr style={{ background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
+                    {headerRow.map((cell, cIdx) => (
+                      <th key={cIdx} style={{ padding: '8px 12px', textAlign: 'left', fontWeight: 700, color: '#1e293b' }}>
+                        {formatInline(cell)}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+              )}
+              <tbody>
+                {bodyRows.map((row, rIdx) => (
+                  <tr key={rIdx} style={{ borderBottom: '1px solid #f1f5f9', background: rIdx % 2 === 1 ? '#fafafa' : '#ffffff' }}>
+                    {row.map((cell, cIdx) => (
+                      <td key={cIdx} style={{ padding: '8px 12px', color: '#334155' }}>
+                        {formatInline(cell)}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+        continue;
+      }
+    }
+
+    // Blank line
+    if (!trimmed) {
+      elements.push(<div key={`space-${i}`} style={{ height: 6 }} />);
+      i++;
+      continue;
+    }
+
+    // Disclaimer
     if (trimmed.toLowerCase().includes('note:') || trimmed.toLowerCase().includes('disclaimer:')) {
       const cleaned = trimmed.replace(/^\*+|\*+$/g, '');
-      return (
-        <div key={idx} style={{
+      elements.push(
+        <div key={`disc-${i}`} style={{
           marginTop: 10,
           marginBottom: 4,
           padding: '8px 12px',
@@ -58,33 +125,77 @@ function renderFormattedText(text) {
           <span>{cleaned}</span>
         </div>
       );
+      i++;
+      continue;
     }
 
-    if (trimmed.startsWith('###') || trimmed.startsWith('##') || (trimmed.endsWith(':') && trimmed.length < 50 && !trimmed.includes('http'))) {
-      const headerText = trimmed.replace(/^#+\s*/, '').replace(/:$/, '');
-      return (
-        <div key={idx} style={{ fontWeight: 700, fontSize: '0.95rem', marginTop: 8, marginBottom: 4, color: '#0f172a' }}>
-          {headerText}
+    // Horizontal Rule
+    if (trimmed === '---' || trimmed === '***' || trimmed === '___') {
+      elements.push(<hr key={`hr-${i}`} style={{ border: 'none', borderTop: '1px solid #e2e8f0', margin: '10px 0' }} />);
+      i++;
+      continue;
+    }
+
+    // Headers (#, ##, ###, #### or trailing :)
+    if (trimmed.startsWith('#')) {
+      const headerText = trimmed.replace(/^#+\s*/, '');
+      const level = (trimmed.match(/^#+/) || [''])[0].length;
+      const fontSize = level === 1 ? '1.1rem' : level === 2 ? '1.05rem' : '0.95rem';
+      elements.push(
+        <div key={`h-${i}`} style={{ fontWeight: 700, fontSize, marginTop: 10, marginBottom: 4, color: '#0f172a' }}>
+          {formatInline(headerText)}
         </div>
       );
+      i++;
+      continue;
     }
 
+    if (trimmed.endsWith(':') && trimmed.length < 50 && !trimmed.includes('http')) {
+      elements.push(
+        <div key={`h-${i}`} style={{ fontWeight: 700, fontSize: '0.95rem', marginTop: 10, marginBottom: 4, color: '#0f172a' }}>
+          {formatInline(trimmed.slice(0, -1))}
+        </div>
+      );
+      i++;
+      continue;
+    }
+
+    // Bullet lists
     if (trimmed.startsWith('•') || trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
       const bulletContent = trimmed.replace(/^[•\-\*]\s*/, '');
-      return (
-        <div key={idx} style={{ display: 'flex', gap: 8, marginTop: 3, marginBottom: 3, paddingLeft: 4 }}>
+      elements.push(
+        <div key={`b-${i}`} style={{ display: 'flex', gap: 8, marginTop: 3, marginBottom: 3, paddingLeft: 4 }}>
           <span style={{ color: '#0d9488', fontWeight: 700 }}>•</span>
-          <div>{formatInlineBold(bulletContent)}</div>
+          <div>{formatInline(bulletContent)}</div>
         </div>
       );
+      i++;
+      continue;
     }
 
-    return (
-      <div key={idx} style={{ marginBottom: 4 }}>
-        {formatInlineBold(line)}
+    // Numbered lists
+    const numMatch = trimmed.match(/^(\d+)[\.\)]\s+(.*)/);
+    if (numMatch) {
+      elements.push(
+        <div key={`num-${i}`} style={{ display: 'flex', gap: 8, marginTop: 3, marginBottom: 3, paddingLeft: 4 }}>
+          <span style={{ color: '#475569', fontWeight: 700 }}>{numMatch[1]}.</span>
+          <div>{formatInline(numMatch[2])}</div>
+        </div>
+      );
+      i++;
+      continue;
+    }
+
+    // Regular paragraph
+    elements.push(
+      <div key={`p-${i}`} style={{ marginBottom: 4 }}>
+        {formatInline(line)}
       </div>
     );
-  });
+    i++;
+  }
+
+  return elements;
 }
 
 function buildReply(question, members) {
@@ -161,21 +272,56 @@ function buildReply(question, members) {
   return ans + DOCTOR_DISCLAIMER;
 }
 
+const STORAGE_KEY = 'vivrose_chat_messages';
+
+const INITIAL_MESSAGES = [
+  {
+    id: 'intro',
+    role: 'ai',
+    text: "Hi, I'm VivRose AI \u2014 your family health assistant. I can answer questions about your family's risk scores, vitals, medical advice, and next steps. What would you like to know?",
+  },
+];
+
+function loadSavedMessages() {
+  if (typeof window === 'undefined') return INITIAL_MESSAGES;
+  try {
+    const saved = sessionStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch (e) {
+    console.warn('Failed to load chat history from sessionStorage:', e);
+  }
+  return INITIAL_MESSAGES;
+}
+
 export default function AiAssistant() {
   const { members } = useMember();
-  const [messages, setMessages] = useState([
-    {
-      id: 'intro',
-      role: 'ai',
-      text: "Hi, I'm VivRose AI \u2014 your family health assistant. I can answer questions about your family's risk scores, vitals, medical advice, and next steps. What would you like to know?",
-    },
-  ]);
+  const [messages, setMessages] = useState(loadSavedMessages);
   const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
   const [showLogs, setShowLogs] = useState(false);
   const [llmLogs, setLlmLogs] = useState([]);
   const [loadingLogs, setLoadingLogs] = useState(false);
   const scrollRef = useRef(null);
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+    } catch (e) {
+      console.warn('Failed to save chat history to sessionStorage:', e);
+    }
+  }, [messages]);
+
+  const clearChat = () => {
+    setMessages(INITIAL_MESSAGES);
+    try {
+      sessionStorage.removeItem(STORAGE_KEY);
+    } catch (e) {
+      /* ignore */
+    }
+  };
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -250,14 +396,24 @@ export default function AiAssistant() {
           <div className="page-title">VivRose AI</div>
           <div className="page-subtitle">Ask anything about your family&apos;s health, risks, and next steps.</div>
         </div>
-        <button
-          className="btn btn-sm"
-          onClick={openLogsModal}
-          style={{ background: 'var(--card-bg, #ffffff)', border: '1px solid var(--border-color, #e2e8f0)', display: 'flex', alignItems: 'center', gap: 6 }}
-        >
-          <Icon name="sparkles" size="xs" />
-          View LLM Logs
-        </button>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button
+            className="btn btn-sm"
+            onClick={clearChat}
+            style={{ background: 'var(--card-bg, #ffffff)', border: '1px solid var(--border-color, #e2e8f0)', color: '#64748b' }}
+            title="Clear current chat history"
+          >
+            Clear Chat
+          </button>
+          <button
+            className="btn btn-sm"
+            onClick={openLogsModal}
+            style={{ background: 'var(--card-bg, #ffffff)', border: '1px solid var(--border-color, #e2e8f0)', display: 'flex', alignItems: 'center', gap: 6 }}
+          >
+            <Icon name="sparkles" size="xs" />
+            View LLM Logs
+          </button>
+        </div>
       </div>
 
       <div className="ai-chat-card">

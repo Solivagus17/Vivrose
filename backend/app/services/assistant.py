@@ -77,12 +77,14 @@ def _rule_reply(message, members):
 
 
 def reply(message, members, history=None):
-    """Answer user query using Groq API (llama-3.1-8b-instant), fallback to rule-based engine."""
+    """Answer user query using Groq API (openai/gpt-oss-120b), fallback to rule-based engine."""
     ai_answer = groq_service.chat_reply(message, members, history=history)
     if ai_answer:
+        if "consult a real doctor" not in ai_answer.lower() and "consult a doctor" not in ai_answer.lower():
+            ai_answer += "\n\n*Note: It's always better to consult a real doctor or qualified healthcare professional.*"
         return ai_answer
     rule_ans = _rule_reply(message, members)
-    if "consult a real doctor" not in rule_ans:
+    if "consult a real doctor" not in rule_ans.lower():
         rule_ans += "\n\n*Note: It's always better to consult a real doctor for medical advice and clinical diagnosis.*"
     return rule_ans
 
