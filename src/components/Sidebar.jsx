@@ -1,0 +1,81 @@
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import Icon from './Icon.jsx';
+import { ROUTES } from '../routes.js';
+
+const NAV_SECTIONS = [
+  {
+    title: 'Overview',
+    items: [
+      { id: 'dashboard', label: 'Dashboard', icon: 'chart', path: ROUTES.dashboard },
+      { id: 'new-assessment', label: 'New Assessment', icon: 'sparkle', path: ROUTES.assessment },
+    ],
+  },
+  {
+    title: 'Family',
+    items: [
+      { id: 'family', label: 'Family Members', icon: 'user', path: ROUTES.family },
+      { id: 'ai-assessment', label: 'AI Insights', icon: 'brain', path: ROUTES.insights, badge: '1' },
+    ],
+  },
+  {
+    title: 'Insights',
+    items: [
+      { id: 'health', label: 'Health Insights', icon: 'trend', path: ROUTES.health },
+    ],
+  },
+  {
+    title: 'Resources',
+    items: [
+      { id: 'reports', label: 'Reports', icon: 'document', path: ROUTES.reports },
+      { id: 'patient-education', label: 'Health Education', icon: 'book', path: ROUTES.education },
+      { id: 'settings', label: 'Settings', icon: 'gear', path: ROUTES.settings },
+    ],
+  },
+];
+
+export default function Sidebar() {
+  return (
+    <aside className="sidebar">
+      <div className="sidebar-logo">
+        <div className="logo-icon">V</div>
+        <div className="logo-word">
+          <div className="logo-text">VivRose</div>
+          <div className="logo-tag">Predict. Prevent. Prosper.</div>
+        </div>
+      </div>
+
+      <nav className="sidebar-nav">
+        {NAV_SECTIONS.map((section) => (
+          <div className="sidebar-section" key={section.title}>
+            <div className="sidebar-section-title">{section.title}</div>
+            {section.items.map((item) => (
+              <NavLink
+                key={item.id}
+                to={item.path}
+                end
+                className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}
+              >
+                <span className="nav-icon">
+                  <Icon name={item.icon} size="md" />
+                </span>
+                {item.label}
+                {item.badge && <span className="nav-badge">{item.badge}</span>}
+              </NavLink>
+            ))}
+          </div>
+        ))}
+      </nav>
+
+      <div className="sidebar-footer">
+        <div className="sidebar-user">
+          <div className="avatar">AM</div>
+          <div className="user-info">
+            <div className="user-name">Arjun Mehta</div>
+            <div className="user-role">Family Health Manager</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  );
+}
