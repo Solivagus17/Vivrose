@@ -1,6 +1,6 @@
 <div align="center">
 
-# VivRose
+<img src="docs/logo.png" alt="VivRose Logo" width="340" />
 
 ### Predict. Prevent. Prosper.
 
