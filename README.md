@@ -1,48 +1,443 @@
+<div align="center">
+
 # VivRose
 
-> **Predict. Prevent. Prosper.** — AI-powered preventive healthcare platform for families.
+### Predict. Prevent. Prosper.
 
-VivRose helps one family health manager look after the whole family's health in a single place. It runs AI-powered risk assessments for each member, explains exactly what is driving every risk score, suggests the next check-ups to book, and turns everything into clear insights, alerts, and printable reports — so no one in the family is left guessing about their health.
+**AI-powered preventive healthcare and clinical decision support for families.**
 
-## Core Capabilities
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](#license)
+[![Python](https://img.shields.io/badge/python-3.11+-3776ab.svg?logo=python&logoColor=white)](#tech-stack)
+[![React](https://img.shields.io/badge/react-18-61dafb.svg?logo=react&logoColor=white)](#tech-stack)
+[![Flask](https://img.shields.io/badge/flask-3.1-000000.svg?logo=flask&logoColor=white)](#tech-stack)
+[![Groq](https://img.shields.io/badge/LLM-Llama%203.3%2070B-orange.svg)](#tech-stack)
 
-| Capability | What it does |
-|---|---|
-| AI Risk Scoring | Multi-disease risk prediction with a percentage score per family member |
-| Family Health Assistant | Chat with **VivRose AI** about any member's risk scores, vitals, and next steps |
-| Explainable AI | Ranked impact factors that show *why* the AI reached its conclusion |
-| Plain-Language Insights | A clinical summary written in clear, non-medical language |
-| Missing Investigations | Recommended next tests based on gaps in the data |
-| Referral Engine | Specialist referral suggestions with priority and timelines |
-| Check-up Tracker | Schedule upcoming appointments with doctors and mark them complete |
-| Clinical Reports | Professional, print-ready reports for doctor–patient sharing |
-| Patient Education | Health education in English, Hindi, and Gujarati |
+</div>
+
+---
+
+## About
+
+VivRose is a full-stack clinical decision support platform that enables a single family health manager to monitor, assess, and act on the health of every family member from one dashboard. It combines deterministic clinical risk scoring with LLM-driven insights to surface actionable health intelligence — risk percentages, plain-language explanations, next check-ups, specialist referrals, and printable clinical reports.
+
+The system is not a diagnostic tool. It is a decision-support layer designed to help families have better-informed conversations with their physicians.
+
+<div align="center">
+
+![VivRose — AI-powered family health platform landing page](docs/screenshots/landing-page.png)
+
+*Landing Page — "Your family's health, before it's a problem"*
+
+</div>
+
+<div align="center">
+
+![VivRose Dashboard — family health overview with alerts and risk levels](docs/screenshots/dashboard.png)
+
+*Dashboard — family-wide health overview with real-time health alerts and risk indicators*
+
+</div>
+
+---
 
 ## Features
 
-- **Dashboard** — a family-wide health overview with key stats, members, and alerts at a glance.
+### Clinical Decision Support (CDSS)
+Multi-disease risk assessment engine covering **Diabetes, Hypertension, CKD, CVD, and Stroke**. Each condition is evaluated through a dual-layer scoring pipeline: deterministic rule-based thresholds derived from clinical guidelines, paired with trained scikit-learn ML models for predictive validation.
 
-- **Family Members** — manage profiles for every family member. Add and edit members with their date of birth (age is calculated automatically), birth location, and current residence; filter and search the whole family in seconds.
+### AI Health Assistant
+A conversational interface powered by **Llama 3.3 70B** (via Groq) that answers natural-language questions about any family member's health — risk scores, vitals, medication context, and upcoming check-ups. Supports **multilingual responses** (English, Hindi) with automatic medical disclaimer injection.
 
-- **VivRose AI** — a chat assistant that answers questions about the family's health — diabetes risk, blood pressure, who's healthiest, or a specific member's situation — using each member's latest assessment data.
+### Voice-to-Text Input
+Speak queries directly into the AI assistant using browser-native speech recognition. The microphone input is transcribed in real-time and submitted as a chat message, enabling hands-free health queries.
 
-- **AI Assessment** — a guided 6-step health check-up (demographics, lifestyle, symptoms, history, vitals, labs). Pick which family member you're assessing, auto-fill from their stored profile, and let VivRose AI generate personalized risk insights.
+<div align="center">
 
-- **AI Insights** — a full breakdown of each member's assessment: risk scores, AI summary, key findings, lifestyle actions, an action checklist, explainable factors, suggested check-ups, health alerts, and doctor recommendations. Past assessments are saved per member, so you can revisit how their risk has changed over time.
+![VivRose AI Assistant — multilingual family health chat with CDSS integration](docs/screenshots/ai-assistant.png)
 
-- **Generate AI Report** — a PDF-style clinical report per member, ready to print and share with a physician.
+*VivRose AI — multilingual chat with family context panel, risk levels, and medical disclaimers*
 
-- **Medical Reports** — a searchable library of uploaded reports, categorized by type, date, hospital/clinic, doctor, purpose, and remark.
+</div>
 
-- **Doctors** — manage the family's care team (specialty, hospital/clinic, contact details, notes), call or email them directly, and see each doctor's next scheduled check-up.
+<div align="center">
 
-- **Upcoming Checkups** — track upcoming appointments per doctor with purpose, date, time, location, notes, and status, plus one-click complete and Scheduled/Completed/Cancelled filters.
+![VivRose AI — upcoming check-ups and contextual recommendations](docs/screenshots/ai-chat-checkups.png)
 
-- **Medicines** — a medicine course tracker with dosage, frequency, timing, and status, including days-left/overdue visibility for active courses.
+*AI Assistant contextual response — upcoming check-ups, doctor details, and next steps*
 
-- **Health Insights** — family-level analytics that surface patterns and trends across all members.
+</div>
 
-- **Health Education** — multilingual (English / हिन्दी / ગુજરાતી) guidance on disease explanation, diet, exercise, smoking cessation, warning signs, and follow-up.
+### AI Assessment (6-Step Guided Evaluation)
+A structured clinical intake flow across **Demographics → Lifestyle → Symptoms → History → Vitals → Labs**. Pre-fills from stored member profiles. On submission, the backend runs the CDSS pipeline and the LLM generates a comprehensive health summary, key findings, lifestyle plan, and specialist referral recommendations.
+
+<div align="center">
+
+![Past AI Insights — historical risk tracking per family member](docs/screenshots/ai-insights.png)
+
+*Past AI Insights — per-member risk score history with trend indicators and AI health summary*
+
+</div>
+
+### Medicine Price Comparator (VivRose Panacea)
+Live price comparison across **Apollo Pharmacy, Tata 1mg, and Netmeds**. Search any medicine, view uses and common side effects sourced from FDA Open Data, and instantly identify the cheapest option across pharmacies. Add to cart or buy directly.
+
+<div align="center">
+
+![VivRose Panacea — live medicine price comparison across pharmacies](docs/screenshots/medicine-price-comparator.png)
+
+*VivRose Panacea — real-time price comparison with FDA-sourced drug information*
+
+</div>
+
+### Family Dashboard
+A consolidated health command center showing key stats at a glance — total family members, high-risk count, completed assessments, and pending check-ups. The dashboard surfaces **real-time health alerts** (elevated BP, poor glycemic control, severe fatigue, uncontrolled hypertension) with per-member attribution, so the health manager knows exactly who needs attention and why.
+
+### Live Notifications
+Real-time alerts for assessment completions, upcoming check-up reminders, medication course status (expiring/overdue), and LLM processing state changes. Notification preferences are configurable per user from Settings.
+
+### Doctors & Care Team Management
+Maintain a directory of the family's physicians with specialty, hospital, city, phone, and email. One-click call or email. Each doctor card shows which family members they treat.
+
+<div align="center">
+
+![Doctors — family care team directory](docs/screenshots/doctors-management.png)
+
+*Doctors — care team management with direct contact actions*
+
+</div>
+
+### Additional Capabilities
+
+| Capability | Description |
+|---|---|
+| **Explainable AI** | Ranked impact factors showing *why* the AI reached its risk conclusion |
+| **Early Warning System** | Automatic red-flag detection for critical lab values (eGFR < 30, HbA1c > 9%, etc.) |
+| **Referral Engine** | Specialist referral suggestions with priority levels and timelines |
+| **Missing Investigations** | Recommended next tests based on data gaps in the patient profile |
+| **Health Education** | Multilingual guidance (English / हिन्दी / ગુજરાતી) on conditions, diet, exercise, and warning signs |
+| **Report Upload & Library** | Searchable repository of uploaded medical reports with metadata tagging |
+| **Medicine Tracker** | Dosage, frequency, timing, and days-left/overdue visibility for active courses |
+| **Check-up Scheduler** | Appointment tracking with doctor assignment, status filters, and completion workflow |
+
+---
+
+## System Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                        CLIENT (Browser)                     │
+│                                                             │
+│  React 18 + React Router 7 + Motion (Framer)                │
+│  ┌──────────┐ ┌──────────┐ ┌───────────┐ ┌──────────────┐  │
+│  │Dashboard │ │AI Assist │ │Assessment │ │  Panacea     │  │
+│  │          │ │(Chat+STT)│ │(6-Step)   │ │(Price Comp.) │  │
+│  └────┬─────┘ └────┬─────┘ └─────┬─────┘ └──────┬───────┘  │
+│       │             │             │               │          │
+│  ┌────┴─────────────┴─────────────┴───────────────┴───────┐ │
+│  │              Zustand-style Store Layer                  │ │
+│  │  (members, insights, doctors, checkups, medicines,     │ │
+│  │   reports — all with optimistic updates)               │ │
+│  └────────────────────────┬───────────────────────────────┘ │
+│                           │ REST (fetch + Firebase Auth)    │
+└───────────────────────────┼─────────────────────────────────┘
+                            │
+                   ┌────────┴────────┐
+                   │   Firebase Auth  │
+                   │  (Google OAuth)  │
+                   └────────┬────────┘
+                            │ Bearer Token
+┌───────────────────────────┼─────────────────────────────────┐
+│                    BACKEND (Flask 3.1)                       │
+│                                                             │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │                    API Layer                         │    │
+│  │  /api/members  /api/assessments  /api/cdss/assess   │    │
+│  │  /api/assistant  /api/reports  /api/doctors          │    │
+│  │  /api/checkups  /api/medicines  /api/insights        │    │
+│  └──────────────────────┬──────────────────────────────┘    │
+│                         │                                   │
+│  ┌──────────────────────┴──────────────────────────────┐    │
+│  │              Service Layer                           │    │
+│  │                                                      │    │
+│  │  ┌─────────────────┐  ┌──────────────────────────┐  │    │
+│  │  │  Risk Engine     │  │  Groq LLM Service        │  │    │
+│  │  │  (Deterministic) │  │  (Llama 3.3 70B)         │  │    │
+│  │  └────────┬────────┘  └────────────┬─────────────┘  │    │
+│  │           │                        │                 │    │
+│  │  ┌────────┴────────────────────────┴─────────────┐  │    │
+│  │  │         Clinical Decision Support (CDSS)       │  │    │
+│  │  │                                                │  │    │
+│  │  │  Rules:  diabetes │ hypertension │ ckd │ cvd   │  │    │
+│  │  │          stroke                                │  │    │
+│  │  │                                                │  │    │
+│  │  │  ML:     DiabetesModel │ HypertensionModel     │  │    │
+│  │  │          CKDModel │ CVDModel │ StrokeModel      │  │    │
+│  │  │                                                │  │    │
+│  │  │  Clinical Modules:                             │  │    │
+│  │  │    early_warning │ referral │ explainability    │  │    │
+│  │  │    missing_fields │ i18n (en, hi)              │  │    │
+│  │  └────────────────────────────────────────────────┘  │    │
+│  └──────────────────────────────────────────────────────┘    │
+│                         │                                   │
+│  ┌──────────────────────┴──────────────────────────────┐    │
+│  │              Data Layer                              │    │
+│  │  SQLAlchemy ORM → PostgreSQL (Supabase)              │    │
+│  │  Supabase Storage (medical report files)             │    │
+│  └──────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────┘
+                            │
+              ┌─────────────┴──────────────┐
+              │      External Services      │
+              │  • Groq API (LLM inference) │
+              │  • Firebase (Auth)          │
+              │  • Supabase (DB + Storage)  │
+              │  • Pharmacy APIs (Panacea)  │
+              └────────────────────────────┘
+```
+
+---
+
+## Tech Stack
+
+### Frontend
+
+| Technology | Purpose |
+|---|---|
+| **React 18** | Component framework with hooks-based state management |
+| **Vite 8** | Build tooling and HMR dev server |
+| **React Router 7** | Client-side routing |
+| **Motion (Framer Motion)** | Animations and micro-interactions |
+| **Firebase Auth** | Google OAuth authentication |
+| **Web Speech API** | Browser-native voice-to-text for AI assistant |
+| **Vanilla CSS** | Custom design system (no utility frameworks) |
+
+### Backend
+
+| Technology | Purpose |
+|---|---|
+| **Flask 3.1** | REST API framework |
+| **SQLAlchemy** | ORM with PostgreSQL dialect |
+| **PostgreSQL (Supabase)** | Primary database with connection pooling |
+| **Supabase Storage** | Medical report file storage |
+| **Firebase Admin SDK** | Server-side token verification |
+| **scikit-learn** | ML models for clinical risk prediction |
+| **pandas / NumPy** | Data processing for clinical computations |
+| **Gunicorn** | Production WSGI server |
+
+### AI / ML
+
+| Technology | Purpose |
+|---|---|
+| **Groq API** | Ultra-low-latency LLM inference |
+| **Llama 3.3 70B Versatile** | Primary model for health summaries, chat, and assessments |
+| **Llama 3.1 8B Instant** | Fallback model for resilience |
+| **scikit-learn (5 models)** | Diabetes, Hypertension, CKD, CVD, Stroke prediction |
+| **Deterministic Rule Engine** | Clinical-guideline-based scoring (thresholds: low < 30, moderate 30–60, high > 60) |
+
+---
+
+## Sample AI Report (PDF Generation)
+
+VivRose generates structured, print-ready clinical reports from assessment data. Below is the schema of a generated report:
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│  ┌──┐                                                        │
+│  │V │  VivRose                                               │
+│  └──┘  AI Health Assessment Report                           │
+│                                           Assessment Date    │
+│                                           2 Aug 2026         │
+│                                           Report ID:         │
+│                                           VR-HR-02Aug20-MEM  │
+├──────────────────────────────────────────────────────────────┤
+│                                                              │
+│  MEMBER INFORMATION                                          │
+│  ┌────────────────────┬─────────────────────────────────┐    │
+│  │ Name:              │ Hitarth                         │    │
+│  │ Relation:          │ Son                             │    │
+│  │ Age / Sex:         │ 20 years / Male                 │    │
+│  │ BMI:               │ 24.3 (Normal)                   │    │
+│  │ Blood Pressure:    │ 145/92 mmHg                     │    │
+│  │ HbA1c:             │ 5.2%                            │    │
+│  │ Smoking:           │ Non-smoker                      │    │
+│  │ Known Conditions:  │ Hypertension                    │    │
+│  │ Family History:    │ Hypertension (Mother)           │    │
+│  └────────────────────┴─────────────────────────────────┘    │
+│                                                              │
+├──────────────────────────────────────────────────────────────┤
+│                                                              │
+│  AI RISK ASSESSMENT                                          │
+│  ┌──────────────┬──────────────┬──────────┬──────────────┐   │
+│  │  DIABETES    │ HYPERTENSION │   CVD    │   STROKE     │   │
+│  │    25%       │     80%      │   55%    │    40%       │   │
+│  │  Low Risk    │  HIGH RISK   │ Moderate │  Moderate    │   │
+│  └──────────────┴──────────────┴──────────┴──────────────┘   │
+│                                                              │
+├──────────────────────────────────────────────────────────────┤
+│                                                              │
+│  AI HEALTH SUMMARY                                           │
+│  This patient has a high risk of hypertension due to         │
+│  elevated blood pressure readings and a family history       │
+│  of hypertension. Moderate risk for cardiovascular           │
+│  disease. Diabetes risk is low. Lifestyle modifications      │
+│  such as increased physical activity, a balanced diet,       │
+│  and stress management are recommended.                      │
+│                                                              │
+├──────────────────────────────────────────────────────────────┤
+│                                                              │
+│  KEY FINDINGS                                                │
+│  • Elevated systolic BP (145 mmHg) — Stage 2 hypertension   │
+│  • Family history of hypertension increases hereditary risk  │
+│  • BMI within normal range — positive factor                 │
+│  • HbA1c 5.2% — well within non-diabetic range              │
+│                                                              │
+├──────────────────────────────────────────────────────────────┤
+│                                                              │
+│  SUGGESTED CHECK-UPS                                         │
+│  • 24-hour ambulatory blood pressure monitoring              │
+│  • Lipid panel (LDL, HDL, triglycerides)                     │
+│  • Renal function test (creatinine, eGFR)                    │
+│  • ECG / Echocardiogram                                      │
+│                                                              │
+├──────────────────────────────────────────────────────────────┤
+│                                                              │
+│  DOCTOR RECOMMENDATIONS                                      │
+│  • Cardiologist referral for BP management                   │
+│  • Regular home BP monitoring (morning + evening)            │
+│                                                              │
+├──────────────────────────────────────────────────────────────┤
+│                                                              │
+│  HEALTHY LIFESTYLE PLAN                                      │
+│  • Reduce sodium intake to < 2g/day                          │
+│  • 30 minutes of moderate aerobic exercise, 5 days/week     │
+│  • DASH diet adherence                                       │
+│  • Stress reduction techniques (meditation, sleep hygiene)   │
+│                                                              │
+├──────────────────────────────────────────────────────────────┤
+│  This report was generated by the VivRose AI health          │
+│  assessment. All findings are AI-assisted and should be      │
+│  discussed with a qualified healthcare professional.         │
+│                                                              │
+│  VivRose · Predict. Prevent. Prosper. · © 2026               │
+└──────────────────────────────────────────────────────────────┘
+```
+
+**Report generation pipeline:**
+
+1. **Data collection** — The 6-step assessment form collects demographics, lifestyle, symptoms, medical history, vitals, and lab values.
+2. **Risk scoring** — The CDSS pipeline runs both deterministic rule-based scoring and ML model inference for all 5 conditions.
+3. **LLM synthesis** — Groq (Llama 3.3 70B) generates the health summary, key findings, lifestyle plan, and doctor recommendations from the scored patient context.
+4. **Report rendering** — The frontend renders a structured clinical document with branded header, member info grid, risk score cards, and sectioned findings.
+5. **Output** — Print via `window.print()` which uses `@media print` CSS for clean A4 PDF output. The report includes a unique Report ID and assessment timestamp.
+
+---
+
+## Project Structure
+
+```
+TETRA005/
+├── src/                          # Frontend (React)
+│   ├── components/
+│   │   ├── AiAssistant.jsx       # Chat interface + voice input
+│   │   ├── NewAssessment.jsx     # 6-step clinical intake
+│   │   ├── InsightView.jsx       # Risk scores + AI summary
+│   │   ├── GenerateReport.jsx    # PDF report renderer
+│   │   ├── PastInsights.jsx      # Historical assessment viewer
+│   │   ├── Dashboard.jsx         # Family health overview
+│   │   ├── Doctors.jsx           # Care team management
+│   │   ├── Medicines.jsx         # Medicine tracker
+│   │   └── ...
+│   ├── firebase.js               # Firebase Auth config
+│   ├── api.js                    # REST client with auth headers
+│   ├── membersStore.js           # Family member state
+│   └── App.jsx                   # Root router
+│
+├── backend/                      # Backend (Flask)
+│   ├── app/
+│   │   ├── routes/
+│   │   │   ├── cdss.py           # CDSS assessment endpoints
+│   │   │   ├── assessments.py    # Assessment CRUD
+│   │   │   ├── assistant.py      # AI chat endpoint
+│   │   │   └── ...
+│   │   ├── services/
+│   │   │   ├── clinical/
+│   │   │   │   ├── rules/        # Disease-specific scoring rules
+│   │   │   │   │   ├── diabetes.py
+│   │   │   │   │   ├── hypertension.py
+│   │   │   │   │   ├── ckd.py
+│   │   │   │   │   ├── cvd.py
+│   │   │   │   │   └── stroke.py
+│   │   │   │   ├── ml/           # scikit-learn models
+│   │   │   │   │   ├── base.py
+│   │   │   │   │   ├── diabetes_model.py
+│   │   │   │   │   └── ...
+│   │   │   │   ├── early_warning.py
+│   │   │   │   ├── referral.py
+│   │   │   │   ├── explainability.py
+│   │   │   │   ├── missing_fields.py
+│   │   │   │   └── i18n/         # Localization (en, hi)
+│   │   │   ├── groq_service.py   # LLM integration
+│   │   │   ├── risk_engine.py    # Deterministic risk scoring
+│   │   │   └── storage.py        # Supabase file storage
+│   │   ├── models.py             # SQLAlchemy ORM models
+│   │   ├── security.py           # Firebase token middleware
+│   │   └── config.py             # Environment configuration
+│   ├── requirements.txt
+│   └── run.py
+│
+├── docs/screenshots/             # Product screenshots
+├── package.json
+├── vite.config.js
+└── index.html
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- **Node.js** ≥ 18 and **npm**
+- **Python** ≥ 3.11
+- **PostgreSQL** instance (or Supabase project)
+- **Firebase** project with Authentication enabled
+- **Groq** API key
+
+### Setup
+
+```bash
+# Clone
+git clone https://github.com/kavin-jindal/TETRA005.git
+cd TETRA005
+
+# Frontend
+npm install
+cp .env.example .env          # Fill in Firebase + API keys
+npm run dev                   # → http://localhost:5173
+
+# Backend (separate terminal)
+cd backend
+python -m venv venv
+venv\Scripts\activate         # Windows
+pip install -r requirements.txt
+cp .env.example .env          # Fill in DB, Groq, Firebase, Supabase keys
+python run.py                 # → http://localhost:5000
+```
+
+### Environment Variables
+
+| Variable | Service | Required |
+|---|---|---|
+| `VITE_FIREBASE_API_KEY` | Firebase | Yes |
+| `VITE_FIREBASE_AUTH_DOMAIN` | Firebase | Yes |
+| `VITE_FIREBASE_PROJECT_ID` | Firebase | Yes |
+| `DATABASE_URL` | PostgreSQL / Supabase | Yes |
+| `GROQ_API_KEY` | Groq (LLM) | Yes |
+| `SUPABASE_URL` | Supabase | Yes |
+| `SUPABASE_SECRET_KEY` | Supabase | Yes |
+| `GOOGLE_APPLICATION_CREDENTIALS` | Firebase Admin | Yes |
+
+---
 
 ## Keyboard Shortcuts
 
@@ -50,3 +445,21 @@ VivRose helps one family health manager look after the whole family's health in 
 |---|---|
 | `Ctrl + K` | Focus member search (Family Members) |
 | `Escape` | Return to Dashboard |
+
+---
+
+## Disclaimer
+
+VivRose is a **decision-support assistant** and does not replace professional medical advice. All AI-generated findings should be reviewed and validated by a qualified healthcare professional. Always consult a doctor before making clinical decisions.
+
+---
+
+## License
+
+This project is developed as part of the TETRA005 initiative. See repository for license details.
+
+<div align="center">
+
+**VivRose** · Predict. Prevent. Prosper. · © 2026
+
+</div>
