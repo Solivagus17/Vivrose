@@ -1,6 +1,6 @@
-/* ================================================
-   VivRose — Personal & Family Health Utilities
-   ================================================ */
+/* ─────────────────────────────────────────────────────────────
+   ShushrutAI — Personal & Family Health Utilities
+   ───────────────────────────────────────────────────────────── */
 
 export const AVATAR_LOW = 'linear-gradient(135deg, #2E9E6A, #4FBF88)';
 export const DEFAULT_LOCATION = 'India';

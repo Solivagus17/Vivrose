@@ -272,13 +272,13 @@ function buildReply(question, members) {
   return ans + DOCTOR_DISCLAIMER;
 }
 
-const STORAGE_KEY = 'vivrose_chat_messages';
+const STORAGE_KEY = 'shushrutai_chat_messages';
 
 const INITIAL_MESSAGES = [
   {
     id: 'intro',
     role: 'ai',
-    text: "Hi, I'm VivRose AI \u2014 your family health assistant. I can answer questions about your family's risk scores, vitals, medical advice, and next steps. What would you like to know?",
+    text: "Hi, I'm ShushrutAI \u2014 your family health assistant. I can answer questions about your family's risk scores, vitals, medical advice, and next steps. What would you like to know?",
   },
 ];
 
@@ -393,7 +393,7 @@ export default function AiAssistant() {
     <>
       <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
-          <div className="page-title">VivRose AI</div>
+          <div className="page-title">ShushrutAI</div>
           <div className="page-subtitle">Ask anything about your family&apos;s health, risks, and next steps.</div>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
@@ -456,7 +456,7 @@ export default function AiAssistant() {
           <input
             type="text"
             className="ai-chat-input"
-            placeholder="Ask VivRose AI about health, risks, or appointments..."
+            placeholder="Ask ShushrutAI about health, risks, or appointments..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={onKeyDown}
@@ -496,7 +496,7 @@ export default function AiAssistant() {
             <div style={{ padding: '16px 24px', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
                 <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 700, color: '#0f172a' }}>Live LLM API Conversation Logs</h3>
-                <p style={{ margin: '2px 0 0', fontSize: '0.85rem', color: '#64748b' }}>Step-by-step requests &amp; responses exchanged between VivRose and Groq</p>
+                <p style={{ margin: '2px 0 0', fontSize: '0.85rem', color: '#64748b' }}>Step-by-step requests &amp; responses exchanged between ShushrutAI and Groq</p>
               </div>
               <div style={{ display: 'flex', gap: 8 }}>
                 <button className="btn btn-sm" onClick={fetchLogs} disabled={loadingLogs}>

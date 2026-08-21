@@ -45,8 +45,8 @@ export default function Login() {
     <div className="auth-page">
       <div className="auth-card">
         <div className="auth-brand">
-          <div className="logo-mark">V</div>
-          <span>VivRose</span>
+          <div className="logo-mark">S</div>
+          <span>ShushrutAI</span>
         </div>
         <h1 className="auth-title">Welcome back</h1>
         <p className="auth-subtitle">Sign in to manage your family&apos;s health.</p>
@@ -98,7 +98,7 @@ export default function Login() {
         <GoogleButton onClick={onGoogle} busy={busy || !firebaseReady} />
 
         <p className="auth-alt">
-          New to VivRose? <Link to={ROUTES.register}>Create an account</Link>
+          New to ShushrutAI? <Link to={ROUTES.register}>Create an account</Link>
         </p>
       </div>
     </div>

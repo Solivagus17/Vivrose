@@ -63,9 +63,9 @@ export default function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="sidebar-logo">
-        <div className="logo-icon">V</div>
+        <div className="logo-icon">S</div>
         <div className="logo-word">
-          <div className="logo-text">VivRose</div>
+          <div className="logo-text">ShushrutAI</div>
           <div className="logo-tag">Predict. Prevent. Prosper.</div>
         </div>
       </div>
@@ -80,7 +80,7 @@ export default function Sidebar() {
             <Icon name="sparkles" size="md" />
           </span>
           <span className="sidebar-ai-text">
-            <span className="sidebar-ai-name">VivRose AI</span>
+            <span className="sidebar-ai-name">ShushrutAI</span>
             <span className="sidebar-ai-sub">Ask about your family</span>
           </span>
           <span className="sidebar-ai-badge">AI</span>

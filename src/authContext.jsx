@@ -45,7 +45,7 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const initDev = async () => {
-      const devUser = { uid: 'dev-user-123', email: 'dev@vivrose.local', displayName: 'Arjun Mehta' };
+      const devUser = { uid: 'dev-user-123', email: 'dev@shushrutai.local', displayName: 'Arjun Mehta' };
       setUser(devUser);
       setToken('dev-token-user');
       try {

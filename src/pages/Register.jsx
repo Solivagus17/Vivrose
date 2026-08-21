@@ -56,8 +56,8 @@ export default function Register() {
     <div className="auth-page">
       <div className="auth-card">
         <div className="auth-brand">
-          <div className="logo-mark">V</div>
-          <span>VivRose</span>
+          <div className="logo-mark">S</div>
+          <span>ShushrutAI</span>
         </div>
         <h1 className="auth-title">Create your account</h1>
         <p className="auth-subtitle">One account for your whole family&apos;s health.</p>

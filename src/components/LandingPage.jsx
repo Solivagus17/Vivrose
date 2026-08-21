@@ -53,8 +53,8 @@ export default function LandingPage() {
 
       <nav className="landing-nav">
         <div className="landing-logo">
-          <div className="logo-mark">V</div>
-          <span>VivRose</span>
+          <div className="logo-mark">S</div>
+          <span>ShushrutAI</span>
         </div>
         <div className="landing-nav-links">
           <a href="#features">How it works</a>
@@ -85,7 +85,7 @@ export default function LandingPage() {
               </TextEffect>
             </h1>
             <p className="hero-desc">
-              VivRose watches for the early signs of diabetes, heart disease, and more — for every member of your
+              ShushrutAI watches for the early signs of diabetes, heart disease, and more — for every member of your
               family. One account, one dashboard, plain-language guidance.
             </p>
             <div className="hero-actions">

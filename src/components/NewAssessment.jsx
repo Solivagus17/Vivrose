@@ -487,7 +487,7 @@ export default function NewAssessment() {
           <div className="wizard-card">
             <div className="wizard-card-title">Laboratory Results</div>
             <div className="wizard-card-desc">
-              Enter available lab values. Leave blank if unavailable — VivRose will suggest missing check-ups.
+              Enter available lab values. Leave blank if unavailable — ShushrutAI will suggest missing check-ups.
             </div>
             <div className="form-row">
               <div className="form-group">
@@ -597,7 +597,7 @@ export default function NewAssessment() {
                 Analyzing Health Data
               </h3>
               <p style={{ color: 'var(--gray-500)', fontSize: '0.9375rem', marginBottom: 28 }}>
-                VivRose AI is processing risk factors and preparing {(forMember?.name || 'Member').split(' ')[0]}&apos;s health insights...
+                ShushrutAI is processing risk factors and preparing {(forMember?.name || 'Member').split(' ')[0]}&apos;s health insights...
               </p>
               <div
                 style={{

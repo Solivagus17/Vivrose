@@ -59,7 +59,7 @@ export default function Settings() {
     <>
       <div className="page-header">
         <div className="page-title">Settings</div>
-        <div className="page-subtitle">Configure VivRose preferences for your family.</div>
+        <div className="page-subtitle">Configure ShushrutAI preferences for your family.</div>
       </div>
 
       <div className="settings-grid">
