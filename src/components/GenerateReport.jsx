@@ -7,24 +7,27 @@ import { ROUTES } from '../routes.js';
 export default function GenerateReport() {
   const navigate = useNavigate();
   const { member } = useMember();
+  const memberName = member?.name || 'Family Member';
+  const memberAge = member?.age ? `${member.age} years` : 'Age N/A';
+  const memberSex = member?.sex || 'N/A';
 
   const INFO_ITEMS = [
-    ['Name:', member.name],
-    ['Relation:', member.relation],
-    ['Age / Sex:', `${member.age} years / ${member.sex}`],
-    ['BMI:', `${member.bmi} (${member.bmiClass})`],
-    ['Blood Pressure:', member.bp],
-    ['HbA1c:', member.hba1c],
-    ['Smoking:', member.smoking],
-    ['Known Conditions:', member.conditions],
-    ['Family History:', member.familyHistory],
+    ['Name:', memberName],
+    ['Relation:', member?.relation || 'N/A'],
+    ['Age / Sex:', `${memberAge} / ${memberSex}`],
+    ['BMI:', member?.bmi ? `${member.bmi} (${member.bmiClass || 'N/A'})` : 'N/A'],
+    ['Blood Pressure:', member?.bp || 'N/A'],
+    ['HbA1c:', member?.hba1c || 'N/A'],
+    ['Smoking:', member?.smoking || 'N/A'],
+    ['Known Conditions:', Array.isArray(member?.conditions) ? member.conditions.join(', ') : 'None'],
+    ['Family History:', Array.isArray(member?.familyHistory) ? member.familyHistory.join(', ') : 'None'],
   ];
 
   return (
     <>
       <div className="page-header">
         <div className="page-title">Generate AI Report</div>
-        <div className="page-subtitle">Generate and preview a new AI health assessment report for {member.name}.</div>
+        <div className="page-subtitle">Generate and preview a new AI health assessment report for {memberName}.</div>
       </div>
 
       <div className="report-container">
@@ -54,8 +57,8 @@ export default function GenerateReport() {
             </div>
             <div className="report-date">
               <div style={{ fontWeight: 600, color: 'var(--gray-800)' }}>Assessment Date</div>
-              <div>{member.assessed}</div>
-              <div style={{ marginTop: 4 }}>Report ID: VR-HR-{member.assessed.replace(/\s|,/g, '').slice(0, 8)}-{member.id.toUpperCase()}</div>
+              <div>{member?.assessed || 'Today'}</div>
+              <div style={{ marginTop: 4 }}>Report ID: VR-HR-{(member?.assessed || '').replace(/\s|,/g, '').slice(0, 8)}-{(member?.id || 'MEM').toUpperCase()}</div>
             </div>
           </div>
 
@@ -74,7 +77,7 @@ export default function GenerateReport() {
           <div className="report-section">
             <div className="report-section-title">AI Risk Assessment</div>
             <div className="report-risk-grid">
-              {member.scores.map((r) => (
+              {(member?.scores || []).map((r) => (
                 <div className={`report-risk-item ${r.level}`} key={r.label}>
                   <div className="r-name">{r.label}</div>
                   <div className="r-score">{r.score}%</div>
@@ -86,13 +89,13 @@ export default function GenerateReport() {
 
           <div className="report-section">
             <div className="report-section-title">AI Health Summary</div>
-            <div className="report-summary-text">{member.reportSummary}</div>
+            <div className="report-summary-text">{member?.reportSummary || 'Complete an assessment to view full AI summary.'}</div>
           </div>
 
           <div className="report-section">
             <div className="report-section-title">Key Findings</div>
             <ul className="report-list">
-              {member.findings.map((li) => (
+              {(member?.findings || []).map((li) => (
                 <li key={li}>{li}</li>
               ))}
             </ul>
@@ -101,17 +104,17 @@ export default function GenerateReport() {
           <div className="report-section">
             <div className="report-section-title">Suggested Check-ups</div>
             <ul className="report-list">
-              {member.checkupList.map((li) => (
+              {(member?.checkupList || []).map((li) => (
                 <li key={li}>{li}</li>
               ))}
             </ul>
           </div>
 
-          {member.recommendationList.length > 0 && (
+          {(member?.recommendationList || []).length > 0 && (
             <div className="report-section">
               <div className="report-section-title">Doctor Recommendations</div>
               <ul className="report-list">
-                {member.recommendationList.map((li) => (
+                {(member?.recommendationList || []).map((li) => (
                   <li key={li}>{li}</li>
                 ))}
               </ul>
@@ -121,7 +124,7 @@ export default function GenerateReport() {
           <div className="report-section">
             <div className="report-section-title">Healthy Lifestyle Plan</div>
             <ul className="report-list">
-              {member.lifestyle.map((li) => (
+              {(member?.lifestyle || []).map((li) => (
                 <li key={li}>{li}</li>
               ))}
             </ul>

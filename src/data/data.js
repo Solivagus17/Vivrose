@@ -8,9 +8,61 @@ export const DEFAULT_LOCATION = 'India';
 export const FAMILY_MEMBERS = [];
 export const DASH_STATS = [];
 export const ALERTS = [];
-export const ANALYTICS_OVERVIEW = [];
-export const ANALYTICS_CHART = [];
-export const TOP_CONTRIBUTORS = [];
+
+export const ANALYTICS_OVERVIEW = [
+  {
+    label: 'High Risk Members',
+    value: '0',
+    change: '0% of family',
+    icon: 'alertCircle',
+    iconBg: 'rgba(196, 60, 60, 0.1)',
+    iconColor: '#C43C3C',
+    changeClass: 'down',
+  },
+  {
+    label: 'Moderate Risk Members',
+    value: '0',
+    change: '0% of family',
+    icon: 'trend',
+    iconBg: 'rgba(212, 154, 42, 0.1)',
+    iconColor: '#D49A2A',
+    changeClass: 'neutral',
+  },
+  {
+    label: 'Low Risk Members',
+    value: '0',
+    change: '0% of family',
+    icon: 'heart',
+    iconBg: 'rgba(46, 158, 106, 0.1)',
+    iconColor: '#2E9E6A',
+    changeClass: 'up',
+  },
+  {
+    label: 'Total Assessed',
+    value: '0',
+    change: '0% of family',
+    icon: 'users',
+    iconBg: 'rgba(92, 42, 158, 0.1)',
+    iconColor: '#5C2A9E',
+    changeClass: 'up',
+  },
+];
+
+export const ANALYTICS_CHART = [
+  { label: 'Diabetes', low: 60, mod: 25, high: 15 },
+  { label: 'Hypertension', low: 40, mod: 35, high: 25 },
+  { label: 'CKD', low: 70, mod: 20, high: 10 },
+  { label: 'CVD', low: 55, mod: 30, high: 15 },
+  { label: 'Stroke', low: 75, mod: 15, high: 10 },
+];
+
+export const TOP_CONTRIBUTORS = [
+  { name: 'Elevated Blood Pressure', value: 'Systolic ≥ 130 or Diastolic ≥ 80', width: 70 },
+  { name: 'Elevated HbA1c / Fasting Glucose', value: 'HbA1c ≥ 6.5% or Glucose ≥ 126 mg/dL', width: 55 },
+  { name: 'Elevated BMI / Overweight', value: 'BMI ≥ 25.0 kg/m²', width: 65 },
+  { name: 'Family History of Chronic Disease', value: 'First-degree genetic predisposition', width: 80 },
+  { name: 'Smoking / Tobacco Use', value: 'Active or past tobacco use', width: 40 },
+];
 
 export function calcAge(birthDate) {
   if (!birthDate) return null;

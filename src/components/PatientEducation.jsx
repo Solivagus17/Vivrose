@@ -188,7 +188,7 @@ export default function PatientEducation() {
     <>
       <div className="page-header">
         <div className="page-title">Health Education</div>
-        <div className="page-subtitle">Personalized health education materials for {member.name}.</div>
+        <div className="page-subtitle">Personalized health education materials for {member?.name || 'your family member'}.</div>
       </div>
 
       <div className="edu-tabs">
